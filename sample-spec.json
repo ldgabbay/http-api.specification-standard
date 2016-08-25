@@ -8,6 +8,7 @@
     ],
     "locations": {
         "InstanceRoot": {
+            "type": "symbolic",
             "location": "InstanceRoot",
             "methods": [
                 {
@@ -40,6 +41,7 @@
             ]
         },
         "StaticData": {
+            "type": "symbolic",
             "location": "StaticData",
             "methods": [
                 {
@@ -65,6 +67,7 @@
             ]
         },
         "StaticLanguageData": {
+            "type": "symbolic",
             "location": "StaticLanguageData",
             "methods": [
                 {

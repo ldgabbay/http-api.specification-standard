@@ -27,6 +27,7 @@ SECTION :
 
 LOCATION :
     {
+        "type" required : string,              // one of "absolute" (http://...), "relative" (/v1/foo), or "symbolic" (Root)
         "location" required : string,          // path (e.g. /api/v1/people) or location (e.g. Root)
         "summary" optional : string,           //
         "description" optional : string,       //
