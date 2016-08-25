@@ -20,11 +20,11 @@ SECTION :
 
 LOCATION :
     {
-        "location" required : string,                              // path (e.g. /api/v1/people) or location (e.g. Root)
-        "summary" optional : string,
-        "description" optional : string,                           // 
-        "section" optional : string,                               // matches SECTION."name"
-        "methods" required : METHOD_LIST                           // list of METHODs on this LOCATION
+        "location" required : string,          // path (e.g. /api/v1/people) or location (e.g. Root)
+        "summary" optional : string,           //
+        "description" optional : string,       //
+        "section" optional : string,           // matches SECTION."name"
+        "methods" required : METHOD_LIST       // list of METHODs on this LOCATION
     }
 
 
@@ -34,20 +34,20 @@ METHOD_LIST :
 
 METHOD :
     {
-        "method" required : string,                                // "GET", "PUT", "POST", etc.
-        "summary" optional : string,
-        "description" optional : string,                           // 
-        "request" required : REQUEST,                              // 
-        "response" required : RESPONSE_LIST                        // possible responses
+        "method" required : string,            // "GET", "PUT", "POST", etc.
+        "summary" optional : string,           //
+        "description" optional : string,       //
+        "request" required : REQUEST,          //
+        "response" required : RESPONSE_LIST    // possible responses
     }
 
 
 REQUEST :
     {
-        "path" optional : PARAMETER_LIST,                          // 
-        "query" optional : PARAMETER_LIST,                         // 
-        "header" optional : PARAMETER_LIST,                        // 
-        "body" optional : BODY_LIST                                // 
+        "path" optional : PARAMETER_LIST,      //
+        "query" optional : PARAMETER_LIST,     //
+        "header" optional : PARAMETER_LIST,    //
+        "body" optional : BODY_LIST            //
     }
 
 
