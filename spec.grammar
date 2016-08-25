@@ -164,17 +164,18 @@ JSON_PROPERTY_LIST :
 
 JSON_PROPERTY :
     {
-        "key" required : string,
+        "key" required : JSON_PROPERTY_KEY,
         "description" optional : string,
         "frequency" required : string,
         "schema" required : JSON_SCHEMA
     }
 
+
+JSON_PROPERTY_KEY :
+    string            // literal match for property key
+
     {
-        "pattern" required : string,
-        "criteria" optional : [ string, string, ... ],
-        "examples" optional : [ string, string, ... ],
-        "description" optional : string,
-        "frequency" required : string,
-        "schema" required : JSON_SCHEMA
+        "pattern" optional : string,                     // regex match for property key
+        "criteria" optional : [ string, string, ... ],   // 
+        "examples" optional : [ string, string, ... ]    // 
     }
