@@ -1,7 +1,9 @@
 API_DOCUMENT :
     {
         "sections" optional : SECTION_LIST,
-        "locations" optional : LOCATION_LIST,
+        "locations" optional : {
+            string: LOCATION
+        },
         "schemas" optional : {
             "json" optional : {
                 string: JSON_SCHEMA
@@ -18,12 +20,9 @@ SECTION :
     {
         "name" required : string,
         "summary" optional : string,
-        "description" optional : string
+        "description" optional : string,
+        "locations" required : [ string, string, ... ]     // list of locations identified by the properties found in API_DOCUMENT."locations"
     }
-
-
-LOCATION_LIST :
-    [ LOCATION, LOCATION, ... ]
 
 
 LOCATION :
@@ -31,7 +30,6 @@ LOCATION :
         "location" required : string,          // path (e.g. /api/v1/people) or location (e.g. Root)
         "summary" optional : string,           //
         "description" optional : string,       //
-        "section" optional : string,           // matches SECTION."name"
         "methods" required : METHOD_LIST       // list of METHODs on this LOCATION
     }
 

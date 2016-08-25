@@ -2,11 +2,12 @@
     "sections": [
         {
             "name": "Initialization",
-            "description": "This initializes everything."
+            "description": "This initializes everything.",
+            "locations": ["InstanceRoot", "StaticData", "StaticLanguageData"]
         }
     ],
-    "locations": [
-        {
+    "locations": {
+        "InstanceRoot": {
             "location": "InstanceRoot",
             "methods": [
                 {
@@ -37,7 +38,8 @@
                     ]
                 }
             ]
-        },{
+        },
+        "StaticData": {
             "location": "StaticData",
             "methods": [
                 {
@@ -61,7 +63,8 @@
                     ]
                 }
             ]
-        },{
+        },
+        "StaticLanguageData": {
             "location": "StaticLanguageData",
             "methods": [
                 {
@@ -96,7 +99,7 @@
                 }
             ]
         }
-    ],
+    },
     "schemas": {
         "json": {
             "InstanceRootResponse": {
