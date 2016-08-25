@@ -1,0 +1,173 @@
+API_DOCUMENT :
+    {
+        "sections" optional : [ SECTION, SECTION, ... ],
+        "locations" optional : [ LOCATION, LOCATION, ... ],
+        "schemas" optional : {
+            "json" optional : {
+                string: JSON_SCHEMA
+            }
+        }
+    }
+
+
+SECTION :
+    {
+        "name" required : string,
+        "summary" optional : string,
+        "description" optional : string
+    }
+
+
+LOCATION :
+    {
+        "location" required : string,                              // path (e.g. /api/v1/people) or location (e.g. Root)
+        "summary" optional : string,
+        "description" optional : string,                           // 
+        "section" optional : string,                               // matches SECTION."name"
+        "methods" required : METHOD_LIST                           // list of METHODs on this LOCATION
+    }
+
+
+METHOD_LIST :
+    [ METHOD, METHOD, ... ]
+
+
+METHOD :
+    {
+        "method" required : string,                                // "GET", "PUT", "POST", etc.
+        "summary" optional : string,
+        "description" optional : string,                           // 
+        "request" required : REQUEST,                              // 
+        "response" required : RESPONSE_LIST                        // possible responses
+    }
+
+
+REQUEST :
+    {
+        "path" optional : PARAMETER_LIST,                          // 
+        "query" optional : PARAMETER_LIST,                         // 
+        "header" optional : PARAMETER_LIST,                        // 
+        "body" optional : BODY_LIST                                // 
+    }
+
+
+RESPONSE_LIST :
+    [ RESPONSE, RESPONSE, ... ]
+
+
+RESPONSE :
+    {
+        "summary" optional : string,
+        "description" optional : string,
+        "statusCode" required : number,
+        "statusMessage" optional : string,
+        "header" optional : PARAMETER_LIST
+        "body" optional : BODY_LIST
+    }
+
+
+BODY_LIST :
+    [ BODY, BODY, ... ]
+
+
+BODY :
+    {
+        "type" required : "form",
+        "contentType" optional : string,           // default "application/x-www-form-urlencoded"
+        "parameters" required : PARAMETER_LIST
+    }
+
+    {
+        "type" required : "json",
+        "contentType" optional : string,           // default "application/json"
+        "schema" required : JSON_SCHEMA
+    }
+
+
+PARAMETER_LIST :
+    [ PARAMETER, PARAMETER, ... ]
+
+
+PARAMETER :
+    {
+        "name" required : string,
+        "description" optional : string,
+        "frequency" required : string,
+        "criteria" optional : [ string, string, ... ],
+        "examples" optional : [ string, string, ... ]
+    }
+
+
+JSON_SCHEMA :
+    {
+        "type" required : "reference",
+        "tag" required : string           // matches key in API_DOCUMENT."schemas"."json"
+    }
+
+    {
+        "type" required : "null"
+    }
+
+    {
+        "type" required : "boolean"
+    }
+
+    {
+        "type" required : "number",
+        "criteria" optional : [ string, string, ... ],
+        "examples" optional : [ string, string, ... ]
+    }
+
+    {
+        "type" required : "string",
+        "criteria" optional : [ string, string, ... ],
+        "examples" optional : [ string, string, ... ]
+    }
+
+    {
+        "type" required : "array",
+        "criteria" optional : [ string, string, ... ],
+        "examples" optional : [ string, string, ... ],
+        "items" required : JSON_ITEM_LIST
+    }
+
+    {
+        "type" required : "object",
+        "criteria" optional : [ string, string, ... ],
+        "examples" optional : [ string, string, ... ],
+        "properties" required : JSON_PROPERTY_LIST
+    }
+
+
+JSON_ITEM_LIST :
+    [ JSON_ITEM, JSON_ITEM, ... ]
+
+
+JSON_ITEM :
+    {
+        "index" required : string,
+        "description" optional : string,
+        "schema" required : JSON_SCHEMA
+    }
+
+
+JSON_PROPERTY_LIST :
+    [ JSON_PROPERTY, JSON_PROPERTY, ... ]
+
+
+JSON_PROPERTY :
+    {
+        "key" required : string,
+        "description" optional : string,
+        "frequency" required : string,
+        "schema" required : JSON_SCHEMA
+    }
+
+    {
+        "pattern" required : string,
+        "criteria" optional : [ string, string, ... ],
+        "examples" optional : [ string, string, ... ],
+        "description" optional : string,
+        "frequency" required : string,
+        "schema" required : JSON_SCHEMA
+    }
