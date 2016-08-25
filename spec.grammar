@@ -1,6 +1,6 @@
 API_DOCUMENT :
     {
-        "sections" optional : [ SECTION, SECTION, ... ],
+        "sections" optional : SECTION_LIST,
         "locations" optional : [ LOCATION, LOCATION, ... ],
         "schemas" optional : {
             "json" optional : {
@@ -8,6 +8,9 @@ API_DOCUMENT :
             }
         }
     }
+
+SECTION_LIST :
+    [ SECTION, SECTION, ... ]
 
 
 SECTION :
