@@ -3,622 +3,597 @@
         {
             "name": "Initialization",
             "description": "This initializes everything.",
-            "locations": ["InstanceRoot", "StaticData", "StaticLanguageData", "StaticLocaleData"]
+            "methods": [
+                "GET InstanceRoot",
+                "GET StaticData",
+                "GET StaticLanguageData",
+                "GET StaticLocaleData"
+            ]
         },
         {
             "name": "Browsing",
             "description": "This is for browsing.",
-            "locations": ["Availability", "Reservations", "Reservation", "ExchangeRate"]
+            "methods": [
+                "POST Availability",
+                "POST Reservations",
+                "GET Reservation",
+                "GET Currency",
+                "GET ExchangeRate"
+            ]
         }
     ],
-    "locations": {
-        "InstanceRoot": {
-            "type": "symbolic",
+    "methods": {
+        "GET InstanceRoot": {
+            "method": "GET",
             "location": "InstanceRoot",
-            "methods": [
+            "location_type": "symbolic",
+            "summary": "Retrieves the URLs for all other service calls for this IBE instance.",
+            "description": "This API leverages HATEOAS as per the RESTful design pattern. This means that other than this initial query, all other URLs are provided in responses, including this one. No other URL should be coded to directly, as their locations might change.",
+            "request": {
+                "query": [
+                    {
+                        "name": "id",
+                        "description": "The id of the site.",
+                        "frequency": "required"
+                    }
+                ]
+            },
+            "response": [
                 {
-                    "method": "GET",
-                    "summary": "Retrieves the URLs for all other service calls for this IBE instance.",
-                    "description": "This API leverages HATEOAS as per the RESTful design pattern. This means that other than this initial query, all other URLs are provided in responses, including this one. No other URL should be coded to directly, as their locations might change.",
-                    "request": {
-                        "query": [
-                            {
-                                "name": "id",
-                                "description": "The id of the site.",
-                                "frequency": "required"
+                    "statusCode": 200,
+                    "statusMessage": "OK",
+                    "header": [
+                        {
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
+                        {
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "InstanceRootResponse"
                             }
-                        ]
-                    },
-                    "response": [
-                        {
-                            "statusCode": 200,
-                            "statusMessage": "OK",
-                            "header": [
-                                {
-                                    "name": "Content-Type",
-                                    "frequency": "required",
-                                    "criteria": ["application/json"]
-                                }
-                            ],
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "InstanceRootResponse"
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "statusCode": 400,
-                            "statusMessage": "Bad Request",
-                            "header": [
-                                {
-                                    "name": "Content-Type",
-                                    "frequency": "required",
-                                    "criteria": ["application/json"]
-                                }
-                            ],
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "ErrorResponse"
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "statusCode": 404,
-                            "statusMessage": "Not Found"
                         }
                     ]
+                },
+                {
+                    "statusCode": 400,
+                    "statusMessage": "Bad Request",
+                    "header": [
+                        {
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
+                        {
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "ErrorResponse"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "statusCode": 404,
+                    "statusMessage": "Not Found"
                 }
             ]
         },
-        "StaticData": {
-            "type": "symbolic",
+        "GET StaticData": {
+            "method": "GET",
             "location": "StaticData",
-            "methods": [
+            "location_type": "symbolic",
+            "summary": "Retrieves static application data.",
+            "description": "Retrieves all the language- and locale-independent static data any client might need to run this application.",
+            "request": {},
+            "response": [
                 {
-                    "method": "GET",
-                    "summary": "Retrieves static application data.",
-                    "description": "Retrieves all the language- and locale-independent static data any client might need to run this application.",
-                    "request": {},
-                    "response": [
+                    "statusCode": 200,
+                    "statusMessage": "OK",
+                    "body": [
                         {
-                            "statusCode": 200,
-                            "statusMessage": "OK",
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "StaticDataResponse"
-                                    }
-                                }
-                            ]
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "StaticDataResponse"
+                            }
                         }
                     ]
                 }
             ]
         },
-        "StaticLanguageData": {
-            "type": "symbolic",
+        "GET StaticLanguageData": {
+            "method": "GET",
             "location": "StaticLanguageData",
-            "methods": [
+            "location_type": "symbolic",
+            "summary": "Retrieves static language-specific application data.",
+            "description": "Retrieves all the language-specific static data any client might need to run this application in the given language.",
+            "request": {
+                "header": [
+                    {
+                        "name": "Accept-Language",
+                        "description": "The language of the language-specific data to be returned.",
+                        "frequency": "required",
+                        "criteria": ["https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4"],
+                        "examples": ["en_US"]
+                    }
+                ]
+            },
+            "response": [
                 {
-                    "method": "GET",
-                    "summary": "Retrieves static language-specific application data.",
-                    "description": "Retrieves all the language-specific static data any client might need to run this application in the given language.",
-                    "request": {
-                        "header": [
-                            {
-                                "name": "Accept-Language",
-                                "description": "The language of the language-specific data to be returned.",
-                                "frequency": "required",
-                                "criteria": ["https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4"],
-                                "examples": ["en_US"]
-                            }
-                        ]
-                    },
-                    "response": [
+                    "statusCode": 200,
+                    "statusMessage": "OK",
+                    "header": [
                         {
-                            "statusCode": 200,
-                            "statusMessage": "OK",
-                            "header": [
-                                {
-                                    "name": "Content-Language",
-                                    "description": "The language of the language-specific data to be returned.",
-                                    "frequency": "required",
-                                    "criteria": ["https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4"],
-                                    "examples": ["en_US"]
-                                },
-                                {
-                                    "name": "Content-Type",
-                                    "frequency": "required",
-                                    "criteria": ["application/json"]
-                                }
-                            ],
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "StaticLanguageDataResponse"
-                                    }
-                                }
-                            ]
+                            "name": "Content-Language",
+                            "description": "The language of the language-specific data to be returned.",
+                            "frequency": "required",
+                            "criteria": ["https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4"],
+                            "examples": ["en_US"]
+                        },
+                        {
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
+                        {
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "StaticLanguageDataResponse"
+                            }
                         }
                     ]
                 }
             ]
         },
-        "StaticLocaleData": {
-            "type": "symbolic",
+        "GET StaticLocaleData": {
+            "method" : "GET",
             "location": "StaticLocaleData",
-            "methods": [
+            "location_type": "symbolic",
+            "summary": "Retrieves static locale-specific application data.",
+            "description": "Retrieves all the locale-specific static data any client might need to run this application in the given locale.",
+            "request": {
+                "header": [
+                    {
+                        "name": "Accept-Locale",
+                        "description": "The locale for the locale-specific data to be returned.",
+                        "frequency": "required",
+                        "criteria": ["https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4"],
+                        "examples": ["en_US"]
+                    }
+                ]
+            },
+            "response": [
                 {
-                    "method" : "GET",
-                    "summary": "Retrieves static locale-specific application data.",
-                    "description": "Retrieves all the locale-specific static data any client might need to run this application in the given locale.",
-                    "request": {
-                        "header": [
-                            {
-                                "name": "Accept-Locale",
-                                "description": "The locale for the locale-specific data to be returned.",
-                                "frequency": "required",
-                                "criteria": ["https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4"],
-                                "examples": ["en_US"]
+                    "statusCode": 200,
+                    "statusMessage": "OK",
+                    "header": [
+                        {
+                            "name": "Content-Locale",
+                            "description": "The locale of the locale-specific data to be returned.",
+                            "frequency": "required",
+                            "criteria": ["https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4"],
+                            "examples": ["en_US"]
+                        },
+                        {
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
+                        {
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "StaticLocaleDataResponse"
                             }
-                        ]
-                    },
-                    "response": [
-                        {
-                            "statusCode": 200,
-                            "statusMessage": "OK",
-                            "header": [
-                                {
-                                    "name": "Content-Locale",
-                                    "description": "The locale of the locale-specific data to be returned.",
-                                    "frequency": "required",
-                                    "criteria": ["https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4"],
-                                    "examples": ["en_US"]
-                                },
-                                {
-                                    "name": "Content-Type",
-                                    "frequency": "required",
-                                    "criteria": ["application/json"]
-                                }
-                            ],
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "StaticLocaleDataResponse"
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "statusCode": 400,
-                            "statusMessage": "Bad Request",
-                            "header": [
-                                {
-                                    "name": "Content-Type",
-                                    "frequency": "required",
-                                    "criteria": ["application/json"]
-                                }
-                            ],
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "ErrorResponse"
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "statusCode": 404,
-                            "statusMessage": "Not Found"
                         }
                     ]
+                },
+                {
+                    "statusCode": 400,
+                    "statusMessage": "Bad Request",
+                    "header": [
+                        {
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
+                        {
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "ErrorResponse"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "statusCode": 404,
+                    "statusMessage": "Not Found"
                 }
             ]
         },
-        "Availability": {
-            "type": "symbolic",
+        "POST Availability": {
+            "method": "POST",
             "location": "Availability",
-            "methods": [
+            "location_type": "symbolic",
+            "summary": "Get all the rooms available.",
+            "description": "This endpoint provides all the items available at a Site(Hotel)",
+            "request": {
+                "header": [
+                    {
+                        "name": "Content-Type",
+                        "frequency": "required",
+                        "criteria": ["application/json"]
+                    }
+                ],
+                "body": [
+                    {
+                        "type": "json",
+                        "schema": {
+                            "type": "reference",
+                            "tag": "AvailabilityRequest"
+                        }
+                    }
+                ]
+            },
+            "response": [
                 {
-                    "method": "POST",
-                    "summary": "Get all the rooms available.",
-                    "description": "This endpoint provides all the items available at a Site(Hotel)",
-                    "request": {
-                        "header": [
-                            {
-                                "name": "Content-Type",
-                                "frequency": "required",
-                                "criteria": ["application/json"]
-                            }
-                        ],
-                        "body": [
-                            {
-                                "type": "json",
-                                "schema": {
-                                    "type": "reference",
-                                    "tag": "AvailabilityRequest"
-                                }
-                            }
-                        ]
-                    },
-                    "response": [
+                    "statusCode": 200,
+                    "statusMessage": "OK",
+                    "header": [
                         {
-                            "statusCode": 200,
-                            "statusMessage": "OK",
-                            "header": [
-                                {
-                                    "name": "Content-Type",
-                                    "frequency": "required",
-                                    "criteria": ["application/json"]
-                                }
-                            ],
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "AvailabilityResponse"
-                                    }
-                                }
-                            ]
-                        },
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
                         {
-                            "statusCode": 400,
-                            "statusMessage": "Bad Request",
-                            "header": [
-                                {
-                                    "name": "Content-Type",
-                                    "frequency": "required",
-                                    "criteria": ["application/json"]
-                                }
-                            ],
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "ErrorResponse"
-                                    }
-                                }
-                            ]
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "AvailabilityResponse"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "statusCode": 400,
+                    "statusMessage": "Bad Request",
+                    "header": [
+                        {
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
+                        {
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "ErrorResponse"
+                            }
                         }
                     ]
                 }
             ]
         },
-        "Reservations": {
-            "type": "symbolic",
+        "POST Reservations": {
+            "method": "POST",
             "location": "Reservations",
-            "methods": [
+            "location_type": "symbolic",
+            "summary": "Create a reservation",
+            "description": "Creates a reservation.",
+            "request": {
+                "body": [
+                    {
+                        "type": "json",
+                        "schema": {
+                            "type": "reference",
+                            "tag": "PostReservationsRequest"
+                        }
+                    }
+                ]
+            },
+            "response": [
                 {
-                    "method": "POST",
-                    "summary": "Create a reservation",
-                    "description": "Creates a reservation.",
-                    "request": {
-                        "body": [
-                            {
-                                "type": "json",
-                                "schema": {
-                                    "type": "reference",
-                                    "tag": "PostReservationsRequest"
-                                }
+                    "statusCode": 201,
+                    "statusMessage": "Created",
+                    "header": [
+                        {
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
+                        {
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "PostReservationsCreatedResponse"
                             }
-                        ]
-                    },
-                    "response": [
+                        }
+                    ]
+                },
+                {
+                    "statusCode": 400,
+                    "statusMessage": "Bad Request",
+                    "header": [
                         {
-                            "statusCode": 201,
-                            "statusMessage": "Created",
-                            "header": [
-                                {
-                                    "name": "Content-Type",
-                                    "frequency": "required",
-                                    "criteria": ["application/json"]
-                                }
-                            ],
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "PostReservationsCreatedResponse"
-                                    }
-                                }
-                            ]
-                        },
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
                         {
-                            "statusCode": 400,
-                            "statusMessage": "Bad Request",
-                            "header": [
-                                {
-                                    "name": "Content-Type",
-                                    "frequency": "required",
-                                    "criteria": ["application/json"]
-                                }
-                            ],
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "ErrorResponse"
-                                    }
-                                }
-                            ]
-                        },
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "ErrorResponse"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "statusCode": 200,
+                    "statusMessage": "OK",
+                    "description": "The reservation request was processed, but unable to be created.",
+                    "header": [
                         {
-                            "statusCode": 200,
-                            "statusMessage": "OK",
-                            "description": "The reservation request was processed, but unable to be created.",
-                            "header": [
-                                {
-                                    "name": "Content-Type",
-                                    "frequency": "required",
-                                    "criteria": ["application/json"]
-                                }
-                            ],
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "PostReservationsFailedResponse"
-                                    }
-                                }
-                            ]
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
+                        {
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "PostReservationsFailedResponse"
+                            }
                         }
                     ]
                 }
             ]
         },
-        "Reservation": {
-            "type": "symbolic",
+        "GET Reservation": {
+            "method": "GET",
             "location": "Reservation",
-            "methods": [
+            "location_type": "symbolic",
+            "summary": "Retrieves a reservation.",
+            "description": "Retrieves a reservation.",
+            "request": {
+                "header": [
+                    {
+                        "name": "Accept",
+                        "frequency": "optional",
+                        "criteria": ["application/json"]
+                    }
+                ]
+            },
+            "response": [
                 {
-                    "method": "GET",
-                    "summary": "Retrieves a reservation.",
-                    "description": "Retrieves a reservation.",
-                    "request": {
-                        "header": [
-                            {
-                                "name": "Accept",
-                                "frequency": "optional",
-                                "criteria": ["application/json"]
+                    "statusCode": 200,
+                    "statusMessage": "OK",
+                    "header": [
+                        {
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
+                        {
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "ReservationResponse"
                             }
-                        ]
-                    },
-                    "response": [
+                        }
+                    ]
+                },
+                {
+                    "statusCode": 404,
+                    "statusMessage": "Not Found",
+                    "header": [
                         {
-                            "statusCode": 200,
-                            "statusMessage": "OK",
-                            "header": [
-                                {
-                                    "name": "Content-Type",
-                                    "frequency": "required",
-                                    "criteria": ["application/json"]
-                                }
-                            ],
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "ReservationResponse"
-                                    }
-                                }
-                            ]
-                        },
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
                         {
-                            "statusCode": 404,
-                            "statusMessage": "Not Found",
-                            "header": [
-                                {
-                                    "name": "Content-Type",
-                                    "frequency": "required",
-                                    "criteria": ["application/json"]
-                                }
-                            ],
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "ErrorResponse"
-                                    }
-                                }
-                            ]
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "ErrorResponse"
+                            }
                         }
                     ]
                 }
             ]
         },
-        "Currency": {
-            "type": "symbolic",
+        "GET Currency": {
+            "method": "GET",
             "location": "Currency",
-            "methods": [
+            "location_type": "symbolic",
+            "summary": "Get currency information",
+            "description": "Retrieves currency information.",
+            "request": {
+                "query": [
+                    {
+                        "name": "code",
+                        "frequency": "required",
+                        "description": "The currency code.",
+                        "criteria": ["currency code"],
+                        "examples": ["USD", "EUR"]
+                    }
+                ]
+            },
+            "response": [
                 {
-                    "method": "GET",
-                    "summary": "Get currency information",
-                    "description": "Retrieves currency information.",
-                    "request": {
-                        "query": [
-                            {
-                                "name": "code",
-                                "frequency": "required",
-                                "description": "The currency code.",
-                                "criteria": ["currency code"],
-                                "examples": ["USD", "EUR"]
+                    "statusCode": 200,
+                    "statusMessage": "OK",
+                    "header": [
+                        {
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
+                        {
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "CurrencyData"
                             }
-                        ]
-                    },
-                    "response": [
+                        }
+                    ]
+                },
+                {
+                    "statusCode": 400,
+                    "statusMessage": "Bad Request",
+                    "header": [
                         {
-                            "statusCode": 200,
-                            "statusMessage": "OK",
-                            "header": [
-                                {
-                                    "name": "Content-Type",
-                                    "frequency": "required",
-                                    "criteria": ["application/json"]
-                                }
-                            ],
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "CurrencyData"
-                                    }
-                                }
-                            ]
-                        },
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
                         {
-                            "statusCode": 400,
-                            "statusMessage": "Bad Request",
-                            "header": [
-                                {
-                                    "name": "Content-Type",
-                                    "frequency": "required",
-                                    "criteria": ["application/json"]
-                                }
-                            ],
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "ErrorResponse"
-                                    }
-                                }
-                            ]
-                        },
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "ErrorResponse"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "statusCode": 404,
+                    "statusMessage": "Not Found",
+                    "header": [
                         {
-                            "statusCode": 404,
-                            "statusMessage": "Not Found",
-                            "header": [
-                                {
-                                    "name": "Content-Type",
-                                    "frequency": "required",
-                                    "criteria": ["application/json"]
-                                }
-                            ],
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "ErrorResponse"
-                                    }
-                                }
-                            ]
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
+                        {
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "ErrorResponse"
+                            }
                         }
                     ]
                 }
             ]
         },
-        "ExchangeRate": {
-            "type": "symbolic",
+        "GET ExchangeRate": {
+            "method": "GET",
             "location": "ExchangeRate",
-            "methods": [
-                {
-                    "method": "GET",
-                    "summary": "Monetary exchange information.",
-                    "description": "Monetary exchange information.",
-                    "request": {
-                        "query": [
-                            {
-                                "name": "from",
-                                "frequency": "required",
-                                "description": "The currency to convert from.",
-                                "criteria": ["currency code"],
-                                "examples": ["USD", "EUR"]
-                            },
-                            {
-                                "name": "to",
-                                "frequency": "required",
-                                "description": "The currency to convert to.",
-                                "criteria": ["currency code"],
-                                "examples": ["USD", "EUR"]
-                            }
-                        ]
+            "location_type": "symbolic",
+            "summary": "Monetary exchange information.",
+            "description": "Monetary exchange information.",
+            "request": {
+                "query": [
+                    {
+                        "name": "from",
+                        "frequency": "required",
+                        "description": "The currency to convert from.",
+                        "criteria": ["currency code"],
+                        "examples": ["USD", "EUR"]
                     },
-                    "response": [
+                    {
+                        "name": "to",
+                        "frequency": "required",
+                        "description": "The currency to convert to.",
+                        "criteria": ["currency code"],
+                        "examples": ["USD", "EUR"]
+                    }
+                ]
+            },
+            "response": [
+                {
+                    "statusCode": 200,
+                    "statusMessage": "OK",
+                    "header": [
                         {
-                            "statusCode": 200,
-                            "statusMessage": "OK",
-                            "header": [
-                                {
-                                    "name": "Content-Type",
-                                    "frequency": "required",
-                                    "criteria": ["application/json"]
-                                }
-                            ],
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "ExchangeRateResponse"
-                                    }
-                                }
-                            ]
-                        },
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
                         {
-                            "statusCode": 400,
-                            "statusMessage": "Bad Request",
-                            "header": [
-                                {
-                                    "name": "Content-Type",
-                                    "frequency": "required",
-                                    "criteria": ["application/json"]
-                                }
-                            ],
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "ErrorResponse"
-                                    }
-                                }
-                            ]
-                        },
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "ExchangeRateResponse"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "statusCode": 400,
+                    "statusMessage": "Bad Request",
+                    "header": [
                         {
-                            "statusCode": 404,
-                            "statusMessage": "Not Found",
-                            "header": [
-                                {
-                                    "name": "Content-Type",
-                                    "frequency": "required",
-                                    "criteria": ["application/json"]
-                                }
-                            ],
-                            "body": [
-                                {
-                                    "type": "json",
-                                    "schema": {
-                                        "type": "reference",
-                                        "tag": "ErrorResponse"
-                                    }
-                                }
-                            ]
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
+                        {
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "ErrorResponse"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "statusCode": 404,
+                    "statusMessage": "Not Found",
+                    "header": [
+                        {
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
+                        {
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "ErrorResponse"
+                            }
                         }
                     ]
                 }

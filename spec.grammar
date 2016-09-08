@@ -1,8 +1,8 @@
 API_DOCUMENT :
     {
         "sections" optional : SECTION_LIST,
-        "locations" optional : {
-            string: LOCATION
+        "methods" optional : {
+            string: METHOD
         },
         "schemas" optional : {
             "json" optional : {
@@ -21,27 +21,15 @@ SECTION :
         "name" required : string,
         "summary" optional : string,
         "description" optional : string,
-        "locations" required : [ string, string, ... ]     // list of locations identified by the properties found in API_DOCUMENT."locations"
+        "methods" required : [ string, string, ... ]     // list of methods identified by the property keys found in API_DOCUMENT."methods"
     }
-
-
-LOCATION :
-    {
-        "type" required : string,              // one of "absolute" (http://...), "relative" (/v1/foo), or "symbolic" (Root)
-        "location" required : string,          // path (e.g. /api/v1/people) or location (e.g. Root)
-        "summary" optional : string,           //
-        "description" optional : string,       //
-        "methods" required : METHOD_LIST       // list of METHODs on this LOCATION
-    }
-
-
-METHOD_LIST :
-    [ METHOD, METHOD, ... ]
 
 
 METHOD :
     {
         "method" required : string,            // "GET", "PUT", "POST", etc.
+        "location" required : string,          // path (e.g. /api/v1/people) or location (e.g. Root)
+        "location_type" required : string,              // one of "absolute" (http://...), "relative" (/v1/foo), or "symbolic" (Root)
         "summary" optional : string,           //
         "description" optional : string,       //
         "request" required : REQUEST,          //
