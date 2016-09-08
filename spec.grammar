@@ -52,7 +52,7 @@ RESPONSE_LIST :
 
 RESPONSE :
     {
-        "summary" optional : string,
+        "name" optional : string,
         "description" optional : string,
         "statusCode" required : number,
         "statusMessage" optional : string,
