@@ -54,7 +54,7 @@ REQUEST :
         "path" optional : PARAMETER_LIST,      //
         "query" optional : PARAMETER_LIST,     //
         "header" optional : PARAMETER_LIST,    //
-        "body" optional : BODY_LIST            //
+        "body" optional : BODY_LIST    // ????? should this be a BODY? an object of Content-Type: BODY?
     }
 
 
@@ -69,7 +69,7 @@ RESPONSE :
         "statusCode" required : number,
         "statusMessage" optional : string,
         "header" optional : PARAMETER_LIST
-        "body" optional : BODY_LIST
+        "body" optional : BODY_LIST    // ????? should this be a BODY? an object of Content-Type: BODY?
     }
 
 

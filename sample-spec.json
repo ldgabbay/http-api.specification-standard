@@ -3,7 +3,12 @@
         {
             "name": "Initialization",
             "description": "This initializes everything.",
-            "locations": ["InstanceRoot", "StaticData", "StaticLanguageData"]
+            "locations": ["InstanceRoot", "StaticData", "StaticLanguageData", "StaticLocaleData"]
+        },
+        {
+            "name": "Browsing",
+            "description": "This is for browsing.",
+            "locations": ["Availability", "Reservations", "Reservation", "ExchangeRate"]
         }
     ],
     "locations": {
@@ -28,13 +33,46 @@
                         {
                             "statusCode": 200,
                             "statusMessage": "OK",
-                            "body": [{
-                                "type": "json",
-                                "schema": [{
-                                    "type": "reference",
-                                    "name": "InstanceRootResponse"
-                                }]
-                            }]
+                            "header": [
+                                {
+                                    "name": "Content-Type",
+                                    "frequency": "required",
+                                    "criteria": ["application/json"]
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "type": "json",
+                                    "schema": {
+                                        "type": "reference",
+                                        "tag": "InstanceRootResponse"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "statusCode": 400,
+                            "statusMessage": "Bad Request",
+                            "header": [
+                                {
+                                    "name": "Content-Type",
+                                    "frequency": "required",
+                                    "criteria": ["application/json"]
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "type": "json",
+                                    "schema": {
+                                        "type": "reference",
+                                        "tag": "ErrorResponse"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "statusCode": 404,
+                            "statusMessage": "Not Found"
                         }
                     ]
                 }
@@ -57,7 +95,8 @@
                                 {
                                     "type": "json",
                                     "schema": {
-
+                                        "type": "reference",
+                                        "tag": "StaticDataResponse"
                                     }
                                 }
                             ]
@@ -89,11 +128,494 @@
                         {
                             "statusCode": 200,
                             "statusMessage": "OK",
+                            "header": [
+                                {
+                                    "name": "Content-Language",
+                                    "description": "The language of the language-specific data to be returned.",
+                                    "frequency": "required",
+                                    "criteria": ["https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4"],
+                                    "examples": ["en_US"]
+                                },
+                                {
+                                    "name": "Content-Type",
+                                    "frequency": "required",
+                                    "criteria": ["application/json"]
+                                }
+                            ],
                             "body": [
                                 {
                                     "type": "json",
                                     "schema": {
-
+                                        "type": "reference",
+                                        "tag": "StaticLanguageDataResponse"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "StaticLocaleData": {
+            "type": "symbolic",
+            "location": "StaticLocaleData",
+            "methods": [
+                {
+                    "method" : "GET",
+                    "summary": "Retrieves static locale-specific application data.",
+                    "description": "Retrieves all the locale-specific static data any client might need to run this application in the given locale.",
+                    "request": {
+                        "header": [
+                            {
+                                "name": "Accept-Locale",
+                                "description": "The locale for the locale-specific data to be returned.",
+                                "frequency": "required",
+                                "criteria": ["https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4"],
+                                "examples": ["en_US"]
+                            }
+                        ]
+                    },
+                    "response": [
+                        {
+                            "statusCode": 200,
+                            "statusMessage": "OK",
+                            "header": [
+                                {
+                                    "name": "Content-Locale",
+                                    "description": "The locale of the locale-specific data to be returned.",
+                                    "frequency": "required",
+                                    "criteria": ["https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4"],
+                                    "examples": ["en_US"]
+                                },
+                                {
+                                    "name": "Content-Type",
+                                    "frequency": "required",
+                                    "criteria": ["application/json"]
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "type": "json",
+                                    "schema": {
+                                        "type": "reference",
+                                        "tag": "StaticLocaleDataResponse"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "statusCode": 400,
+                            "statusMessage": "Bad Request",
+                            "header": [
+                                {
+                                    "name": "Content-Type",
+                                    "frequency": "required",
+                                    "criteria": ["application/json"]
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "type": "json",
+                                    "schema": {
+                                        "type": "reference",
+                                        "tag": "ErrorResponse"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "statusCode": 404,
+                            "statusMessage": "Not Found"
+                        }
+                    ]
+                }
+            ]
+        },
+        "Availability": {
+            "type": "symbolic",
+            "location": "Availability",
+            "methods": [
+                {
+                    "method": "POST",
+                    "summary": "Get all the rooms available.",
+                    "description": "This endpoint provides all the items available at a Site(Hotel)",
+                    "request": {
+                        "header": [
+                            {
+                                "name": "Content-Type",
+                                "frequency": "required",
+                                "criteria": ["application/json"]
+                            }
+                        ],
+                        "body": [
+                            {
+                                "type": "json",
+                                "schema": {
+                                    "type": "reference",
+                                    "tag": "AvailabilityRequest"
+                                }
+                            }
+                        ]
+                    },
+                    "response": [
+                        {
+                            "statusCode": 200,
+                            "statusMessage": "OK",
+                            "header": [
+                                {
+                                    "name": "Content-Type",
+                                    "frequency": "required",
+                                    "criteria": ["application/json"]
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "type": "json",
+                                    "schema": {
+                                        "type": "reference",
+                                        "tag": "AvailabilityResponse"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "statusCode": 400,
+                            "statusMessage": "Bad Request",
+                            "header": [
+                                {
+                                    "name": "Content-Type",
+                                    "frequency": "required",
+                                    "criteria": ["application/json"]
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "type": "json",
+                                    "schema": {
+                                        "type": "reference",
+                                        "tag": "ErrorResponse"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "Reservations": {
+            "type": "symbolic",
+            "location": "Reservations",
+            "methods": [
+                {
+                    "method": "POST",
+                    "summary": "Create a reservation",
+                    "description": "Creates a reservation.",
+                    "request": {
+                        "body": [
+                            {
+                                "type": "json",
+                                "schema": {
+                                    "type": "reference",
+                                    "tag": "PostReservationsRequest"
+                                }
+                            }
+                        ]
+                    },
+                    "response": [
+                        {
+                            "statusCode": 201,
+                            "statusMessage": "Created",
+                            "header": [
+                                {
+                                    "name": "Content-Type",
+                                    "frequency": "required",
+                                    "criteria": ["application/json"]
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "type": "json",
+                                    "schema": {
+                                        "type": "reference",
+                                        "tag": "PostReservationsCreatedResponse"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "statusCode": 400,
+                            "statusMessage": "Bad Request",
+                            "header": [
+                                {
+                                    "name": "Content-Type",
+                                    "frequency": "required",
+                                    "criteria": ["application/json"]
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "type": "json",
+                                    "schema": {
+                                        "type": "reference",
+                                        "tag": "ErrorResponse"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "statusCode": 200,
+                            "statusMessage": "OK",
+                            "description": "The reservation request was processed, but unable to be created.",
+                            "header": [
+                                {
+                                    "name": "Content-Type",
+                                    "frequency": "required",
+                                    "criteria": ["application/json"]
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "type": "json",
+                                    "schema": {
+                                        "type": "reference",
+                                        "tag": "PostReservationsFailedResponse"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "Reservation": {
+            "type": "symbolic",
+            "location": "Reservation",
+            "methods": [
+                {
+                    "method": "GET",
+                    "summary": "Retrieves a reservation.",
+                    "description": "Retrieves a reservation.",
+                    "request": {
+                        "header": [
+                            {
+                                "name": "Accept",
+                                "frequency": "optional",
+                                "criteria": ["application/json"]
+                            }
+                        ]
+                    },
+                    "response": [
+                        {
+                            "statusCode": 200,
+                            "statusMessage": "OK",
+                            "header": [
+                                {
+                                    "name": "Content-Type",
+                                    "frequency": "required",
+                                    "criteria": ["application/json"]
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "type": "json",
+                                    "schema": {
+                                        "type": "reference",
+                                        "tag": "ReservationResponse"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "statusCode": 404,
+                            "statusMessage": "Not Found",
+                            "header": [
+                                {
+                                    "name": "Content-Type",
+                                    "frequency": "required",
+                                    "criteria": ["application/json"]
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "type": "json",
+                                    "schema": {
+                                        "type": "reference",
+                                        "tag": "ErrorResponse"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "Currency": {
+            "type": "symbolic",
+            "location": "Currency",
+            "methods": [
+                {
+                    "method": "GET",
+                    "summary": "Get currency information",
+                    "description": "Retrieves currency information.",
+                    "request": {
+                        "query": [
+                            {
+                                "name": "code",
+                                "frequency": "required",
+                                "description": "The currency code.",
+                                "criteria": ["currency code"],
+                                "examples": ["USD", "EUR"]
+                            }
+                        ]
+                    },
+                    "response": [
+                        {
+                            "statusCode": 200,
+                            "statusMessage": "OK",
+                            "header": [
+                                {
+                                    "name": "Content-Type",
+                                    "frequency": "required",
+                                    "criteria": ["application/json"]
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "type": "json",
+                                    "schema": {
+                                        "type": "reference",
+                                        "tag": "CurrencyData"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "statusCode": 400,
+                            "statusMessage": "Bad Request",
+                            "header": [
+                                {
+                                    "name": "Content-Type",
+                                    "frequency": "required",
+                                    "criteria": ["application/json"]
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "type": "json",
+                                    "schema": {
+                                        "type": "reference",
+                                        "tag": "ErrorResponse"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "statusCode": 404,
+                            "statusMessage": "Not Found",
+                            "header": [
+                                {
+                                    "name": "Content-Type",
+                                    "frequency": "required",
+                                    "criteria": ["application/json"]
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "type": "json",
+                                    "schema": {
+                                        "type": "reference",
+                                        "tag": "ErrorResponse"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "ExchangeRate": {
+            "type": "symbolic",
+            "location": "ExchangeRate",
+            "methods": [
+                {
+                    "method": "GET",
+                    "summary": "Monetary exchange information.",
+                    "description": "Monetary exchange information.",
+                    "request": {
+                        "query": [
+                            {
+                                "name": "from",
+                                "frequency": "required",
+                                "description": "The currency to convert from.",
+                                "criteria": ["currency code"],
+                                "examples": ["USD", "EUR"]
+                            },
+                            {
+                                "name": "to",
+                                "frequency": "required",
+                                "description": "The currency to convert to.",
+                                "criteria": ["currency code"],
+                                "examples": ["USD", "EUR"]
+                            }
+                        ]
+                    },
+                    "response": [
+                        {
+                            "statusCode": 200,
+                            "statusMessage": "OK",
+                            "header": [
+                                {
+                                    "name": "Content-Type",
+                                    "frequency": "required",
+                                    "criteria": ["application/json"]
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "type": "json",
+                                    "schema": {
+                                        "type": "reference",
+                                        "tag": "ExchangeRateResponse"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "statusCode": 400,
+                            "statusMessage": "Bad Request",
+                            "header": [
+                                {
+                                    "name": "Content-Type",
+                                    "frequency": "required",
+                                    "criteria": ["application/json"]
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "type": "json",
+                                    "schema": {
+                                        "type": "reference",
+                                        "tag": "ErrorResponse"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "statusCode": 404,
+                            "statusMessage": "Not Found",
+                            "header": [
+                                {
+                                    "name": "Content-Type",
+                                    "frequency": "required",
+                                    "criteria": ["application/json"]
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "type": "json",
+                                    "schema": {
+                                        "type": "reference",
+                                        "tag": "ErrorResponse"
                                     }
                                 }
                             ]
@@ -204,7 +726,7 @@
                     },
                     {
                         "key": "logo",
-                        "descripton": "Hotel's logo as a transparent image",
+                        "description": "Hotel's logo as a transparent image",
                         "frequency": "optional",
                         "schema": {
                             "type": "string",
@@ -213,7 +735,7 @@
                     },
                     {
                         "key": "title",
-                        "descripton": "single line hotel name",
+                        "description": "single line hotel name",
                         "frequency": "required",
                         "schema": {
                             "type": "string"
@@ -221,7 +743,7 @@
                     },
                     {
                         "key": "phoneNumber",
-                        "descripton": "main phone number for site or null",
+                        "description": "main phone number for site or null",
                         "frequency": "required",
                         "schema": {
                             "type": "string",
@@ -230,7 +752,7 @@
                     },
                     {
                         "key": "website",
-                        "descripton": "url to return to when exiting",
+                        "description": "url to return to when exiting",
                         "frequency": "required",
                         "schema": {
                             "type": "string",
@@ -239,7 +761,7 @@
                     },
                     {
                         "key": "languages",
-                        "descripton": "url to return to when exiting",
+                        "description": "url to return to when exiting",
                         "frequency": "required",
                         "schema": {
                             "type": "object",
@@ -277,7 +799,7 @@
                     },
                     {
                         "key": "currencies",
-                        "descripton": "Set of currencies supported by this site.",
+                        "description": "Set of currencies supported by this site.",
                         "frequency": "required",
                         "schema": {
                             "type": "object",
@@ -335,1217 +857,4 @@
             }
         }
     }
-}
-
-
-
-
-  "{StaticLanguageData}":
-    get:
-      operationId: "getStaticLanguageData"
-      tags:
-      - "Setup"
-      summary: "Retrieves static language-specific application data."
-      description: "Retrieves all the language-specific static data any client might need to run this application in the given language."
-      parameters:
-        - in: header
-          name: "Accept-Language"
-          description: "The language of the language-specific data to be returned."
-          required: true
-          type: "string"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/TStaticLanguageData"
-        404:
-          description: "Not Found"
-  "{StaticLocaleData}":
-    get:
-      operationId: "getStaticLocaleData"
-      tags:
-      - "Setup"
-      summary: "Retrieves static locale-specific application data."
-      description: "Retrieves all the locale-specific static data any client might need to run this application in the given locale."
-      parameters:
-        - in: header
-          name: "Accept-Language"
-          description: "The locale for the locale-specific data to be returned."
-          required: true
-          type: "string"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/TStaticLocaleData"
-        404:
-          description: "Not Found"
-  "{Availability}":
-    post:
-      operationId: "postAvailability"
-      tags:
-      - "Interact"
-      summary: "Get all the rooms available."
-      description: "This endpoint provides all the items available at a Site(Hotel)"
-      parameters:
-      - in: "body"
-        # name: "body"
-        # description: "Code Type"
-        required: true
-        schema:
-          $ref: "#/definitions/TAvailabilityRequest"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/TAvailabilityResponse"
-        400:
-          description: "Bad Request"
-          schema:
-            $ref: "#/definitions/TErrorResponse"
-  "{Reservations}":
-    post:
-      operationId: "postReservations"
-      tags:
-      - "Transact"
-      summary: "Create a reservation."
-      description: "Creates a reservation."
-      parameters:
-      - in: "body"
-        # name: "body"
-        # description: "Code Type"
-        required: true
-        schema:
-          $ref: "#/definitions/TPostReservationsRequest"
-      responses:
-        201:
-          description: "Created"
-          schema:
-            $ref: "#/definitions/TPostReservationsCreatedResponse"
-        200:
-          description: "OK - things have changed, data refresh"
-          schema:
-            $ref: "#/definitions/TPostReservationsRefreshResponse"
-        400:
-          description: "Bad Request"
-          schema:
-            $ref: "#/definitions/TErrorResponse"
-  "{Reservation}":
-    get:
-      operationId: "getReservation"
-      tags:
-      - "Transact"
-      summary: "Create a reservation."
-      description: "Creates a reservation."
-      parameters:
-      - in: "query"
-        name: "code"
-        description: "The reservation code."
-        required: true
-        type: string
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/TReservation"
-        400:
-          description: "Bad Request"
-          schema:
-            $ref: "#/definitions/TErrorResponse"
-        404:
-          description: "Not Found"
-          schema:
-            $ref: "#/definitions/TErrorResponse"
-  "{CurrencyExchange}":
-    get:
-      tags:
-      - "Setup"
-      summary: "Monetary exchange information"
-      description: "Monetary exchange information"
-      operationId: "getForeignExchangeInformation"
-      parameters:
-        - name: "code"
-          in: "query"
-          description: "The currency code"
-          required: true
-          type: "string"
-      responses:
-        200:
-          description: "OK"
-          schema:
-            $ref: "#/definitions/CurrencyResponse"
-        404:
-          description: "Not Found"
-
-    ],
-    "schemas": {
-        "json": {
-
-        }
-
-
-  TStaticLanguageData:
-    type: "object"
-    properties:
-      common:
-        $ref: "#/definitions/CommonLocalizedStrings"
-#      properties:
-#        type: "string"
-#        description: "Map of { property.id : { PropertyLocalizedStrings }, ... }"
-#        additionalProperties:
-#          $ref: "#/definitions/PropertyLocalizedStrings"
-      guestTypes:
-        type: "object"
-        description: "Map of { guestType.id : { GuestTypeLocalizedStrings }, ... }"
-        additionalProperties:
-          $ref: "#/definitions/GuestTypeLocalizedStrings"
-      codeTypes:
-        type: "object"
-        description: "Map of { codeType.id : { CodeTypeLocalizedStrings }, ... }"
-        additionalProperties:
-          $ref: "#/definitions/CodeTypeLocalizedStrings"
-      roomTypeClasses:
-        type: "object"
-        description: "Map of { roomTypeClass.id : { RoomTypeClassLocalizedStrings }, ... }"
-        additionalProperties:
-          $ref: "#/definitions/RoomTypeClassLocalizedStrings"
-      roomTypes:
-        type: "object"
-        description: "Map of { roomType.id : { RoomTypeLocalizedStrings }, ... }"
-        additionalProperties:
-          $ref: "#/definitions/RoomTypeLocalizedStrings"
-      rates:
-        type: "object"
-        description: "Map of { rate.id : { RateLocalizedStrings }, ... }"
-        additionalProperties:
-          $ref: "#/definitions/RateLocalizedStrings"
-      chargeTypes:
-        type: "object"
-        description: "Map of { chargeType.id : { ChargeTypeLocalizedStrings }, ... }"
-        additionalProperties:
-          $ref: "#/definitions/ChargeTypeLocalizedStrings"
-      roomFeatures:
-        type: "object"
-        description: "Map of { roomFeature.id : { RoomFeatureLocalizedStrings }, ... }"
-        additionalProperties:
-          $ref: "#/definitions/RoomFeatureLocalizedStrings"
-      errors:
-        type: "object"
-        description: "Map of { error.id : { ErrorLocalizedStrings }, ...}"
-        additionalProperties:
-          type: "string"
-      items:
-        type: "object"
-        description: "Map of { item.id : { IThe api versiontemLocalizedStrings }, ... }"
-        additionalProperties:
-          $ref: "#/definitions/ItemLocalizedStrings"
-  TStaticLocaleData:
-    type: "object"
-  CurrencyResponse:
-    type: "object"
-    description: "A currency ratio from USD, symbol, "
-    properties:
-       ratio:
-         type: "number"
-         description: "Multiply by this to get the requested currency from USD."
-         format: float
-       decimal_character:
-         type: "string"
-         description: "The decimal [\".\", \",\"] separator"
-       thousands_character:
-         type: "string"
-         description: "The thousands [\",\", \" \"] separator"
-       decimal_places:
-         type: "number"
-         description: "The number of decimal places after the"
-       symbol:
-         type: "string"
-         description: "UTF-8 encoded currency symbol"
-  TErrorResponse:
-    type: "object"
-    required:
-    - "errors"
-    description: "An error response"
-    properties:
-       errors:
-         description: "Map of field : [error numbers]"
-         additionalProperties:
-           $ref: "#/definitions/TFieldErrors"
-  TFieldErrors:
-    type: "array"
-    description: "the reponse errors"
-    items:
-      type: "number"
-  TPostReservationsRequest:
-    type: "object"
-    required:
-    - "createLogin"
-    - "guestEmailAddress"
-    - "guestFirstName"
-    - "guestLastName"
-    - "loginEmailAddress"
-    - "loginPassword"
-    - "paymentMethod"
-    - "phoneNumber"
-    - "signUpForNewsletter"
-    properties:
-      guestFirstName:
-        type: "string"
-      guestLastName:
-        type: "string"
-      guestEmailAddress:
-        type: "string"
-        description: Guest Email Address
-      speciaRequest:
-        type: "string"
-      paymentMethod:
-        $ref: "#/definitions/PaymentMethod"
-      phoneNumber:
-        type: string
-        description: Phone Number
-      createLogin:
-        type: "boolean"
-      loginEmailAddress:
-        type: "string"
-        description: Login Email Address
-      loginPassword:
-        type: string
-        description: Login Password
-      signUpForNewsletter:
-        type: "boolean"
-        description: "Sign up for a newsletter"
-  TPostReservationsCreatedResponse:
-    type: "object"
-    required:
-    - "billingMethodDescriptor"
-    - "confirmationID"
-    - "shoppingCart"
-    properties:
-      confirmationID:
-        type: "string"
-        description: confirmation.id
-      shoppingCart:
-        type: "string"
-        description: "TODO define me"
-      billingMethodDescriptor:
-        type: "string"
-        description: "e.g. Visa xxxx-xxxx-xxxx-1234"
-  Code:
-    type: "object"
-    properties:
-      codeTypeID:
-        type: "string"
-        description: codeType.id
-      code:
-        type: "string"
-        description: "localized code to check"
-  TAvailabilityRequest:
-    type: "object"
-    required:
-      - "checkinDate"
-      - "checkoutDate"
-    properties:
-      checkinDate:
-        type: "string"
-        description: Checkin date.
-        format: date
-      checkoutDate:
-        type: "string"
-        description: Checkout date.
-        format: date
-      codes:
-        type: "array"
-        items:
-          $ref: "#/definitions/Code"
-  TAvailabilityResponse:
-    type: "object"
-    properties:
-      roomTypes:
-        type: "array"
-        description: "ordered list of roomType.id's to display"
-        items:
-          type: "string"
-      rates:
-        type: "array"
-        description: "ordered list of rate.id's to display"
-        items:
-          type: "string"
-      priceSchedules:
-        type: "array"
-        description: "Prices"
-        items:
-          $ref: "#/definitions/PriceSchedule"
-  PriceSchedule:
-    type: object
-    description: A Price
-    properties:
-      roomType:
-        type: "string"
-        description: roomType.id
-      rate:
-        type: "string"
-        description: rate.id
-      prices:
-        type: object
-        description: "e.g. GuestTypeCounts as coordinates -> { \"1,1\" : [ 100, 110, 110.99, 95.56] } <- Nightly Prices"
-        additionalProperties:
-            type: array
-            description: Array of Prices indexed by night.
-            items:
-               type: number
-               format: float
-  ExternalLinks:
-    type: "object"
-    description: "URL icon of external link"
-    properties:
-      url:
-        type: string
-        description: "The URL for the external link"
-      icon:
-        type: string
-        description: "The Icon URL for the external link"
-  Chain:
-    type: "object"
-    description: "A hotel chain/brand."
-    required:
-    - "chargeTypes"
-    - "codeTypes"
-    - "guestTypes"
-    - "id"
-    - "items"
-    - "logo"
-    - "properties"
-    - "rates"
-    - "roomFeatures"
-    - "roomTypeClasses"
-    - "roomTypes"
-    - "title"
-    properties:
-      id:
-        type: "string"
-        description: chain.id
-      logo:
-        type: "string"
-        description: "hotel's logo as a transparent image"
-      title:
-        type: "string"
-        description: "single line hotel name"
-      properties:
-        type: "object"
-        description: "Map of { property.id : { Property }, ... }"
-        additionalProperties:
-          $ref: "#/definitions/Property"
-      guestTypes:
-        type: "object"
-        description: "Map of { guestType.id : { GuestType }, ... }"
-        additionalProperties:
-          $ref: "#/definitions/GuestType"
-      codeTypes:
-        type: "object"
-        description: "Map of { codeType.id : { CodeType }, ... }"
-        additionalProperties:
-          $ref: "#/definitions/CodeType"
-      roomTypeClasses:
-        type: "object"
-        description: "Map of { roomTypeClass.id : { RoomTypeClass }, ... }"
-        additionalProperties:
-          $ref: "#/definitions/RoomTypeClass"
-      roomTypes:
-        type: "object"
-        description: "Map of { roomType.id : { RoomType }, ... }"
-        additionalProperties:
-          $ref: "#/definitions/RoomType"
-      rates:
-        type: "object"
-        description: "Map of { rate.id : { Rate }, ... }"
-        additionalProperties:
-          $ref: "#/definitions/Rate"
-      chargeTypes:
-        type: "object"
-        description: "Map of { chargeType.id : { ChargeType }, ... }"
-        additionalProperties:
-          $ref: "#/definitions/ChargeType"
-      roomFeatures:
-        type: "object"
-        description: "Map of { roomFeature.id : { RoomFeature }, ... }"
-        additionalProperties:
-          $ref: "#/definitions/RoomFeature"
-      externalLinks:
-        type: "array"
-        description: "External links map of URL and Icon"
-        items:
-          $ref: "#/definitions/ExternalLinks"
-      items:
-        type: "object"
-        description: "Map of { item.id : { Item }, ... }"
-        additionalProperties:
-          $ref: "#/definitions/Item"
-  Property:
-    type: "object"
-    required:
-    - "defaultLanguage"
-    - "defaultLocale"
-    - "title"
-    properties:
-      title:
-        type: "string"
-        description: "single line hotel name"
-      mailingAddress:
-        $ref: "#/definitions/Address"
-      phoneNumber:
-        type: "string"
-        description: "Phone Number"
-      defaultLocale:
-        type: "string"
-        description: "https://tools.ietf.org/html/bcp47"
-      defaultLanguage:
-        type: "string"
-        description: "https://tools.ietf.org/html/bcp47"
-    description: "Property Attributes"
-  RoomFeature:
-    type: "object"
-    description: "
-    A line item description for something inherently part of a Room or RoomType. 
-      e.g. air conditioning.
-    Some are attached to the property. 
-      e.g. swimming pool.
-    Does not include things that can be added or taken away, e.g. wi-fi,breakfast,newspaper"
-    required:
-    - "icon"
-    - "text"
-    properties:
-      id:
-        type: "string"
-        description: roomFeature.id
-      icon:
-        $ref: "#/definitions/ImageData"
-      text:
-        type: "string"
-        description: "Text substitude for image. Language dependent."
-  ChargeType:
-    type: "object"
-    description: "Additional charges to a room."
-    properties:
-      id:
-        type: "string"
-        description: chargeType.id
-  CodeType:
-    type: "object"
-    description: "Guests can add codes to their booking request to get discounts, etc. These are the types of codes"
-    required:
-    - "icon"
-    - "id"
-    properties:
-      id:
-        type: "string"
-        description: codeType.id
-      icon:
-        type: "string"
-        description: icon URL
-  GuestType:
-    type: "object"
-    description: "Guest types are grouped into classes, e.g. adults, children, pets"
-    required:
-    - "icon"
-    properties:
-      id:
-        type: "string"
-        description: GuestType.id
-      icon:
-        type: "string"
-        description: icon URL
-  Rate:
-    type: "object"
-    description: "
-      A rate is a particular configuration of a RoomType. This would be some combination of:
-      * a specification of a RoomTypeVariant (e.g. \"King Suite\" with \"Ocean View\" vs \"King Suite\")
-      * a discount (e.g. AAA, AARP, military)
-      * included AddOns"
-    properties:
-      id:
-        type: "string"
-        description: rate.id
-  RoomTypeClass:
-    type: "object"
-    description: A general type of room, e.g. \"Standard Room\", \"Deluxe Room\".  There are specific variants of a RoomTypeClass, defined as RoomTypes, usually specified as a RoomTypeClass in conjunction with a Rate, e.g. the \"Ocean View\" rate for a \"Standard Room\"
-    required:
-    - "features"
-    - "images"
-    properties:
-      id:
-        type: "string"
-        description: roomTypeClass.id
-      images:
-        type: array
-        description: Array of Image URLs
-        items:
-           type: "string"
-      features:
-        type: array
-        description: roomFeature.id array
-        items:
-           type: "string"
-  RoomType:
-    type: "object"
-    description: "A specific variant of a RoomTypeClass, e.g. \"Standard Room with Ocean View\". These are usually implicitly defined by a specific combination of Rate and RoomTypeClass. For example, the potential guest is presented with a selection of RoomTypeClass, chooses \"Standard Room\", then is presented with a selection of Rate, and selects \"Ocean View\" which offers a Standard Room with Ocean View."
-    required:
-    - "class"
-    - "features"
-    - "images"
-    properties:
-      id:
-        type: "string"
-        description: roomType.id
-      class:
-        type: "string"
-        description: roomTypeClass.id
-      images:
-        type: array
-        description: Array of Image URLs
-        items:
-          type: "string" 
-      features:
-        type: array
-        description: roomFeature.id array
-        items:
-           type: "string"
-  CommonLocalizedStrings:
-    type: "object"
-    required:
-    - "add"
-    - "addCode"
-    - "addOnItems"
-    - "addToCalendar"
-    - "additionalOptions"
-    - "additionals"
-    - "amenities"
-    - "averageRatePerNight"
-    - "backToHotelWebsite"
-    - "billingInformation"
-    - "bookNow"
-    - "bookingConfirmation"
-    - "bookingTotal"
-    - "cancelReservation"
-    - "cancellationPolicy"
-    - "changeCurrency"
-    - "checkAvailability"
-    - "checkIn"
-    - "checkInDate"
-    - "checkInTime"
-    - "checkOut"
-    - "checkOutDate"
-    - "confirmBooking"
-    - "confirmYourBooking"
-    - "confirmationNoOrLastName"
-    - "contactUs"
-    - "continue"
-    - "customizeYourStay"
-    - "days"
-    - "done"
-    - "emailAddress"
-    - "enterACode"
-    - "fees"
-    - "findReservations"
-    - "forgotPassword"
-    - "guestEmail"
-    - "guestEmailAddress"
-    - "guestName"
-    - "hotelInformation"
-    - "loading"
-    - "logIn"
-    - "modifyReservation"
-    - "monthsFull"
-    - "monthsShort"
-    - "nights"
-    - "noThanks"
-    - "password"
-    - "perNight"
-    - "planHeader"
-    - "profile"
-    - "rateType"
-    - "rates"
-    - "ratesFrom"
-    - "reservation"
-    - "reservationDetails"
-    - "roomDescription"
-    - "roomRatePerNight"
-    - "roomTota"
-    - "roomType"
-    - "search"
-    - "selectARate"
-    - "selectARoom"
-    - "selectLanguage"
-    - "settings"
-    - "shareReservation"
-    - "signIn"
-    - "taxes"
-    - "total"
-    - "upgrade"
-    - "upgradeFeatures"
-    - "upgradeYourRoom"
-    - "viewRate"
-    properties:
-      monthsFull:
-        type: "array"
-        description: "[January,February,March, ...]"
-        items:
-          type: "string"
-      monthsShort:
-        type: "array"
-        description: "[Jan, Feb, Mar, ...]"
-        items:
-          type: "string"
-      days:
-        type: "array"
-        description: "[Su, Mo, Tu, ...]"
-        items:
-          type: "string"
-      loading:
-        type: "string"
-        description: "Loading..."
-      total:
-        type: "string"
-        description: "Total: "
-      backToHotelWebsite:
-        type: "string"
-        description: "Back to hotel website"
-      profile:
-        type: "string"
-        description: "Profile"
-      signIn:
-        type: "string"
-        description: "Sign In"
-      emailAddress:
-        type: "string"
-        description: "Email Address frank@unknown.com"
-      password:
-        type: "string"
-        description: "Password"
-      logIn:
-        type: "string"
-        description: "Log In"
-      forgotPassword:
-        type: "string"
-        description: "Forgot Password"
-      findReservations:
-        type: "string"
-        description: "Find Reservations"
-      guestEmailAddress:
-        type: "string"
-        description: "Email Address"
-      confirmationNoOrLastName:
-        type: "string"
-        description: "Confirmation No. or Last Name"
-      search:
-        type: "string"
-        description: "Search"
-      settings:
-        type: "string"
-        description: "Settings"
-      selectLanguage:
-        type: "string"
-        description: "Select Language"
-      changeCurrency:
-        type: "string"
-        description: "Change Currency"
-      contactUs:
-        type: "string"
-        description: "Contact Us"
-      planHeader:
-        type: "string"
-        description: "Plan Your Trip"
-      checkIn:
-        type: "string"
-        description: "Check-in"
-      checkOut:
-        type: "string"
-        description: "Check-out"
-      additionalOptions:
-        type: "string"
-        description: "Additional Options"
-      enterACode:
-        type: "string"
-        description: "Enter a Code"
-      addCode:
-        type: "string"
-        description: "add code"
-      done:
-        type: "string"
-        description: "Done"
-      checkAvailability:
-        type: "string"
-        description: "Check Availability"
-      selectARoom:
-        type: "string"
-        description: "Select a Room"
-      ratesFrom:
-        type: "string"
-        description: "Rates From"
-      viewRate:
-        type: "string"
-        description: "View Rate"
-      selectARate:
-        type: "string"
-        description: "Select A Rate"
-      rates:
-        type: "string"
-        description: "Rates"
-      bookNow:
-        type: "string"
-        description: "Book Now"
-      roomDescription:
-        type: "string"
-        description: "Room Description"
-      amenities:
-        type: "string"
-        description: "Amenities"
-      customizeYourStay:
-        type: "string"
-        description: "Customize Your Stay"
-      continue:
-        type: "string"
-        description: "Continue"
-      add:
-        type: "string"
-        description: "Add"
-      upgradeYourRoom:
-        type: "string"
-        description: "Upgrade Your Room"
-      perNight:
-        type: "string"
-        description: "/ night"
-      upgrade:
-        type: "string"
-        description: "Upgrade"
-      noThanks:
-        type: "string"
-        description: "no thanks"
-      upgradeFeatures:
-        type: "string"
-        description: "Upgrade features"
-      confirmYourBooking:
-        type: "string"
-        description: "Confirm Your Booking"
-      reservationDetails:
-        type: "string"
-        description: "Reservation Details"
-      roomType:
-        type: "string"
-        description: "Room Type"
-      rateType:
-        type: "string"
-        description: "Rate Type"
-      averageRatePerNight:
-        type: "string"
-        description: "Avg. rate / night"
-      nights:
-        type: "string"
-        description: "Nights"
-      roomRatePerNight:
-        type: "string"
-        description: "Room rate / night"
-      roomTota:
-        type: "string"
-        description: "Room total"
-      addOnItems:
-        type: "string"
-        description: "Add-On Items"
-      additionals:
-        type: "string"
-        description: "additionals"
-      taxes:
-        type: "string"
-        description: "taxes"
-      fees:
-        type: "string"
-        description: "Fees"
-      bookingTotal:
-        type: "string"
-        description: "Booking Total"
-      confirmBooking:
-        type: "string"
-        description: "Confirm Booking"
-      bookingConfirmation:
-        type: "string"
-        description: "Booking Confirmation"
-      reservation:
-        type: "string"
-        description: "Reservation"
-      checkInDate:
-        type: "string"
-        description: "Check-in date"
-      checkInTime:
-        type: "string"
-        description: "Check-in time"
-      checkOutDate:
-        type: "string"
-        description: "Check-out date"
-      guestName:
-        type: "string"
-        description: "Guest name"
-      guestEmail:
-        type: "string"
-        description: "Email Address"
-      addToCalendar:
-        type: "string"
-        description: "Add to calendar"
-      shareReservation:
-        type: "string"
-        description: "Share reservation"
-      hotelInformation:
-        type: "string"
-        description: "Hotel Information"
-      billingInformation:
-        type: "string"
-        description: "Billing Information"
-      cancellationPolicy:
-        type: "string"
-        description: "Cancellation Policy"
-      modifyReservation:
-        type: "string"
-        description: "Modify reservation"
-      cancelReservation:
-        type: "string"
-        description: "Cancel reservation"
-  Address:
-    type: "object"
-    required:
-    - "city"
-    - "country"
-    - "line1"
-    - "stateOrProvince"
-    - "zipOrPostCode"
-    properties:
-      id:
-        type: "string"
-        description: address.id
-      line1:
-        type: "string"
-        description: "Address First Line"
-      line2:
-        type: "string"
-        description: "Address Second Line"
-      city:
-        type: "string"
-        description: Address City
-      stateOrProvince: 
-        type: "string"
-        description: State of Province
-      zipOrPostCode:
-        type: "string"
-        description: Zip or Postal Code
-      country:
-        type: "string"
-        description: Country
-  PaymentMethod:
-    type: "object"
-    required:
-    - "address"
-    - "cardNumber"
-    - "cvv"
-    - "expMonth"
-    - "expYear"
-    - "id"
-    - "nameOnCard"
-    - "owner"
-    - "typeOfCard"
-    properties:
-      id:
-        type: "string"
-        description: paymentMethod.id
-      owner:
-        type: 
-        - "string"
-        - "null"
-        description: owner.id or null
-      typeOfCard:
-        type: "string"
-        description: "Visa, MasterCard, determined by server based on cardNumber"
-      nameOnCard:
-        type: "string"
-      cardNumber:
-        type: "string"
-      expMonth:
-        type: "string"
-      expYear:
-        type: "string"
-      cvv:
-        type: "string"
-      address:
-        $ref: "#/definitions/Address"
-  ImageData:
-    type: "string"
-    description: "Binary Image data to be transmitted"
-    format: byte
-  Item:
-    type: "object"
-    description: An Item
-    properties:
-      id:
-        type: "string"
-        description: item.id
-      tiedToBookedRoomType:
-        type: "boolean"
-        description: "for a specific booked roomtype, or not"
-      timeType:
-        type: "string"
-        description: "for a specific day & time, day only, each day of stay, or not"
-        enum:
-        - "none"
-        - "day"
-        - "day/Time/interval"
-        - "eachDay"
-      tiedGuest:
-        type: "string"
-        description: "for one guest, all guests? for one day, all days?"
-        enum:
-        - "none"
-        - "perOccupant"
-        - "perGuest"
-      image:
-        type: "string"
-        description: Items image URL
-  RoomTypeLocalizedStrings:
-    type: object
-    required:
-      - "name"
-      - "description"
-    properties:
-       name:
-          type: "string"
-          description: The language specific name. 
-       description:
-          type: "string"
-          description: The language specific description.
-  RoomTypeClassLocalizedStrings:
-    type: object
-    required:
-      - "name"
-      - "description"
-    properties:
-       name:
-          type: "string"
-          description: The language specific name. 
-       description:
-          type: "string"
-          description: The language specific description.
-  GuestTypeLocalizedStrings:
-    required:
-      - "nameSingular"
-      - "namePlural"
-      - "tooltip"
-    type: object
-    properties:
-      nameSingular:
-        type: "string"
-        description: The language specific singular name. e.g. adult
-      namePlural:
-        type: "string"
-        description: The language specific plural. e.g. adults
-      tooltip:
-        type: "string"
-        description: The language specific tooltip. 
-  CodeTypeLocalizedStrings:
-    required:
-      - "displayName"
-      - "tooltip"
-    type: object
-    properties:
-      displayName:
-        type: "string"
-        description: The language specific display name. 
-      tooltip:
-        type: "string"
-        description: The language specific tooltip. 
-  RateLocalizedStrings:
-    type: object
-    required:
-      - "name"
-      - "description"
-      - "policy"
-    properties:
-      name:
-        type: "string"
-        description: The language specific name. 
-      description:
-        type: "string"
-        description: The language specific description.
-      policy:
-        type: "string"
-        description: The language specific policy.
-  ChargeTypeLocalizedStrings:
-    type: object
-    required:
-      - "name"
-    properties:
-       name:
-          type: "string"
-          description: The language specific name. 
-  RoomFeatureLocalizedStrings:
-    type: object
-    properties:
-     text:
-        type: "string"
-        description: The language specific text. 
-  ItemLocalizedStrings:
-    type: object
-    required:
-      - "name"
-      - "description"
-      - "policy"
-    properties:
-      name:
-        type: "string"
-        description: The language specific name. 
-      description:
-        type: "string"
-        description: The language specific description.
-      policy:
-        type: "string"
-        description: The language specific policy.
-parameters:
-  Language:
-    name: "Accept-Language"
-    in: "header"
-    description: "Language to return"
-    required: false
-    type: "string"
-
-
-
-    }
-
-    [
-        {
-            "name": "form-schema",
-            "type": "form",
-            "parameters": [
-                {
-                    "name": "param1",
-                    "frequency": "optional",
-                    "description": "param1 desc",
-                    "criteria": [ "number" ],
-                    "examples": [ "313" ]
-                },
-                {
-                    "name": "param2",
-                    "frequency": "required",
-                    "description": "param2 desc",
-                    "criteria": [ "date" ],
-                    "example": [ "Jan13" ]
-                }
-            ]
-        },
-        {
-            "name": "even-num",
-            "type": "json",
-            "schema": {
-                "type": "number",
-                "description": "blahblah",
-                "criteria": [
-                    "less than 10",
-                    "more than 3",
-                    "even"
-                ],
-                "examples": [
-                    "4",
-                    "6"
-                ]
-            }
-        },
-        {
-            "name": "stupid-obj",
-            "type": "json",
-            "description": "this is a dumb object",
-            "schema": {
-                "type": "object",
-                "criteria": [
-                    "has monkeys",
-                    "tastes great with milk",
-                    "funnylookin"
-                ],
-                "examples": [ "{}" ],
-                "properties": [
-                    {
-                        "name": "some-ref",
-                        "description": "param2 desc",
-                        "frequency": "required",
-                        "schema": {
-                            "type": ["ref", "schema-name"]
-                        }
-                    },
-                    {
-                        "name": "some-logic",
-                        "description": "param2 desc",
-                        "frequency": "required",
-                        "schema": {
-                            "type": ["oneOf", ["ref", "schema-one"], ["ref", "schema-two"], ["ref", "schema-three"]]
-                        }
-                    },
-                    {
-                        "name": "some-null",
-                        "description": "param2 desc",
-                        "frequency": "required",
-                        "schema": {
-                            "type": "null",
-                            "criteria": [ "date" ],
-                            "examples": [ "Jan13" ]
-                        }
-                    },
-                    {
-                        "name": "some-boolean",
-                        "description": "param2 desc",
-                        "frequency": "required",
-                        "schema": {
-                            "type": "boolean",
-                            "criteria": [ "date" ],
-                            "examples": [ "Jan13" ]
-                        }
-                    },
-                    {
-                        "name": "some-number",
-                        "description": "param2 desc",
-                        "frequency": "required",
-                        "schema": {
-                            "type": "number",
-                            "criteria": [ "date" ],
-                            "examples": [ "Jan13" ]
-                        }
-                    },
-                    {
-                        "name": "some-string",
-                        "description": "param2 desc",
-                        "frequency": "required",
-                        "schema": {
-                            "type": "string",
-                            "criteria": [ "date" ],
-                            "examples": [ "Jan13" ]
-                        }
-                    },
-                    {
-                        "name": "some-array",
-                        "description": "param2 desc",
-                        "frequency": "required",
-                        "schema": {
-                            "type": "array",
-                            "criteria": [ "date" ],
-                            "examples": [ "Jan13" ]
-                        }
-                    },
-                    {
-                        "name": "some-object",
-                        "description": "param2 desc",
-                        "frequency": "required",
-                        "schema": {
-                            "type": "object",
-                            "criteria": [ "date" ],
-                            "examples": [ "Jan13" ],
-                            "properties": [
-                            ]
-                        }
-                    }
-                ]
-            }
-        }
-    ]
 }
