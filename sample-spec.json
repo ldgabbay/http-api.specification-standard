@@ -40,6 +40,7 @@
             },
             "response": [
                 {
+                    "name": "Success",
                     "statusCode": 200,
                     "statusMessage": "OK",
                     "header": [
@@ -60,6 +61,7 @@
                     ]
                 },
                 {
+                    "name": "Bad Request",
                     "statusCode": 400,
                     "statusMessage": "Bad Request",
                     "header": [
@@ -80,6 +82,7 @@
                     ]
                 },
                 {
+                    "name": "Not Found",
                     "statusCode": 404,
                     "statusMessage": "Not Found"
                 }
@@ -94,6 +97,7 @@
             "request": {},
             "response": [
                 {
+                    "name": "Success",
                     "statusCode": 200,
                     "statusMessage": "OK",
                     "body": [
@@ -127,6 +131,7 @@
             },
             "response": [
                 {
+                    "name": "Success",
                     "statusCode": 200,
                     "statusMessage": "OK",
                     "header": [
@@ -174,6 +179,7 @@
             },
             "response": [
                 {
+                    "name": "Success",
                     "statusCode": 200,
                     "statusMessage": "OK",
                     "header": [
@@ -201,6 +207,7 @@
                     ]
                 },
                 {
+                    "name": "Bad Request",
                     "statusCode": 400,
                     "statusMessage": "Bad Request",
                     "header": [
@@ -221,6 +228,7 @@
                     ]
                 },
                 {
+                    "name": "Not Found",
                     "statusCode": 404,
                     "statusMessage": "Not Found"
                 }
@@ -252,6 +260,7 @@
             },
             "response": [
                 {
+                    "name": "Success",
                     "statusCode": 200,
                     "statusMessage": "OK",
                     "header": [
@@ -272,6 +281,7 @@
                     ]
                 },
                 {
+                    "name": "Bad Request",
                     "statusCode": 400,
                     "statusMessage": "Bad Request",
                     "header": [
@@ -312,6 +322,7 @@
             },
             "response": [
                 {
+                    "name": "Success",
                     "statusCode": 201,
                     "statusMessage": "Created",
                     "header": [
@@ -332,6 +343,7 @@
                     ]
                 },
                 {
+                    "name": "Bad Request",
                     "statusCode": 400,
                     "statusMessage": "Bad Request",
                     "header": [
@@ -352,6 +364,7 @@
                     ]
                 },
                 {
+                    "name": "Conflict",
                     "statusCode": 200,
                     "statusMessage": "OK",
                     "description": "The reservation request was processed, but unable to be created.",
@@ -391,6 +404,7 @@
             },
             "response": [
                 {
+                    "name": "Success",
                     "statusCode": 200,
                     "statusMessage": "OK",
                     "header": [
@@ -411,6 +425,7 @@
                     ]
                 },
                 {
+                    "name": "Not Found",
                     "statusCode": 404,
                     "statusMessage": "Not Found",
                     "header": [
@@ -451,6 +466,7 @@
             },
             "response": [
                 {
+                    "name": "Success",
                     "statusCode": 200,
                     "statusMessage": "OK",
                     "header": [
@@ -471,6 +487,7 @@
                     ]
                 },
                 {
+                    "name": "Bad Request",
                     "statusCode": 400,
                     "statusMessage": "Bad Request",
                     "header": [
@@ -491,6 +508,7 @@
                     ]
                 },
                 {
+                    "name": "Not Found",
                     "statusCode": 404,
                     "statusMessage": "Not Found",
                     "header": [
@@ -538,6 +556,7 @@
             },
             "response": [
                 {
+                    "name": "Success",
                     "statusCode": 200,
                     "statusMessage": "OK",
                     "header": [
@@ -558,6 +577,7 @@
                     ]
                 },
                 {
+                    "name": "Bad Request",
                     "statusCode": 400,
                     "statusMessage": "Bad Request",
                     "header": [
@@ -578,6 +598,7 @@
                     ]
                 },
                 {
+                    "name": "Not Found",
                     "statusCode": 404,
                     "statusMessage": "Not Found",
                     "header": [
