@@ -67,6 +67,10 @@ BODY_LIST :
 
 BODY :
     {
+        "type" required : "binary"
+    }
+
+    {
         "type" required : "form",
         "contentType" optional : string,           // default "application/x-www-form-urlencoded"
         "parameters" required : PARAMETER_LIST
