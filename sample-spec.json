@@ -18,15 +18,16 @@
                 "POST Reservations",
                 "GET Reservation",
                 "GET Currency",
-                "GET ExchangeRate"
+                "GET ExchangeRate",
+                "GET MapImage"
             ]
         }
     ],
     "methods": {
         "GET InstanceRoot": {
             "method": "GET",
-            "location": "InstanceRoot",
-            "location_type": "symbolic",
+            "location": "/",
+            "location_type": "absolute",
             "summary": "Retrieves the URLs for all other service calls for this IBE instance.",
             "description": "This API leverages HATEOAS as per the RESTful design pattern. This means that other than this initial query, all other URLs are provided in responses, including this one. No other URL should be coded to directly, as their locations might change.",
             "request": {
@@ -619,6 +620,70 @@
                     ]
                 }
             ]
+        },
+        "GET MapImage": {
+            "method": "GET",
+            "location": "MapImage",
+            "location_type": "symbolic",
+            "summary": "Retrieve an image of a street map.",
+            "description": "Generates and returns an image of a street map to a hotel or destination.",
+            "request": {
+                "query": [
+                    {
+                        "name": "w",
+                        "frequency": "required",
+                        "description": "The width of the desired image.",
+                        "criteria": ["positive integer"]
+                    },
+                    {
+                        "name": "h",
+                        "frequency": "required",
+                        "description": "The height of the desired image.",
+                        "criteria": ["positive integer"]
+                    }
+                ]
+            },
+            "response": [
+                {
+                    "name": "Success",
+                    "statusCode": 200,
+                    "statusMessage": "OK",
+                    "header": [
+                        {
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["an image MIME type"],
+                            "examples": ["image/png"]
+                        }
+                    ],
+                    "body": [
+                        {
+                            "type": "binary"
+                        }
+                    ]
+                },
+                {
+                    "name": "Bad Request",
+                    "statusCode": 400,
+                    "statusMessage": "Bad Request",
+                    "header": [
+                        {
+                            "name": "Content-Type",
+                            "frequency": "required",
+                            "criteria": ["application/json"]
+                        }
+                    ],
+                    "body": [
+                        {
+                            "type": "json",
+                            "schema": {
+                                "type": "reference",
+                                "tag": "ErrorResponse"
+                            }
+                        }
+                    ]
+                }
+            ]
         }
     },
     "schemas": {
@@ -807,7 +872,8 @@
                                     },
                                     "frequency": "required",
                                     "schema": {
-                                        "type": "object"
+                                        "type": "reference",
+                                        "tag": "Currency"
                                     }
                                 }
                             ]
@@ -849,7 +915,425 @@
                 ]
             },
             "Chain": {
-                "type": "null"
+                "type": "object",
+                "properties": [
+                    {
+                        "key": "id",
+                        "frequency": "required",
+                        "description": "The globally unique ID for this chain.",
+                        "schema": {
+                            "type": "string",
+                            "criteria": ["chain ID"]
+                        }
+                    },
+                    {
+                        "key": "logo",
+                        "frequency": "required",
+                        "description": "URL for the hotel logo.\nThis must be within XXXxYYY dimensions, etc.",
+                        "schema": {
+                            "type": "string",
+                            "criteria": ["URL"]
+                        }
+                    },
+                    {
+                        "key": "title",
+                        "frequency": "required",
+                        "description": "The name of the hotel chain.\nThis can be in ",
+                        "schema": {
+                            "type": "string",
+                            "criteria": ["Chain ID"]
+                        }
+                    },
+                    {
+                        "key": "properties",
+                        "frequency": "required",
+                        "description": "The name of the hotel chain.\nThis can be in ",
+                        "schema": {
+                            "type": "object",
+                            "properties": [{
+                                "key": {
+                                    "criteria": ["Property ID"]
+                                },
+                                "frequency": "unlimited",
+                                "description": "The Properties belonging to this Chain.",
+                                "schema": {
+                                    "type": "reference",
+                                    "tag": "Property"
+                                }
+                            }]
+                        }
+                    },
+                    {
+                        "key": "guestTypes",
+                        "frequency": "required",
+                        "schema": {
+                            "type": "object",
+                            "properties": [{
+                                "key": {
+                                    "criteria": ["GuestType ID"]
+                                },
+                                "frequency": "unlimited",
+                                "schema": {
+                                    "type": "reference",
+                                    "tag": "GuestType"
+                                }
+                            }]
+                        }
+                    },
+                    {
+                        "key": "codeTypes",
+                        "frequency": "required",
+                        "schema": {
+                            "type": "object",
+                            "properties": [{
+                                "key": {
+                                    "criteria": ["CodeType ID"]
+                                },
+                                "frequency": "unlimited",
+                                "schema": {
+                                    "type": "reference",
+                                    "tag": "CodeType"
+                                }
+                            }]
+                        }
+                    },
+                    {
+                        "key": "roomTypes",
+                        "frequency": "required",
+                        "schema": {
+                            "type": "object",
+                            "properties": [{
+                                "key": {
+                                    "criteria": ["RoomType ID"]
+                                },
+                                "frequency": "unlimited",
+                                "schema": {
+                                    "type": "reference",
+                                    "tag": "RoomType"
+                                }
+                            }]
+                        }
+                    },
+                    {
+                        "key": "rates",
+                        "frequency": "required",
+                        "schema": {
+                            "type": "object",
+                            "properties": [{
+                                "key": {
+                                    "criteria": ["Rate ID"]
+                                },
+                                "frequency": "unlimited",
+                                "schema": {
+                                    "type": "reference",
+                                    "tag": "Rate"
+                                }
+                            }]
+                        }
+                    },
+                    {
+                        "key": "chargeTypes",
+                        "frequency": "required",
+                        "schema": {
+                            "type": "object",
+                            "properties": [{
+                                "key": {
+                                    "criteria": ["ChargeType ID"]
+                                },
+                                "frequency": "unlimited",
+                                "schema": {
+                                    "type": "reference",
+                                    "tag": "ChargeType"
+                                }
+                            }]
+                        }
+                    },
+                    {
+                        "key": "roomFeatures",
+                        "frequency": "required",
+                        "schema": {
+                            "type": "object",
+                            "properties": [{
+                                "key": {
+                                    "criteria": ["RoomFeature ID"]
+                                },
+                                "frequency": "unlimited",
+                                "schema": {
+                                    "type": "reference",
+                                    "tag": "RoomFeature"
+                                }
+                            }]
+                        }
+                    },
+                    {
+                        "key": "items",
+                        "frequency": "required",
+                        "schema": {
+                            "type": "object",
+                            "properties": [{
+                                "key": {
+                                    "criteria": ["Item ID"]
+                                },
+                                "frequency": "unlimited",
+                                "schema": {
+                                    "type": "reference",
+                                    "tag": "Item"
+                                }
+                            }]
+                        }
+                    }
+                ]
+            },
+            "ChainLanguage": {
+                "type": "object",
+                "properties": [
+                    {
+                        "key": "agreeText",
+                        "frequency": "required",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "key": "cancellationPolicy",
+                        "frequency": "required",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            },
+            "Property": {
+                "type": "object",
+                "properties": [
+                    {
+                        "key": "title",
+                        "frequency": "required",
+                        "description": "The hotel name.",
+                        "schema": {
+                            "type": "string",
+                            "criteria": ["single line"]
+                        }
+                    },
+                    {
+                        "key": "mailingAddress",
+                        "frequency": "optional",
+                        "description": "The property's street address with company name.",
+                        "schema": {
+                            "type": "string",
+                            "criteria": ["multiple lines"]
+                        }
+                    },
+                    {
+                        "key": "phoneNumber",
+                        "frequency": "optional",
+                        "description": "The property's telephone number.",
+                        "schema": {
+                            "type": "string",
+                            "criteria": ["phone number"]
+                        }
+                    },
+                    {
+                        "key": "defaultLanguage",
+                        "frequency": "required",
+                        "description": "The default language for the Property.",
+                        "schema": {
+                            "type": "string",
+                            "criteria": ["see SiteLanguage"]
+                        }
+                    },
+                    {
+                        "key": "defaultLocale",
+                        "frequency": "required",
+                        "description": "The default locale for the Property.",
+                        "schema": {
+                            "type": "string",
+                            "criteria": ["see SiteLocale"]
+                        }
+                    }
+                ]
+            },
+            "PropertyLanguage": {
+                "type": "object",
+                "properties": []
+            },
+            "GuestType": {
+                "type": "object",
+                "properties": [
+                    {
+                        "key": "icon",
+                        "frequency": "required",
+                        "description": "The URL to the icon for this guest type",
+                        "schema": {
+                            "type": "string",
+                            "criteria": ["valid URL"]
+                        }
+                    }
+                ]
+            },
+            "GuestTypeLanguage": {
+                "type": "object",
+                "properties": [
+                    {
+                        "key": "nameSingular",
+                        "frequency": "required",
+                        "description": "The singular for this guest type.",
+                        "schema": {
+                            "type": "string",
+                            "examples": ["adult", "child"]
+                        }
+                    },
+                    {
+                        "key": "namePlural",
+                        "frequency": "required",
+                        "description": "The plural for this guest type.",
+                        "schema": {
+                            "type": "string",
+                            "examples": ["adults", "children"]
+                        }
+                    },
+                    {
+                        "key": "tooltip",
+                        "frequency": "required",
+                        "description": "A short description of this guest type.",
+                        "schema": {
+                            "type": "string",
+                            "examples": ["Adults (18 and over)", "Children (17 and under)"]
+                        }
+                    }
+                ]
+            },
+            "ChargeType": {
+                "type": "object",
+                "properties": []
+            },
+            "ChargeTypeLanguage": {
+                "type": "object",
+                "properties": [
+                    {
+                        "key": "name",
+                        "frequency": "required",
+                        "schema": {
+                            "type": "string",
+                            "examples": ["Occupancy Tax"]
+                        }
+                    }
+                ]
+            },
+            "RoomFeature": {
+                "type": "object",
+                "properties": [
+                    {
+                        "key": "icon",
+                        "frequency": "required",
+                        "description": "The URL to the icon for this room feature",
+                        "schema": {
+                            "type": "string",
+                            "criteria": ["valid URL"]
+                        }
+                    }
+                ]
+            },
+            "RoomFeatureLanguage": {
+                "type": "object",
+                "properties": [
+                    {
+                        "key": "text",
+                        "frequency": "required",
+                        "description": "The description of this room feature",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            },
+            "AvailabilityRequest": {
+                "type": "object",
+                "properties": []
+            },
+            "AvailabilityResponse": {
+                "type": "object",
+                "properties": []
+            },
+            "CurrencyData": {
+                "type": "object",
+                "properties": []
+            },
+            "ErrorResponse": {
+                "type": "object",
+                "properties": []
+            },
+            "ExchangeRateResponse": {
+                "type": "object",
+                "properties": []
+            },
+            "PostReservationsCreatedResponse": {
+                "type": "object",
+                "properties": []
+            },
+            "PostReservationsFailedResponse": {
+                "type": "object",
+                "properties": []
+            },
+            "PostReservationsRequest": {
+                "type": "object",
+                "properties": []
+            },
+            "ReservationResponse": {
+                "type": "object",
+                "properties": []
+            },
+            "StaticLanguageDataResponse": {
+                "type": "object",
+                "properties": []
+            },
+            "StaticLocaleDataResponse": {
+                "type": "object",
+                "properties": []
+            },
+            "Currencies": {
+                "type": "object",
+                "properties": [
+                    {
+                        "key": "/.../",
+                        "frequency": "any",
+                        "description": "The currency.",
+                        "schema": {
+                            "type": "object",
+                            "properties": [
+                                {
+                                    "key": "code",
+                                    "frequency": "required",
+                                    "description": "The currency code",
+                                    "schema": {
+                                        "type": "string",
+                                        "criteria": ["three character currency code"],
+                                        "examples": ["USD", "EUR", "GBP"]
+                                    }
+                                },
+                                {
+                                    "key": "symbol",
+                                    "frequency": "optional",
+                                    "description": "The currency symbol",
+                                    "schema": {
+                                        "type": "string",
+                                        "examples": ["$"]
+                                    }
+                                },
+                                {
+                                    "key": "precision",
+                                    "frequency": "required",
+                                    "description": "The precision to use when displaying amounts in this currency.\n\ne.g. The smallest amount to display is 10^(-precision).\ne.g. if precision=2, we show 0.00.",
+                                    "schema": {
+                                        "type": "number",
+                                        "criteria": ["integer"],
+                                        "examples": ["2"]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
             }
         }
     }
