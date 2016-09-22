@@ -1,5 +1,6 @@
-# HTTP API Specification Language
+# Standard for HTTP API Specification
 
-This project defines a JSON structure that can be used to specify and document a web API.
 
-The structure is specified in a grammar-like syntax in the [spec.grammar](spec.grammar) file.
+This project defines a data structure that specifies an HTTP API.
+
+This structure is specified in a grammar-like syntax in the included [spec.grammar](spec.grammar) file.
