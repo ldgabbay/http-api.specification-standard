@@ -5,6 +5,9 @@ API_DOCUMENT :
             string: METHOD
         },
         "schemas" optional : {
+            "string" optional : {
+                string: STRING_SCHEMA
+            },
             "json" optional : {
                 string: JSON_SCHEMA
             }
@@ -89,23 +92,33 @@ PARAMETER_LIST :
 
 PARAMETER :
     {
-        "name" required : string,
+        "name" required : STRING_SCHEMA,
         "description" optional : string,
         "frequency" required : string,
+        "value" required : STRING_SCHEMA
+    }
+
+
+STRING_SCHEMA :
+    // literal
+    string
+
+    // schema
+    {
         "criteria" optional : [ string, string, ... ],
         "examples" optional : [ string, string, ... ]
     }
 
-
-JSON_SCHEMA :
+    // reference to another type
     {
-        "type" required : "inline",       // when rendering, embed the schema inline here
-        "tag" required : string           // matches key in API_DOCUMENT."schemas"."json"
+        "ref" required : string        // matches key in API_DOCUMENT."schemas"."string"
     }
 
+
+JSON_SCHEMA :
+    // reference to another type
     {
-        "type" required : "reference",
-        "tag" required : string           // matches key in API_DOCUMENT."schemas"."json"
+        "ref" required : string        // matches key in API_DOCUMENT."schemas"."json"
     }
 
     {
@@ -124,8 +137,7 @@ JSON_SCHEMA :
 
     {
         "type" required : "string",
-        "criteria" optional : [ string, string, ... ],
-        "examples" optional : [ string, string, ... ]
+        "format" optional : STRING_SCHEMA
     }
 
     {
@@ -151,7 +163,7 @@ JSON_ITEM :
     {
         "index" required : string,
         "description" optional : string,
-        "schema" required : JSON_SCHEMA
+        "value" required : JSON_SCHEMA
     }
 
 
@@ -161,18 +173,8 @@ JSON_PROPERTY_LIST :
 
 JSON_PROPERTY :
     {
-        "key" required : JSON_PROPERTY_KEY,
+        "key" required : STRING_SCHEMA,
         "description" optional : string,
         "frequency" required : string,
-        "schema" required : JSON_SCHEMA
-    }
-
-
-JSON_PROPERTY_KEY :
-    string            // literal match for property key
-
-    {
-        "pattern" optional : string,                     // regex match for property key
-        "criteria" optional : [ string, string, ... ],   // 
-        "examples" optional : [ string, string, ... ]    // 
+        "value" required : JSON_SCHEMA
     }
