@@ -137,8 +137,7 @@ JSON_SCHEMA :
 
     {
         "type" required : "string",
-        "criteria" optional : [ string, string, ... ],
-        "examples" optional : [ string, string, ... ]
+        "format" optional : STRING_SCHEMA
     }
 
     {
