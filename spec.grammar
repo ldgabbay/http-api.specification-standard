@@ -5,6 +5,9 @@ API_DOCUMENT :
             string: METHOD
         },
         "schemas" optional : {
+            "string" optional : {
+                string: STRING_SCHEMA
+            },
             "json" optional : {
                 string: JSON_SCHEMA
             }
@@ -92,8 +95,23 @@ PARAMETER :
         "name" required : string,
         "description" optional : string,
         "frequency" required : string,
+        "format" optional : STRING_SCHEMA
+    }
+
+
+STRING_SCHEMA :
+    // literal
+    string
+
+    // schema
+    {
         "criteria" optional : [ string, string, ... ],
         "examples" optional : [ string, string, ... ]
+    }
+
+    // reference to another type
+    {
+        "ref" required : string        // matches key in API_DOCUMENT."schemas"."string"
     }
 
 
@@ -156,18 +174,8 @@ JSON_PROPERTY_LIST :
 
 JSON_PROPERTY :
     {
-        "key" required : JSON_PROPERTY_KEY,
+        "key" required : STRING_SCHEMA,
         "description" optional : string,
         "frequency" required : string,
         "schema" required : JSON_SCHEMA
-    }
-
-
-JSON_PROPERTY_KEY :
-    string            // literal match for property key
-
-    {
-        "pattern" optional : string,                     // regex match for property key
-        "criteria" optional : [ string, string, ... ],   // 
-        "examples" optional : [ string, string, ... ]    // 
     }
