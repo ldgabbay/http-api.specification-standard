@@ -95,7 +95,7 @@ PARAMETER :
         "name" required : string,
         "description" optional : string,
         "frequency" required : string,
-        "format" optional : STRING_SCHEMA
+        "value" required : STRING_SCHEMA
     }
 
 
@@ -163,7 +163,7 @@ JSON_ITEM :
     {
         "index" required : string,
         "description" optional : string,
-        "schema" required : JSON_SCHEMA
+        "value" required : JSON_SCHEMA
     }
 
 
@@ -176,5 +176,5 @@ JSON_PROPERTY :
         "key" required : STRING_SCHEMA,
         "description" optional : string,
         "frequency" required : string,
-        "schema" required : JSON_SCHEMA
+        "value" required : JSON_SCHEMA
     }
