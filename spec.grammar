@@ -92,7 +92,7 @@ PARAMETER_LIST :
 
 PARAMETER :
     {
-        "name" required : string,
+        "name" required : STRING_SCHEMA,
         "description" optional : string,
         "frequency" required : string,
         "value" required : STRING_SCHEMA
