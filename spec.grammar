@@ -98,14 +98,9 @@ PARAMETER :
 
 
 JSON_SCHEMA :
+    // reference to another type
     {
-        "type" required : "inline",       // when rendering, embed the schema inline here
-        "tag" required : string           // matches key in API_DOCUMENT."schemas"."json"
-    }
-
-    {
-        "type" required : "reference",
-        "tag" required : string           // matches key in API_DOCUMENT."schemas"."json"
+        "ref" required : string        // matches key in API_DOCUMENT."schemas"."json"
     }
 
     {
