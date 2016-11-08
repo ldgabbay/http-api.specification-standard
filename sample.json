@@ -1,0 +1,685 @@
+{
+	"sections": [
+		{
+			"name": "Section 1",
+			"summary": "Section 1 Summary",
+			"description": "Section 1 Description",
+			"methods": ["Method 1", "Method 2"]
+		},
+		{
+			"name": "Section 2",
+			"xsummary": "Section 2 Summary",
+			"description": "Section 2 Description",
+			"methods": []
+		},
+		{
+			"name": "Section 3",
+			"summary": "Section 3 Summary",
+			"xdescription": "Section 3 Description",
+			"methods": ["Method 3", "Method 4"]
+		},
+		{
+			"name": "Section 4",
+			"xsummary": "Section 4 Summary",
+			"xdescription": "Section 4 Description",
+			"methods": ["Method 1", "Method 2", "Method 3", "Method 4"]
+		}
+	],
+	"methods": {
+		"Method 1": {
+			"method": "GET",
+			"location": "/1/",
+			"location_type": "relative",
+			"summary": "Method 1 Summary",
+			"description": "Method 1 Description",
+			"request": {
+				"path": [
+					{
+						"name": "M1P1 Name",
+						"description": "M1P1 Description",
+						"frequency": "M1P1 Frequency",
+						"value": "M1P1 Value"
+					},
+					{
+						"name": {"ref": "LiteralSS"},
+						"description": "M1P2 Description",
+						"frequency": "M1P2 Frequency",
+						"value": "M1P2 Value"
+					},
+					{
+						"name": "M1P3 Name",
+						"description": "M1P3 Description",
+						"frequency": "M1P3 Frequency",
+						"value": {"ref": "LiteralSS"}
+					},
+					{
+						"name": {"ref": "LiteralSS"},
+						"description": "M1P4 Description",
+						"frequency": "M1P4 Frequency",
+						"value": {"ref": "LiteralSS"}
+					},
+					{
+						"name": {"ref": "GenericSS"},
+						"description": "M1P2 Description",
+						"frequency": "M1P2 Frequency",
+						"value": "M1P2 Value"
+					},
+					{
+						"name": "M1P3 Name",
+						"description": "M1P3 Description",
+						"frequency": "M1P3 Frequency",
+						"value": {"ref": "GenericSS"}
+					},
+					{
+						"name": {"ref": "GenericSS"},
+						"description": "M1P4 Description",
+						"frequency": "M1P4 Frequency",
+						"value": {"ref": "GenericSS"}
+					},
+					{
+						"name": {"ref": "GenericReferenceSS"},
+						"description": "M1P2 Description",
+						"frequency": "M1P2 Frequency",
+						"value": "M1P2 Value"
+					},
+					{
+						"name": "M1P3 Name",
+						"description": "M1P3 Description",
+						"frequency": "M1P3 Frequency",
+						"value": {"ref": "GenericReferenceSS"}
+					},
+					{
+						"name": {"ref": "GenericReferenceSS"},
+						"description": "M1P4 Description",
+						"frequency": "M1P4 Frequency",
+						"value": {"ref": "GenericReferenceSS"}
+					}
+				],
+				"query": [
+					{
+						"name": {"ref": "LiteralSS"},
+						"description": "M1Q4 Description",
+						"frequency": "M1Q4 Frequency",
+						"value": {"ref": "GenericSS"}
+					},
+					{
+						"name": {"ref": "GenericSS"},
+						"description": "M1Q4 Description",
+						"frequency": "M1Q4 Frequency",
+						"value": {"ref": "LiteralSS"}
+					},
+					{
+						"name": {"ref": "LiteralSS"},
+						"description": "M1Q4 Description",
+						"frequency": "M1Q4 Frequency",
+						"value": {"ref": "GenericReferenceSS"}
+					},
+					{
+						"name": {"ref": "GenericReferenceSS"},
+						"description": "M1Q4 Description",
+						"frequency": "M1Q4 Frequency",
+						"value": {"ref": "GenericSS"}
+					},
+					{
+						"name": {"ref": "GenericReferenceSS"},
+						"description": "M1Q4 Description",
+						"frequency": "M1Q4 Frequency",
+						"value": {"ref": "GenericReferenceSS"}
+					},
+					{
+						"name": {"ref": "LiteralReferenceReferenceSS"},
+						"description": "M1Q4 Description",
+						"frequency": "M1Q4 Frequency",
+						"value": {"ref": "GenericReferenceSS"}
+					},
+					{
+						"name": {"ref": "GenericReferenceReferenceSS"},
+						"description": "M1Q4 Description",
+						"frequency": "M1Q4 Frequency",
+						"value": {"ref": "GenericReferenceReferenceSS"}
+					}
+				],
+				"header": [
+					{
+						"name": "M1H1 Name",
+						"description": "M1H1 Description",
+						"frequency": "M1H1 Frequency",
+						"value": "M1H1 Value"
+					},
+					{
+						"name": {"ref": "GenericSS"},
+						"description": "M1H2 Description",
+						"frequency": "M1H2 Frequency",
+						"value": "M1H2 Value"
+					},
+					{
+						"name": "M1H3 Name",
+						"description": "M1H3 Description",
+						"frequency": "M1H3 Frequency",
+						"value": {"ref": "GenericSS"}
+					},
+					{
+						"name": {"ref": "GenericSS"},
+						"description": "M1H4 Description",
+						"frequency": "M1H4 Frequency",
+						"value": {"ref": "GenericSS"}
+					}
+				],
+				"body": [
+					{
+						"type": "binary"
+					},
+					{
+						"type": "form",
+						"contentType": "application/x-www-form-urlencoded",
+						"parameters": [
+							{
+								"name": "M1BP1 Name",
+								"description": "M1BP1 Description",
+								"frequency": "M1BP1 Frequency",
+								"value": "M1BP1 Value"
+							},
+							{
+								"name": {"ref": "GenericSS"},
+								"description": "M1BP2 Description",
+								"frequency": "M1BP2 Frequency",
+								"value": "M1BP2 Value"
+							},
+							{
+								"name": "M1BP3 Name",
+								"description": "M1BP3 Description",
+								"frequency": "M1BP3 Frequency",
+								"value": {"ref": "GenericSS"}
+							},
+							{
+								"name": {"ref": "GenericSS"},
+								"description": "M1BP4 Description",
+								"frequency": "M1BP4 Frequency",
+								"value": {"ref": "GenericSS"}
+							}
+						]
+					}
+				]
+			},
+			"response": []
+		},
+		"Method 2": {
+			"method": "GET",
+			"location": "/2/",
+			"location_type": "relative",
+			"summary": "Method 2 Summary",
+			"description": "Method 2 Description",
+			"request": {},
+			"response": []
+		},
+		"Method 3": {
+			"method": "GET",
+			"location": "/3/",
+			"location_type": "relative",
+			"summary": "Method 3 Summary",
+			"description": "Method 3 Description",
+			"request": {},
+			"response": []
+		},
+		"Method 4": {
+			"method": "GET",
+			"location": "/4/",
+			"location_type": "relative",
+			"summary": "Method 4 Summary",
+			"description": "Method 4 Description",
+			"request": {},
+			"response": []
+		}	
+	},
+	"schemas": {
+		"string": {
+			"LiteralSS": "a literal string",
+			"AnySS": {
+			},
+			"GenericSS": {
+				"criteria": ["crit 1", "crit 2", "crit 3"],
+				"examples": ["ex 1", "ex 2", "ex 3"]
+			},
+			"LiteralReferenceSS": {
+				"ref": "LiteralSS"
+			},
+			"AnyReferenceSS": {
+				"ref": "AnySS"
+			},
+			"GenericReferenceSS": {
+				"ref": "GenericSS"
+			},
+			"LiteralReferenceReferenceSS": {
+				"ref": "LiteralReferenceSS"
+			},
+			"AnyReferenceReferenceSS": {
+				"ref": "AnyReferenceSS"
+			},
+			"GenericReferenceReferenceSS": {
+				"ref": "GenericReferenceSS"
+			},
+			"SelfReferenceSS": {
+				"ref": "SelfReferenceSS"
+			}
+		},
+		"json": {
+			"NullJS": {
+				"type": "null"
+			},
+			"BooleanJS": {
+				"type": "boolean"
+			},
+			"NumberJS": {
+				"type": "number"
+			},
+			"SpecializedNumberJS": {
+				"type": "number",
+				"criteria": ["crit 1", "crit 2", "crit 3"],
+				"examples": ["ex 1", "ex 2", "ex 3"]
+			},
+			"StringJS": {
+				"type": "string"
+			},
+			"LiteralStringJS": {
+				"type": "string",
+				"format": "a literal json string"
+			},
+			"AnyStringJS": {
+				"type": "string",
+				"format": {}
+			},
+			"GenericStringJS": {
+				"type": "string",
+				"format": {
+					"criteria": ["crit 1", "crit 2", "crit 3"],
+					"examples": ["ex 1", "ex 2", "ex 3"]
+				}
+			},
+			"LiteralReferenceStringJS": {
+				"type": "string",
+				"format": {"ref": "LiteralSS"}
+			},
+			"AnyReferenceStringJS": {
+				"type": "string",
+				"format": {"ref": "AnySS"}
+			},
+			"GenericReferenceStringJS": {
+				"type": "string",
+				"format": {"ref": "GenericSS"}
+			},
+			"LiteralReferenceReferenceStringJS": {
+				"type": "string",
+				"format": {"ref": "LiteralReferenceSS"}
+			},
+			"AnyReferenceReferenceStringJS": {
+				"type": "string",
+				"format": {"ref": "AnyReferenceSS"}
+			},
+			"GenericReferenceReferenceStringJS": {
+				"type": "string",
+				"format": {"ref": "GenericReferenceSS"}
+			},
+			"SelfReferenceReferenceStringJS": {
+				"type": "string",
+				"format": {"ref": "SelfReferenceSS"}
+			},
+			"ArrayJS": {
+				"type": "array",
+				"criteria": ["crit 1", "crit 2", "crit 3"],
+				"examples": ["ex 1", "ex 2", "ex 3"],
+				"items": [
+					{
+						"index": "NullJS",
+						"description": "ArrayJS NullJS Description",
+						"value": {"ref": "NullJS"}
+					},
+					{
+						"index": "BooleanJS",
+						"description": "ArrayJS BooleanJS Description",
+						"value": {"ref": "BooleanJS"}
+					},
+					{
+						"index": "NumberJS",
+						"description": "ArrayJS NumberJS Description",
+						"value": {"ref": "NumberJS"}
+					},
+					{
+						"index": "SpecializedNumberJS",
+						"description": "ArrayJS SpecializedNumberJS Description",
+						"value": {"ref": "SpecializedNumberJS"}
+					},
+					{
+						"index": "StringJS",
+						"description": "ArrayJS StringJS Description",
+						"value": {"ref": "StringJS"}
+					},
+					{
+						"index": "LiteralStringJS",
+						"description": "ArrayJS LiteralStringJS Description",
+						"value": {"ref": "LiteralStringJS"}
+					},
+					{
+						"index": "AnyStringJS",
+						"description": "ArrayJS AnyStringJS Description",
+						"value": {"ref": "AnyStringJS"}
+					},
+					{
+						"index": "GenericStringJS",
+						"description": "ArrayJS GenericStringJS Description",
+						"value": {"ref": "GenericStringJS"}
+					},
+					{
+						"index": "LiteralReferenceStringJS",
+						"description": "ArrayJS LiteralReferenceStringJS Description",
+						"value": {"ref": "LiteralReferenceStringJS"}
+					},
+					{
+						"index": "AnyReferenceStringJS",
+						"description": "ArrayJS AnyReferenceStringJS Description",
+						"value": {"ref": "AnyReferenceStringJS"}
+					},
+					{
+						"index": "GenericReferenceStringJS",
+						"description": "ArrayJS GenericReferenceStringJS Description",
+						"value": {"ref": "GenericReferenceStringJS"}
+					},
+					{
+						"index": "LiteralReferenceReferenceStringJS",
+						"description": "ArrayJS LiteralReferenceReferenceStringJS Description",
+						"value": {"ref": "LiteralReferenceReferenceStringJS"}
+					},
+					{
+						"index": "AnyReferenceReferenceStringJS",
+						"description": "ArrayJS AnyReferenceReferenceStringJS Description",
+						"value": {"ref": "AnyReferenceReferenceStringJS"}
+					},
+					{
+						"index": "GenericReferenceReferenceStringJS",
+						"description": "ArrayJS GenericReferenceReferenceStringJS Description",
+						"value": {"ref": "GenericReferenceReferenceStringJS"}
+					},
+					{
+						"index": "SelfReferenceReferenceStringJS",
+						"description": "ArrayJS SelfReferenceReferenceStringJS Description",
+						"value": {"ref": "SelfReferenceReferenceStringJS"}
+					},
+					{
+						"index": "ArrayJS",
+						"description": "ArrayJS ArrayJS Description",
+						"value": {"ref": "ArrayJS"}
+					},
+					{
+						"index": "ObjectJS",
+						"description": "ArrayJS ObjectJS Description",
+						"value": {"ref": "ObjectJS"}
+					}
+				]
+			},
+			"ObjectJS": {
+				"type": "object",
+				"criteria": ["crit 1", "crit 2", "crit 3"],
+				"examples": ["ex 1", "ex 2", "ex 3"],
+				"properties": [
+					{
+						"key": "NullJS",
+						"description": "ObjectJS NullJS Description",
+						"frequency": "ObjectJS NullJS Frequency",
+						"value": {"ref": "NullJS"}
+					},
+					{
+						"key": "BooleanJS",
+						"description": "ObjectJS BooleanJS Description",
+						"frequency": "ObjectJS BooleanJS Frequency",
+						"value": {"ref": "BooleanJS"}
+					},
+					{
+						"key": "NumberJS",
+						"description": "ObjectJS NumberJS Description",
+						"frequency": "ObjectJS NumberJS Frequency",
+						"value": {"ref": "NumberJS"}
+					},
+					{
+						"key": "SpecializedNumberJS",
+						"description": "ObjectJS SpecializedNumberJS Description",
+						"frequency": "ObjectJS SpecializedNumberJS Frequency",
+						"value": {"ref": "SpecializedNumberJS"}
+					},
+					{
+						"key": "StringJS",
+						"description": "ObjectJS StringJS Description",
+						"frequency": "ObjectJS StringJS Frequency",
+						"value": {"ref": "StringJS"}
+					},
+					{
+						"key": "LiteralStringJS",
+						"description": "ObjectJS LiteralStringJS Description",
+						"frequency": "ObjectJS LiteralStringJS Frequency",
+						"value": {"ref": "LiteralStringJS"}
+					},
+					{
+						"key": "AnyStringJS",
+						"description": "ObjectJS AnyStringJS Description",
+						"frequency": "ObjectJS AnyStringJS Frequency",
+						"value": {"ref": "AnyStringJS"}
+					},
+					{
+						"key": "GenericStringJS",
+						"description": "ObjectJS GenericStringJS Description",
+						"frequency": "ObjectJS GenericStringJS Frequency",
+						"value": {"ref": "GenericStringJS"}
+					},
+					{
+						"key": "LiteralReferenceStringJS",
+						"description": "ObjectJS LiteralReferenceStringJS Description",
+						"frequency": "ObjectJS LiteralReferenceStringJS Frequency",
+						"value": {"ref": "LiteralReferenceStringJS"}
+					},
+					{
+						"key": "AnyReferenceStringJS",
+						"description": "ObjectJS AnyReferenceStringJS Description",
+						"frequency": "ObjectJS AnyReferenceStringJS Frequency",
+						"value": {"ref": "AnyReferenceStringJS"}
+					},
+					{
+						"key": "GenericReferenceStringJS",
+						"description": "ObjectJS GenericReferenceStringJS Description",
+						"frequency": "ObjectJS GenericReferenceStringJS Frequency",
+						"value": {"ref": "GenericReferenceStringJS"}
+					},
+					{
+						"key": "LiteralReferenceReferenceStringJS",
+						"description": "ObjectJS LiteralReferenceReferenceStringJS Description",
+						"frequency": "ObjectJS LiteralReferenceReferenceStringJS Frequency",
+						"value": {"ref": "LiteralReferenceReferenceStringJS"}
+					},
+					{
+						"key": "AnyReferenceReferenceStringJS",
+						"description": "ObjectJS AnyReferenceReferenceStringJS Description",
+						"frequency": "ObjectJS AnyReferenceReferenceStringJS Frequency",
+						"value": {"ref": "AnyReferenceReferenceStringJS"}
+					},
+					{
+						"key": "GenericReferenceReferenceStringJS",
+						"description": "ObjectJS GenericReferenceReferenceStringJS Description",
+						"frequency": "ObjectJS GenericReferenceReferenceStringJS Frequency",
+						"value": {"ref": "GenericReferenceReferenceStringJS"}
+					},
+					{
+						"key": "SelfReferenceReferenceStringJS",
+						"description": "ObjectJS SelfReferenceReferenceStringJS Description",
+						"frequency": "ObjectJS SelfReferenceReferenceStringJS Frequency",
+						"value": {"ref": "SelfReferenceReferenceStringJS"}
+					},
+					{
+						"key": "ArrayJS",
+						"description": "ObjectJS ArrayJS Description",
+						"frequency": "ObjectJS ArrayJS Frequency",
+						"value": {"ref": "ArrayJS"}
+					},
+					{
+						"key": "ObjectJS",
+						"description": "ObjectJS ObjectJS Description",
+						"frequency": "ObjectJS ObjectJS Frequency",
+						"value": {"ref": "ObjectJS"}
+					},
+					{
+						"key": {"ref": "AnySS"},
+						"description": "ObjectJS NullJS Description",
+						"frequency": "ObjectJS NullJS Frequency",
+						"value": {"ref": "NullJS"}
+					},
+					{
+						"key": {"ref": "AnySS"},
+						"description": "ObjectJS BooleanJS Description",
+						"frequency": "ObjectJS BooleanJS Frequency",
+						"value": {"ref": "BooleanJS"}
+					},
+					{
+						"key": {"ref": "AnySS"},
+						"description": "ObjectJS NumberJS Description",
+						"frequency": "ObjectJS NumberJS Frequency",
+						"value": {"ref": "NumberJS"}
+					},
+					{
+						"key": {"ref": "AnySS"},
+						"description": "ObjectJS SpecializedNumberJS Description",
+						"frequency": "ObjectJS SpecializedNumberJS Frequency",
+						"value": {"ref": "SpecializedNumberJS"}
+					},
+					{
+						"key": {"ref": "AnySS"},
+						"description": "ObjectJS StringJS Description",
+						"frequency": "ObjectJS StringJS Frequency",
+						"value": {"ref": "StringJS"}
+					},
+					{
+						"key": {"ref": "AnySS"},
+						"description": "ObjectJS LiteralStringJS Description",
+						"frequency": "ObjectJS LiteralStringJS Frequency",
+						"value": {"ref": "LiteralStringJS"}
+					},
+					{
+						"key": {"ref": "AnySS"},
+						"description": "ObjectJS AnyStringJS Description",
+						"frequency": "ObjectJS AnyStringJS Frequency",
+						"value": {"ref": "AnyStringJS"}
+					},
+					{
+						"key": {"ref": "AnySS"},
+						"description": "ObjectJS GenericStringJS Description",
+						"frequency": "ObjectJS GenericStringJS Frequency",
+						"value": {"ref": "GenericStringJS"}
+					},
+					{
+						"key": {"ref": "AnySS"},
+						"description": "ObjectJS LiteralReferenceStringJS Description",
+						"frequency": "ObjectJS LiteralReferenceStringJS Frequency",
+						"value": {"ref": "LiteralReferenceStringJS"}
+					},
+					{
+						"key": {"ref": "AnySS"},
+						"description": "ObjectJS AnyReferenceStringJS Description",
+						"frequency": "ObjectJS AnyReferenceStringJS Frequency",
+						"value": {"ref": "AnyReferenceStringJS"}
+					},
+					{
+						"key": {"ref": "AnySS"},
+						"description": "ObjectJS GenericReferenceStringJS Description",
+						"frequency": "ObjectJS GenericReferenceStringJS Frequency",
+						"value": {"ref": "GenericReferenceStringJS"}
+					},
+					{
+						"key": {"ref": "AnySS"},
+						"description": "ObjectJS LiteralReferenceReferenceStringJS Description",
+						"frequency": "ObjectJS LiteralReferenceReferenceStringJS Frequency",
+						"value": {"ref": "LiteralReferenceReferenceStringJS"}
+					},
+					{
+						"key": {"ref": "AnySS"},
+						"description": "ObjectJS AnyReferenceReferenceStringJS Description",
+						"frequency": "ObjectJS AnyReferenceReferenceStringJS Frequency",
+						"value": {"ref": "AnyReferenceReferenceStringJS"}
+					},
+					{
+						"key": {"ref": "AnySS"},
+						"description": "ObjectJS GenericReferenceReferenceStringJS Description",
+						"frequency": "ObjectJS GenericReferenceReferenceStringJS Frequency",
+						"value": {"ref": "GenericReferenceReferenceStringJS"}
+					},
+					{
+						"key": {"ref": "AnySS"},
+						"description": "ObjectJS SelfReferenceReferenceStringJS Description",
+						"frequency": "ObjectJS SelfReferenceReferenceStringJS Frequency",
+						"value": {"ref": "SelfReferenceReferenceStringJS"}
+					},
+					{
+						"key": {"ref": "AnySS"},
+						"description": "ObjectJS ArrayJS Description",
+						"frequency": "ObjectJS ArrayJS Frequency",
+						"value": {"ref": "ArrayJS"}
+					},
+					{
+						"key": {"ref": "AnySS"},
+						"description": "ObjectJS ObjectJS Description",
+						"frequency": "ObjectJS ObjectJS Frequency",
+						"value": {"ref": "ObjectJS"}
+					}
+				]
+			},
+			"NullReferenceJS": {
+				"ref": "NullJS"
+			},
+			"BooleanReferenceJS": {
+				"ref": "BooleanJS"
+			},
+			"NumberReferenceJS": {
+				"ref": "NumberJS"
+			},
+			"SpecializedNumberReferenceJS": {
+				"ref": "SpecializedNumberJS"
+			},
+			"StringReferenceJS": {
+				"ref": "StringJS"
+			},
+			"LiteralStringReferenceJS": {
+				"ref": "LiteralStringJS"
+			},
+			"AnyStringReferenceJS": {
+				"ref": "AnyStringJS"
+			},
+			"GenericStringReferenceJS": {
+				"ref": "GenericStringJS"
+			},
+			"LiteralReferenceStringReferenceJS": {
+				"ref": "LiteralReferenceStringJS"
+			},
+			"AnyReferenceStringReferenceJS": {
+				"ref": "AnyReferenceStringJS"
+			},
+			"GenericReferenceStringReferenceJS": {
+				"ref": "GenericReferenceStringJS"
+			},
+			"LiteralReferenceReferenceStringReferenceJS": {
+				"ref": "LiteralReferenceReferenceStringJS"
+			},
+			"AnyReferenceReferenceStringReferenceJS": {
+				"ref": "AnyReferenceReferenceStringJS"
+			},
+			"GenericReferenceReferenceStringReferenceJS": {
+				"ref": "GenericReferenceReferenceStringJS"
+			},
+			"SelfReferenceReferenceStringReferenceJS": {
+				"ref": "SelfReferenceReferenceStringJS"
+			},
+			"ArrayReferenceJS": {
+				"ref": "ArrayJS"
+			},
+			"ObjectReferenceJS": {
+				"ref": "ObjectJS"
+			},
+			"SelfReferenceJS": {
+				"ref": "SelfReferenceJS"
+			}
+		}
+	}
+}
