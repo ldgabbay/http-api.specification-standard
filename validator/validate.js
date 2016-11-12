@@ -5,7 +5,7 @@ var fs = require('fs');
 
 
 
-function jsontypeof(x) {
+function jsonTypeof(x) {
 	var t = typeof x;
 	if (t === "number") {
 		return t;
@@ -28,102 +28,233 @@ function jsontypeof(x) {
 	return undefined;
 }
 
-function validateRequiredKey(obj, key, validator) {
-	assert(key in obj);
-	validator(obj[key]);
-	delete obj[key];
+
+function validateType(path, x, type) {
+	assert(jsonTypeof(x) === type, path + " not of type " + type);
 }
 
-function validateOptionalKey(obj, key, validator) {
-	if (key in obj) {
-		validator(obj[key]);
-		delete obj[key];
+function validateNumber(path, x) {
+	validateType(path, x, "number");
+}
+
+function validateString(path, x) {
+	validateType(path, x, "string");
+}
+
+function validateBoolean(path, x) {
+	validateType(path, x, "boolean");
+}
+
+function validateNull(path, x) {
+	validateType(path, x, "null");
+}
+
+function validateArray(path, x) {
+	validateType(path, x, "array");
+}
+
+function validateObject(path, x) {
+	validateType(path, x, "object");
+}
+
+
+
+function validateRequiredKey(path, obj, key, valueValidator) {
+	assert(obj.hasOwnProperty(key), path + " does not have key " + key);
+	valueValidator(path + "." + key, obj[key]);
+}
+
+function validateOptionalKey(path, obj, key, valueValidator) {
+	if (obj.hasOwnProperty(key)) {
+		valueValidator(path + "." + key, obj[key]);
 	}
 }
 
-function validateObject(x) {
-	assert(jsontypeof(x) === "object");
+function validateList(path, arr, valueValidator) {
+	for (var i=0; i!=arr.length; ++i)
+		valueValidator(path + "[" + i + "]", arr[i]);
 }
 
-function validateArray(x) {
-	assert(jsontypeof(x) === "array");
+function validateMap(path, obj, valueValidator) {
+	for (var key in obj) {
+		if (obj.hasOwnProperty(key)) {
+			valueValidator(path + "." + key, obj[key]);
+		}
+	}
 }
 
-function validateString(x) {
-	assert(jsontypeof(x) === "string");
+function validateApiDocument_methods(path, x) {
+	validateObject(path, x);
+	validateMap(path, x, validateMethod);
 }
 
-function validateBoolean(x) {
-	assert(jsontypeof(x) === "boolean");
+function validateApiDocument_schemas(path, x) {
+	validateObject(path, x);
+	validateOptionalKey(path, x, "string", function(p, y) { validateMap(p, y, validateStringSchema); });
+	validateOptionalKey(path, x, "json", function(p, y) { validateMap(p, y, validateJsonSchema); });
 }
 
-function validateNumber(x) {
-	assert(jsontypeof(x) === "number");
+
+function validateApiDocument(path, x) {
+	validateObject(path, x);
+	validateOptionalKey(path, x, "sections", validateSectionList);
+	validateOptionalKey(path, x, "methods", validateApiDocument_methods);
+	validateOptionalKey(path, x, "schemas", validateApiDocument_schemas);
 }
 
-function validateNull(x) {
-	assert(jsontypeof(x) === "null");
+function validateSectionList(path, x) {
+	validateArray(path, x);
+	validateList(path, x, validateSection);
 }
 
-function validateSectionMethods(arr) {
-	validateArray(arr);
-
-	arr.forEach(function(elem) {
-		validateString(elem);
-	});
+function validateSection(path, x) {
+	validateObject(path, x);
+	validateRequiredKey(path, x, "name", validateString);
+	validateOptionalKey(path, x, "summary", validateString);
+	validateOptionalKey(path, x, "description", validateString);
+	validateRequiredKey(path, x, "methods", function(p, y) { validateList(p, y, validateString); });
 }
 
-function validateSection(obj) {
-	validateObject(obj);
-
-	validateRequiredKey(obj, "name", validateString);
-	validateOptionalKey(obj, "summary", validateString);
-	validateOptionalKey(obj, "description", validateString);
-	validateRequiredKey(obj, "methods", validateSectionMethods);
+function validateMethod(path, x) {
+	validateObject(path, x);
+	validateRequiredKey(path, x, "method", validateString);
+	validateRequiredKey(path, x, "location", validateString);
+	validateRequiredKey(path, x, "location_type", validateString);
+	validateOptionalKey(path, x, "summary", validateString);
+	validateOptionalKey(path, x, "description", validateString);
+	validateOptionalKey(path, x, "method", validateString);
+	validateRequiredKey(path, x, "request", validateRequest);
+	validateRequiredKey(path, x, "response", validateResponseList);
 }
 
-function validateMethod() {}
-function validateJsonSchema() {}
-
-function validateSectionList(arr) {
-	validateArray(arr);
-
-	arr.forEach(function(elem) {
-		validateSection(elem);
-	});
+function validateRequest(path, x) {
+	validateObject(path, x);
+	validateOptionalKey(path, x, "path", validateParameterList);
+	validateOptionalKey(path, x, "query", validateParameterList);
+	validateOptionalKey(path, x, "header", validateParameterList);
+	validateOptionalKey(path, x, "body", validateBodyList);
 }
 
-function validateMethods(obj) {
-	validateObject(obj);
-
-	Object.keys(obj).forEach(function(key) {
-		validateMethod(obj[key]);
-	});
+function validateResponseList(path, x) {
+	validateArray(path, x);
+	validateList(path, x, validateResponse);
 }
 
-function validateSchemasJson(obj) {
-	validateObject(obj);
-
-	Object.keys(obj).forEach(function(key) {
-		validateJsonSchema(obj[key]);
-	});
+function validateResponse(path, x) {
+	validateObject(path, x);
+	validateOptionalKey(path, x, "name", validateString);
+	validateOptionalKey(path, x, "description", validateString);
+	validateRequiredKey(path, x, "statusCode", validateNumber);
+	validateOptionalKey(path, x, "statusMessage", validateString);
+	validateOptionalKey(path, x, "header", validateParameterList);
+	validateOptionalKey(path, x, "body", validateBodyList);
 }
 
-function validateSchemas(obj) {
-	validateObject(obj);
-
-	validateOptionalKey(obj, "json", validateSchemasJson);
+function validateBodyList(path, x) {
+	validateArray(path, x);
+	validateList(path, x, validateBody);
 }
 
-function validateAPIDocument(obj) {
-	validateObject(obj);
-
-	validateOptionalKey(obj, "sections", validateSectionList);
-	validateOptionalKey(obj, "methods", validateMethods);
-	validateOptionalKey(obj, "schemas", validateSchemas);
-
-	assert(Object.keys(obj).length === 0);
+function validateBody(path, x) {
+	validateObject(path, x);
+	validateRequiredKey(path, x, "type", validateString);
+	if (x["type"] === "binary") {
+		;
+	} else if (x["type"] === "form") {
+		validateOptionalKey(path, x, "contentType", validateString);
+		validateRequiredKey(path, x, "parameters", validateParameterList);
+	} else if (x["type"] === "json") {
+		validateOptionalKey(path, x, "contentType", validateString);
+		validateRequiredKey(path, x, "schema", validateJsonSchema);
+	} else {
+		assert(false);
+	}		
 }
+
+function validateParameterList(path, x) {
+	validateArray(path, x);
+	validateList(path, x, validateParameter);
+}
+
+function validateParameter(path, x) {
+	validateObject(path, x);
+	validateRequiredKey(path, x, "name", validateStringSchema);
+	validateOptionalKey(path, x, "description", validateString);
+	validateRequiredKey(path, x, "frequency", validateString);
+	validateRequiredKey(path, x, "value", validateStringSchema);
+}
+
+function validateStringSchema(path, x) {
+	var t = jsonTypeof(x);
+	if (t === "string") {
+		;
+	} else if (t === "object") {
+		if (x.hasOwnProperty("ref")) {
+			validateString(path + ".ref", x["ref"]);
+		} else {
+			validateOptionalKey(path, x, "criteria", function(p, y) { validateList(p, y, validateString); });
+			validateOptionalKey(path, x, "examples", function(p, y) { validateList(p, y, validateString); });
+		}
+	} else {
+		assert(false);
+	}
+}
+
+function validateJsonSchema(path, x) {
+	validateObject(path, x);
+	if (x.hasOwnProperty("ref")) {
+		validateString(path + ".ref", x["ref"]);
+	} else {
+		validateRequiredKey(path, x, "type", validateString);
+		if (x["type"] === "null") {
+			;
+		} else if (x["type"] === "boolean") {
+			;
+		} else if (x["type"] === "number") {
+			validateOptionalKey(path, x, "criteria", function(p, y) { validateList(p, y, validateString); });
+			validateOptionalKey(path, x, "examples", function(p, y) { validateList(p, y, validateString); });
+		} else if (x["type"] === "string") {
+			validateOptionalKey(path, x, "format", validateStringSchema);
+		} else if (x["type"] === "array") {
+			validateOptionalKey(path, x, "criteria", function(p, y) { validateList(p, y, validateString); });
+			validateOptionalKey(path, x, "examples", function(p, y) { validateList(p, y, validateString); });
+			validateRequiredKey(path, x, "items", validateJsonItemList);
+		} else if (x["type"] === "object") {
+			validateOptionalKey(path, x, "criteria", function(p, y) { validateList(p, y, validateString); });
+			validateOptionalKey(path, x, "examples", function(p, y) { validateList(p, y, validateString); });
+			validateRequiredKey(path, x, "properties", validateJsonPropertyList);
+		} else {
+			assert(false);
+		}
+	}
+	return false;
+}
+
+function validateJsonItemList(path, x) {
+	validateArray(path, x);
+	validateList(path, x, validateJsonItem);
+}
+
+function validateJsonItem(path, x) {
+	validateObject(path, x);
+	validateRequiredKey(path, x, "index", validateString);
+	validateOptionalKey(path, x, "description", validateString);
+	validateRequiredKey(path, x, "value", validateJsonSchema);
+}
+
+function validateJsonPropertyList(path, x) {
+	validateArray(path, x);
+	validateList(path, x, validateJsonProperty);
+}
+
+function validateJsonProperty(path, x) {
+	validateObject(path, x);
+	validateRequiredKey(path, x, "key", validateStringSchema);
+	validateOptionalKey(path, x, "description", validateString);
+	validateRequiredKey(path, x, "frequency", validateString);
+	validateRequiredKey(path, x, "value", validateJsonSchema);
+}
+
 
 
 
@@ -142,13 +273,13 @@ catch(e) {
 	process.exit(1);
 }
 
-var obj = null;
+var x = null;
 try {
-	obj = JSON.parse(body);
+	x = JSON.parse(body);
 }
 catch(e) {
 	console.error("Couldn't parse: "+e);
 	process.exit(1);
 }
 
-validateAPIDocument(obj);
+validateApiDocument("", x);
