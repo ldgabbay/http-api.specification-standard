@@ -307,4 +307,11 @@ catch(e) {
 	process.exit(1);
 }
 
-validateApiDocument("document", top);
+try {
+	validateApiDocument("document", top);
+}
+catch(e) {
+	if (!(e instanceof assert.AssertionError))
+		throw e;
+	console.error(e.message);
+}
