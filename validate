@@ -121,7 +121,10 @@ function validateSection(path, x) {
 	validateRequiredKey(path, x, "name", validateString);
 	validateOptionalKey(path, x, "summary", validateString);
 	validateOptionalKey(path, x, "description", validateString);
-	validateRequiredKey(path, x, "methods", function(p, y) { validateList(p, y, validateString); });
+	validateRequiredKey(path, x, "methods", function(p, y) { validateList(p, y, function(q, z) {
+		validateString(q, z);
+		assert(top.methods.hasOwnProperty(z), q + " method reference " + JSON.stringify(z) + " not found");
+	}); });
 }
 
 function validateMethod(path, x) {
