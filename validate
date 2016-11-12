@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 "use strict";
 
 var assert = require('assert');
@@ -282,4 +283,4 @@ catch(e) {
 	process.exit(1);
 }
 
-validateApiDocument("top", top);
+validateApiDocument("document", top);
