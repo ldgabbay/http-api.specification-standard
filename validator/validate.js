@@ -4,7 +4,6 @@ var assert = require('assert');
 var fs = require('fs');
 
 
-
 function jsonTypeof(x) {
 	var t = typeof x;
 	if (t === "number") {
@@ -30,7 +29,7 @@ function jsonTypeof(x) {
 
 
 function validateType(path, x, type) {
-	assert(jsonTypeof(x) === type, path + " not of type " + type);
+	assert(jsonTypeof(x) === type, path + " not of type \"" + type + "\"");
 }
 
 function validateNumber(path, x) {
@@ -58,15 +57,14 @@ function validateObject(path, x) {
 }
 
 
-
 function validateRequiredKey(path, obj, key, valueValidator) {
-	assert(obj.hasOwnProperty(key), path + " does not have key " + key);
-	valueValidator(path + "." + key, obj[key]);
+	assert(obj.hasOwnProperty(key), path + " does not have key " + JSON.stringify(key));
+	valueValidator(path + "[" + JSON.stringify(key) + "]", obj[key]);
 }
 
 function validateOptionalKey(path, obj, key, valueValidator) {
 	if (obj.hasOwnProperty(key)) {
-		valueValidator(path + "." + key, obj[key]);
+		valueValidator(path + "[" + JSON.stringify(key) + "]", obj[key]);
 	}
 }
 
@@ -78,7 +76,7 @@ function validateList(path, arr, valueValidator) {
 function validateMap(path, obj, valueValidator) {
 	for (var key in obj) {
 		if (obj.hasOwnProperty(key)) {
-			valueValidator(path + "." + key, obj[key]);
+			valueValidator(path + "[" + JSON.stringify(key) + "]", obj[key]);
 		}
 	}
 }
@@ -167,7 +165,7 @@ function validateBody(path, x) {
 		validateOptionalKey(path, x, "contentType", validateString);
 		validateRequiredKey(path, x, "schema", validateJsonSchema);
 	} else {
-		assert(false);
+		assert(false, path + " has invalid type " + JSON.stringify(x["type"]));
 	}		
 }
 
@@ -190,20 +188,22 @@ function validateStringSchema(path, x) {
 		;
 	} else if (t === "object") {
 		if (x.hasOwnProperty("ref")) {
-			validateString(path + ".ref", x["ref"]);
+			validateRequiredKey(path, x, "ref", validateString);
+			assert(top.schemas.string.hasOwnProperty(x["ref"]), path + " string schema reference " + JSON.stringify(x["ref"]) + " not found");
 		} else {
 			validateOptionalKey(path, x, "criteria", function(p, y) { validateList(p, y, validateString); });
 			validateOptionalKey(path, x, "examples", function(p, y) { validateList(p, y, validateString); });
 		}
 	} else {
-		assert(false);
+		assert(false, path + " is of invalid type " + JSON.stringify(t));
 	}
 }
 
 function validateJsonSchema(path, x) {
 	validateObject(path, x);
 	if (x.hasOwnProperty("ref")) {
-		validateString(path + ".ref", x["ref"]);
+		validateRequiredKey(path, x, "ref", validateString);
+		assert(top.schemas.json.hasOwnProperty(x["ref"]), path + " json schema reference " + JSON.stringify(x["ref"]) + " not found");
 	} else {
 		validateRequiredKey(path, x, "type", validateString);
 		if (x["type"] === "null") {
@@ -224,7 +224,7 @@ function validateJsonSchema(path, x) {
 			validateOptionalKey(path, x, "examples", function(p, y) { validateList(p, y, validateString); });
 			validateRequiredKey(path, x, "properties", validateJsonPropertyList);
 		} else {
-			assert(false);
+			assert(false, path + "[\"type\"] has an invalid value " + JSON.stringify(x["type"]));
 		}
 	}
 	return false;
@@ -273,13 +273,13 @@ catch(e) {
 	process.exit(1);
 }
 
-var x = null;
+var top = null;
 try {
-	x = JSON.parse(body);
+	top = JSON.parse(body);
 }
 catch(e) {
 	console.error("Couldn't parse: "+e);
 	process.exit(1);
 }
 
-validateApiDocument("", x);
+validateApiDocument("top", top);
