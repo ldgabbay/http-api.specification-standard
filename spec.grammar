@@ -1,14 +1,14 @@
 API_DOCUMENT :
     {
-        "sections" optional : SECTION_LIST,
-        "methods" optional : {
+        "sections" required : SECTION_LIST,
+        "methods" required : {
             string: METHOD
         },
-        "schemas" optional : {
-            "string" optional : {
+        "schemas" required : {
+            "string" required : {
                 string: STRING_SCHEMA
             },
-            "json" optional : {
+            "json" required : {
                 string: JSON_SCHEMA
             }
         }

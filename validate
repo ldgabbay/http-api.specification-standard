@@ -89,6 +89,23 @@ function validateMap(path, obj, valueValidator) {
 	}
 }
 
+
+function prevalidateApiDocument_schemas(path, x) {
+	validateObject(path, x);
+	validateOnlyKeys(path, x, ["string", "json"]);
+	validateRequiredKey(path, x, "string", validateObject);
+	validateRequiredKey(path, x, "json", validateObject);
+}
+
+function prevalidateApiDocument(path, x) {
+	validateObject(path, x);
+	validateOnlyKeys(path, x, ["sections", "methods", "schemas"]);
+	validateRequiredKey(path, x, "sections", validateArray);
+	validateRequiredKey(path, x, "methods", validateObject);
+	validateRequiredKey(path, x, "schemas", prevalidateApiDocument_schemas);
+}
+
+
 function validateApiDocument_methods(path, x) {
 	validateObject(path, x);
 	validateMap(path, x, validateMethod);
@@ -97,17 +114,17 @@ function validateApiDocument_methods(path, x) {
 function validateApiDocument_schemas(path, x) {
 	validateObject(path, x);
 	validateOnlyKeys(path, x, ["string", "json"]);
-	validateOptionalKey(path, x, "string", function(p, y) { validateMap(p, y, validateStringSchema); });
-	validateOptionalKey(path, x, "json", function(p, y) { validateMap(p, y, validateJsonSchema); });
+	validateRequiredKey(path, x, "string", function(p, y) { validateMap(p, y, validateStringSchema); });
+	validateRequiredKey(path, x, "json", function(p, y) { validateMap(p, y, validateJsonSchema); });
 }
 
 
 function validateApiDocument(path, x) {
 	validateObject(path, x);
 	validateOnlyKeys(path, x, ["sections", "methods", "schemas"]);
-	validateOptionalKey(path, x, "sections", validateSectionList);
-	validateOptionalKey(path, x, "methods", validateApiDocument_methods);
-	validateOptionalKey(path, x, "schemas", validateApiDocument_schemas);
+	validateRequiredKey(path, x, "sections", validateSectionList);
+	validateRequiredKey(path, x, "methods", validateApiDocument_methods);
+	validateRequiredKey(path, x, "schemas", validateApiDocument_schemas);
 }
 
 function validateSectionList(path, x) {
@@ -311,6 +328,7 @@ catch(e) {
 }
 
 try {
+	prevalidateApiDocument("document", top);
 	validateApiDocument("document", top);
 }
 catch(e) {
