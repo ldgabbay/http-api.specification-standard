@@ -58,6 +58,13 @@ function validateObject(path, x) {
 }
 
 
+function validateOnlyKeys(path, obj, keys) {
+	for (var key in obj) {
+		if (obj.hasOwnProperty(key))
+			assert(keys.indexOf(key) !== -1, path + " contains unexpected key " + JSON.stringify(key));
+	}
+}
+
 function validateRequiredKey(path, obj, key, valueValidator) {
 	assert(obj.hasOwnProperty(key), path + " does not have key " + JSON.stringify(key));
 	valueValidator(path + "[" + JSON.stringify(key) + "]", obj[key]);
@@ -89,6 +96,7 @@ function validateApiDocument_methods(path, x) {
 
 function validateApiDocument_schemas(path, x) {
 	validateObject(path, x);
+	validateOnlyKeys(path, x, ["string", "json"]);
 	validateOptionalKey(path, x, "string", function(p, y) { validateMap(p, y, validateStringSchema); });
 	validateOptionalKey(path, x, "json", function(p, y) { validateMap(p, y, validateJsonSchema); });
 }
@@ -96,6 +104,7 @@ function validateApiDocument_schemas(path, x) {
 
 function validateApiDocument(path, x) {
 	validateObject(path, x);
+	validateOnlyKeys(path, x, ["sections", "methods", "schemas"]);
 	validateOptionalKey(path, x, "sections", validateSectionList);
 	validateOptionalKey(path, x, "methods", validateApiDocument_methods);
 	validateOptionalKey(path, x, "schemas", validateApiDocument_schemas);
@@ -108,6 +117,7 @@ function validateSectionList(path, x) {
 
 function validateSection(path, x) {
 	validateObject(path, x);
+	validateOnlyKeys(path, x, ["name", "summary", "description", "methods"]);
 	validateRequiredKey(path, x, "name", validateString);
 	validateOptionalKey(path, x, "summary", validateString);
 	validateOptionalKey(path, x, "description", validateString);
@@ -116,6 +126,7 @@ function validateSection(path, x) {
 
 function validateMethod(path, x) {
 	validateObject(path, x);
+	validateOnlyKeys(path, x, ["method", "location", "location_type", "summary", "description", "method", "request", "response"]);
 	validateRequiredKey(path, x, "method", validateString);
 	validateRequiredKey(path, x, "location", validateString);
 	validateRequiredKey(path, x, "location_type", validateString);
@@ -128,6 +139,7 @@ function validateMethod(path, x) {
 
 function validateRequest(path, x) {
 	validateObject(path, x);
+	validateOnlyKeys(path, x, ["path", "query", "header", "body"]);
 	validateOptionalKey(path, x, "path", validateParameterList);
 	validateOptionalKey(path, x, "query", validateParameterList);
 	validateOptionalKey(path, x, "header", validateParameterList);
@@ -141,6 +153,7 @@ function validateResponseList(path, x) {
 
 function validateResponse(path, x) {
 	validateObject(path, x);
+	validateOnlyKeys(path, x, ["name", "description", "statusCode", "statusMessage", "header", "body"]);
 	validateOptionalKey(path, x, "name", validateString);
 	validateOptionalKey(path, x, "description", validateString);
 	validateRequiredKey(path, x, "statusCode", validateNumber);
@@ -158,11 +171,13 @@ function validateBody(path, x) {
 	validateObject(path, x);
 	validateRequiredKey(path, x, "type", validateString);
 	if (x["type"] === "binary") {
-		;
+		validateOnlyKeys(path, x, ["type"]);
 	} else if (x["type"] === "form") {
+		validateOnlyKeys(path, x, ["type", "contentType", "parameters"]);
 		validateOptionalKey(path, x, "contentType", validateString);
 		validateRequiredKey(path, x, "parameters", validateParameterList);
 	} else if (x["type"] === "json") {
+		validateOnlyKeys(path, x, ["type", "contentType", "schema"]);
 		validateOptionalKey(path, x, "contentType", validateString);
 		validateRequiredKey(path, x, "schema", validateJsonSchema);
 	} else {
@@ -177,6 +192,7 @@ function validateParameterList(path, x) {
 
 function validateParameter(path, x) {
 	validateObject(path, x);
+	validateOnlyKeys(path, x, ["name", "description", "frequency", "value"]);
 	validateRequiredKey(path, x, "name", validateStringSchema);
 	validateOptionalKey(path, x, "description", validateString);
 	validateRequiredKey(path, x, "frequency", validateString);
@@ -189,9 +205,11 @@ function validateStringSchema(path, x) {
 		;
 	} else if (t === "object") {
 		if (x.hasOwnProperty("ref")) {
+			validateOnlyKeys(path, x, ["ref"]);
 			validateRequiredKey(path, x, "ref", validateString);
 			assert(top.schemas.string.hasOwnProperty(x["ref"]), path + " string schema reference " + JSON.stringify(x["ref"]) + " not found");
 		} else {
+			validateOnlyKeys(path, x, ["criteria", "examples"]);
 			validateOptionalKey(path, x, "criteria", function(p, y) { validateList(p, y, validateString); });
 			validateOptionalKey(path, x, "examples", function(p, y) { validateList(p, y, validateString); });
 		}
@@ -203,24 +221,29 @@ function validateStringSchema(path, x) {
 function validateJsonSchema(path, x) {
 	validateObject(path, x);
 	if (x.hasOwnProperty("ref")) {
+		validateOnlyKeys(path, x, ["ref"]);
 		validateRequiredKey(path, x, "ref", validateString);
 		assert(top.schemas.json.hasOwnProperty(x["ref"]), path + " json schema reference " + JSON.stringify(x["ref"]) + " not found");
 	} else {
 		validateRequiredKey(path, x, "type", validateString);
 		if (x["type"] === "null") {
-			;
+			validateOnlyKeys(path, x, ["type"]);
 		} else if (x["type"] === "boolean") {
-			;
+			validateOnlyKeys(path, x, ["type"]);
 		} else if (x["type"] === "number") {
+			validateOnlyKeys(path, x, ["type", "criteria", "examples"]);
 			validateOptionalKey(path, x, "criteria", function(p, y) { validateList(p, y, validateString); });
 			validateOptionalKey(path, x, "examples", function(p, y) { validateList(p, y, validateString); });
 		} else if (x["type"] === "string") {
+			validateOnlyKeys(path, x, ["type", "format"]);
 			validateOptionalKey(path, x, "format", validateStringSchema);
 		} else if (x["type"] === "array") {
+			validateOnlyKeys(path, x, ["type", "criteria", "examples", "items"]);
 			validateOptionalKey(path, x, "criteria", function(p, y) { validateList(p, y, validateString); });
 			validateOptionalKey(path, x, "examples", function(p, y) { validateList(p, y, validateString); });
 			validateRequiredKey(path, x, "items", validateJsonItemList);
 		} else if (x["type"] === "object") {
+			validateOnlyKeys(path, x, ["type", "criteria", "examples", "properties"]);
 			validateOptionalKey(path, x, "criteria", function(p, y) { validateList(p, y, validateString); });
 			validateOptionalKey(path, x, "examples", function(p, y) { validateList(p, y, validateString); });
 			validateRequiredKey(path, x, "properties", validateJsonPropertyList);
@@ -238,6 +261,7 @@ function validateJsonItemList(path, x) {
 
 function validateJsonItem(path, x) {
 	validateObject(path, x);
+	validateOnlyKeys(path, x, ["index", "description", "value"]);
 	validateRequiredKey(path, x, "index", validateString);
 	validateOptionalKey(path, x, "description", validateString);
 	validateRequiredKey(path, x, "value", validateJsonSchema);
@@ -250,12 +274,12 @@ function validateJsonPropertyList(path, x) {
 
 function validateJsonProperty(path, x) {
 	validateObject(path, x);
+	validateOnlyKeys(path, x, ["key", "description", "frequency", "value"]);
 	validateRequiredKey(path, x, "key", validateStringSchema);
 	validateOptionalKey(path, x, "description", validateString);
 	validateRequiredKey(path, x, "frequency", validateString);
 	validateRequiredKey(path, x, "value", validateJsonSchema);
 }
-
 
 
 
