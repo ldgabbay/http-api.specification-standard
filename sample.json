@@ -8,20 +8,16 @@
 		},
 		{
 			"name": "Section 2",
-			"xsummary": "Section 2 Summary",
 			"description": "Section 2 Description",
 			"methods": []
 		},
 		{
 			"name": "Section 3",
 			"summary": "Section 3 Summary",
-			"xdescription": "Section 3 Description",
 			"methods": ["Method 3", "Method 4"]
 		},
 		{
 			"name": "Section 4",
-			"xsummary": "Section 4 Summary",
-			"xdescription": "Section 4 Description",
 			"methods": ["Method 1", "Method 2", "Method 3", "Method 4"]
 		}
 	],
