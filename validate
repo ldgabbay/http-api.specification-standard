@@ -229,6 +229,9 @@ var validate = (function(){
 				validateOnlyKeys(top, path, x, ["ref"]);
 				validateRequiredKey(top, path, x, "ref", validateString);
 				assert(top.schemas.string.hasOwnProperty(x["ref"]), path + " string schema reference " + JSON.stringify(x["ref"]) + " not found");
+			} else if (x.hasOwnProperty("oneOf")) {
+				validateOnlyKeys(top, path, x, ["oneOf"]);
+				validateRequiredKey(top, path, x, "oneOf", validateStringSchemaList);
 			} else {
 				validateOnlyKeys(top, path, x, ["criteria", "examples"]);
 				validateOptionalKey(top, path, x, "criteria", function(t, p, y) { validateList(t, p, y, validateString); });
@@ -239,12 +242,20 @@ var validate = (function(){
 		}
 	}
 
+	function validateStringSchemaList(top, path, x) {
+		validateArray(top, path, x);
+		validateList(top, path, x, validateStringSchema);
+	}
+
 	function validateJsonSchema(top, path, x) {
 		validateObject(top, path, x);
 		if (x.hasOwnProperty("ref")) {
 			validateOnlyKeys(top, path, x, ["ref"]);
 			validateRequiredKey(top, path, x, "ref", validateString);
 			assert(top.schemas.json.hasOwnProperty(x["ref"]), path + " json schema reference " + JSON.stringify(x["ref"]) + " not found");
+		} else if (x.hasOwnProperty("oneOf")) {
+			validateOnlyKeys(top, path, x, ["oneOf"]);
+			validateRequiredKey(top, path, x, "oneOf", validateJsonSchemaList);
 		} else {
 			validateRequiredKey(top, path, x, "type", validateString);
 			if (x["type"] === "null") {
@@ -273,6 +284,11 @@ var validate = (function(){
 			}
 		}
 		return false;
+	}
+
+	function validateJsonSchemaList(top, path, x) {
+		validateArray(top, path, x);
+		validateList(top, path, x, validateJsonSchema);
 	}
 
 	function validateJsonItemList(top, path, x) {
