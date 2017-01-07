@@ -608,7 +608,7 @@
 	            throw new ParseError();
 	        }
 
-	        function Specification(httpapiSpec) {
+	        function ApiDocument(httpapiSpec) {
 	            context = {
 	                srefs: [],
 	                jrefs: [],
@@ -659,7 +659,7 @@
 	        }
 
 	        function parse(httpapiSpec) {
-	            return new Specification(httpapiSpec);
+	            return new ApiDocument(httpapiSpec);
 	        }
 
 			return parse;
