@@ -337,6 +337,14 @@
 				this.methods = section.methods.slice();
 			}
 
+			Section.prototype.accept = function(visitor) {
+				if (visitor.enterSection)
+					visitor.enterSection(this);
+
+				if (visitor.exitSection)
+					visitor.exitSection(this);
+			};
+
 			function makeSection(section) { return new Section(section); }
 
 			function Parameter(parameter) {
@@ -346,11 +354,30 @@
 				this.value = makeStringSchema(parameter.value);
 			}
 
+			Parameter.prototype.accept = function(visitor) {
+				if (visitor.enterParameter)
+					visitor.enterParameter(this);
+
+				this.name.accept(visitor);
+				this.value.accept(visitor);
+
+				if (visitor.exitParameter)
+					visitor.exitParameter(this);
+			};
+
 			function makeParameter(parameter) { return new Parameter(parameter); }
 
 			function BinaryBody(body) {
 				this.type = body.type;
 			}
+
+			BinaryBody.prototype.accept = function(visitor) {
+				if (visitor.enterBinaryBody)
+					visitor.enterBinaryBody(this);
+
+				if (visitor.exitBinaryBody)
+					visitor.exitBinaryBody(this);
+			};
 
 			function FormBody(body) {
 				this.type = body.type;
@@ -358,11 +385,31 @@
 				this._parameters = body.parameters.map(makeParameter);
 			}
 
+			FormBody.prototype.accept = function(visitor) {
+				if (visitor.enterFormBody)
+					visitor.enterFormBody(this);
+
+				this._parameters.map(function(parameter) { parameter.accept(visitor); });
+
+				if (visitor.exitFormBody)
+					visitor.exitFormBody(this);
+			};
+
 			function JsonBody(body) {
 				this.type = body.type;
 				if (body.hasOwnProperty('contentType')) this.contentType = body.contentType;
 				this._schema = makeJsonSchema(body.schema);
 			}
+
+			JsonBody.prototype.accept = function(visitor) {
+				if (visitor.enterJsonBody)
+					visitor.enterJsonBody(this);
+
+				this._schema.accept(visitor);
+
+				if (visitor.exitJsonBody)
+					visitor.exitJsonBody(this);
+			};
 
 			function makeBody(body) {
 				if (body.type === 'binary')
@@ -381,6 +428,23 @@
 				if (request.hasOwnProperty('body')) this.body = request.body.map(makeBody);
 			}
 
+			Request.prototype.accept = function(visitor) {
+				if (visitor.enterRequest)
+					visitor.enterRequest(this);
+
+				if (this.path)
+					this.path.map(function(parameter) { parameter.accept(visitor); });
+				if (this.query)
+					this.query.map(function(parameter) { parameter.accept(visitor); });
+				if (this.header)
+					this.header.map(function(parameter) { parameter.accept(visitor); });
+				if (this.body)
+					this.body.map(function(body) { body.accept(visitor); });
+
+				if (visitor.exitRequest)
+					visitor.exitRequest(this);
+			};
+
 			function makeRequest(request) { return new Request(request); }
 
 			function Response(response) {
@@ -391,6 +455,19 @@
 				if (response.hasOwnProperty('header')) this.header = response.header.map(makeParameter);
 				if (response.hasOwnProperty('body')) this.body = response.body.map(makeBody);
 			}
+
+			Response.prototype.accept = function(visitor) {
+				if (visitor.enterResponse)
+					visitor.enterResponse(this);
+
+				if (this.header)
+					this.header.map(function(parameter) { parameter.accept(visitor); });
+				if (this.body)
+					this.body.map(function(body) { body.accept(visitor); });
+
+				if (visitor.exitResponse)
+					visitor.exitResponse(this);
+			};
 
 			function makeResponse(response) { return new Response(response); }
 
@@ -404,6 +481,17 @@
 				this.response = method.response.map(makeResponse);
 			}
 
+			Method.prototype.accept = function(visitor) {
+				if (visitor.enterMethod)
+					visitor.enterMethod(this);
+
+				this.request.accept(visitor);
+				this.response.map(function(response) { response.accept(visitor); });
+
+				if (visitor.exitMethod)
+					visitor.exitMethod(this);
+			};
+
 			function makeMethod(method) { return new Method(method); }
 
 			function LiteralSS(ss) {
@@ -411,11 +499,27 @@
 				this._value = ss;
 			}
 
+			LiteralSS.prototype.accept = function(visitor) {
+				if (visitor.enterLiteralSS)
+					visitor.enterLiteralSS(this);
+
+				if (visitor.exitLiteralSS)
+					visitor.exitLiteralSS(this);
+			};
+
 			function GeneralSS(ss) {
 				this.type = 'general';
 				if (ss.hasOwnProperty('criteria')) this._criteria = ss.criteria;
 				if (ss.hasOwnProperty('examples')) this._examples = ss.examples.map(function(value) { return JSON.stringify(value); });
 			}
+
+			GeneralSS.prototype.accept = function(visitor) {
+				if (visitor.enterGeneralSS)
+					visitor.enterGeneralSS(this);
+
+				if (visitor.exitGeneralSS)
+					visitor.exitGeneralSS(this);
+			};
 
 			function ReferenceSS(ss) {
 				context.srefs.push(this);
@@ -424,10 +528,28 @@
 				this._ref = ss.ref;
 			}
 
+			ReferenceSS.prototype.accept = function(visitor) {
+				if (visitor.enterReferenceSS)
+					visitor.enterReferenceSS(this);
+
+				if (visitor.exitReferenceSS)
+					visitor.exitReferenceSS(this);
+			};
+
 			function OneOfSS(ss) {
 				this.type = 'oneOf';
 				this._oneOf = ss.oneOf.map(makeStringSchema);
 			}
+
+			OneOfSS.prototype.accept = function(visitor) {
+				if (visitor.enterOneOfSS)
+					visitor.enterOneOfSS(this);
+
+				this._oneOf.map(function(stringSchema) { stringSchema.accept(visitor); });
+
+				if (visitor.exitOneOfSS)
+					visitor.exitOneOfSS(this);
+			};
 
 			function makeStringSchema(ss) {
 				if (jsonTypeof(ss) === "string") return new LiteralSS(ss);
@@ -442,6 +564,16 @@
 				this.value = makeJsonSchema(item.value);
 			}
 
+			JsonItem.prototype.accept = function(visitor) {
+				if (visitor.enterJsonItem)
+					visitor.enterJsonItem(this);
+
+				this.value.accept(visitor);
+
+				if (visitor.exitJsonItem)
+					visitor.exitJsonItem(this);
+			};
+
 			function makeJsonItem(item) { return new JsonItem(item); }
 
 			function JsonProperty(property) {
@@ -450,6 +582,17 @@
 				this.frequency = property.frequency;
 				this.value = makeJsonSchema(property.value);
 			}
+
+			JsonProperty.prototype.accept = function(visitor) {
+				if (visitor.enterJsonProperty)
+					visitor.enterJsonProperty(this);
+
+				this.key.accept(visitor);
+				this.value.accept(visitor);
+
+				if (visitor.exitJsonProperty)
+					visitor.exitJsonProperty(this);
+			};
 
 			function makeJsonProperty(property) { return new JsonProperty(property); }
 
@@ -460,18 +603,52 @@
 				this._ref = js.ref;
 			}
 
+			ReferenceJS.prototype.accept = function(visitor) {
+				if (visitor.enterReferenceJS)
+					visitor.enterReferenceJS(this);
+
+				if (visitor.exitReferenceJS)
+					visitor.exitReferenceJS(this);
+			};
+
 			function OneOfJS(js) {
 				this.type = 'oneOf';
 				this._oneOf = js.oneOf.map(makeJsonSchema);
 			}
 
+			OneOfJS.prototype.accept = function(visitor) {
+				if (visitor.enterOneOfJS)
+					visitor.enterOneOfJS(this);
+
+				this._oneOf.map(function(jsonSchema) { jsonSchema.accept(visitor); });
+
+				if (visitor.exitOneOfJS)
+					visitor.exitOneOfJS(this);
+			};
+
 			function NullJS(js) {
 				this.type = js.type;
 			}
 
+			NullJS.prototype.accept = function(visitor) {
+				if (visitor.enterNullJS)
+					visitor.enterNullJS(this);
+
+				if (visitor.exitNullJS)
+					visitor.exitNullJS(this);
+			};
+
 			function BooleanJS(js) {
 				this.type = js.type;
 			}
+
+			BooleanJS.prototype.accept = function(visitor) {
+				if (visitor.enterBooleanJS)
+					visitor.enterBooleanJS(this);
+
+				if (visitor.exitBooleanJS)
+					visitor.exitBooleanJS(this);
+			};
 
 			function NumberJS(js) {
 				this.type = js.type;
@@ -479,10 +656,29 @@
 				if (js.hasOwnProperty('examples')) this._examples = js.examples;
 			}
 
+			NumberJS.prototype.accept = function(visitor) {
+				if (visitor.enterNumberJS)
+					visitor.enterNumberJS(this);
+
+				if (visitor.exitNumberJS)
+					visitor.exitNumberJS(this);
+			};
+
 			function StringJS(js) {
 				this.type = js.type;
 				if (js.hasOwnProperty('format')) this._format = makeStringSchema(js.format);
 			}
+
+			StringJS.prototype.accept = function(visitor) {
+				if (visitor.enterStringJS)
+					visitor.enterStringJS(this);
+
+				if (this._format)
+					this._format.accept(visitor);
+
+				if (visitor.exitStringJS)
+					visitor.exitStringJS(this);
+			};
 
 			function ArrayJS(js) {
 				this.type = js.type;
@@ -491,12 +687,32 @@
 				this._items = js.items.map(makeJsonItem);
 			}
 
+			ArrayJS.prototype.accept = function(visitor) {
+				if (visitor.enterArrayJS)
+					visitor.enterArrayJS(this);
+
+				this._items.map(function(item) { item.accept(visitor); });
+
+				if (visitor.exitArrayJS)
+					visitor.exitArrayJS(this);
+			};
+
 			function ObjectJS(js) {
 				this.type = js.type;
 				if (js.hasOwnProperty('criteria')) this._criteria = js.criteria;
 				if (js.hasOwnProperty('examples')) this._examples = js.examples;
 				this._properties = js.properties.map(makeJsonProperty);
 			}
+
+			ObjectJS.prototype.accept = function(visitor) {
+				if (visitor.enterObjectJS)
+					visitor.enterObjectJS(this);
+
+				this._properties.map(function(property) { property.accept(visitor); });
+
+				if (visitor.exitObjectJS)
+					visitor.exitObjectJS(this);
+			};
 
 			function makeJsonSchema(js) {
 				if (js.hasOwnProperty("ref")) return new ReferenceJS(js);
@@ -559,6 +775,30 @@
 				}
 				context = null;
 			}
+
+			ApiDocument.prototype.accept = function(visitor) {
+				if (visitor.enterApiDocument)
+					visitor.enterApiDocument(this);
+
+				for (var key in this.sections)
+					if (this.sections.hasOwnProperty(key))
+						this.sections[key].accept(visitor);
+
+				for (var key in this.methods)
+					if (this.methods.hasOwnProperty(key))
+						this.methods[key].accept(visitor);
+
+				for (var key in this.schemas.string)
+					if (this.schemas.string.hasOwnProperty(key))
+						this.schemas.string[key].accept(visitor);
+
+				for (var key in this.schemas.json)
+					if (this.schemas.json.hasOwnProperty(key))
+						this.schemas.json[key].accept(visitor);
+
+				if (visitor.exitApiDocument)
+					visitor.exitApiDocument(this);
+			};
 
 			function parse(httpapiSpec) {
 				return new ApiDocument(httpapiSpec);
