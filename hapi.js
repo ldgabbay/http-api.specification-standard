@@ -751,7 +751,7 @@
 				this.schemaTags = {
 					string: Object.getOwnPropertyNames(httpapiSpec.schemas.string).sort(),
 					json: Object.getOwnPropertyNames(httpapiSpec.schemas.json).sort(),
-				}
+				};
 				for(var key in this.methods) {
 					if(this.methods.hasOwnProperty(key)) {
 						this.methods[key].tag = key;
