@@ -323,7 +323,7 @@
 			};
 
 			return validate;
-		});
+		})();
 
 		var parse = (function() {
 			var context = null;
@@ -565,7 +565,7 @@
 			}
 
 			return parse;
-		});
+		})();
 
 		return {
 			version: '1.4',
