@@ -350,24 +350,18 @@
 
 	        function BinaryBody(body) {
 	            this.type = body.type;
-
-	            // TODO extendedView
 	        }
 
 	        function FormBody(body) {
 	            this.type = body.type;
 	            if (body.hasOwnProperty('contentType')) this.contentType = body.contentType;
 	            this._parameters = body.parameters.map(makeParameter);
-
-	            // TODO extendedView
 	        }
 
 	        function JsonBody(body) {
 	            this.type = body.type;
 	            if (body.hasOwnProperty('contentType')) this.contentType = body.contentType;
 	            this._schema = makeJsonSchema(body.schema);
-
-	            // TODO extendedView
 	        }
 
 	        function makeBody(body) {
@@ -415,27 +409,12 @@
 	        function LiteralSS(ss) {
 	            this.type = 'literal';
 	            this._value = ss;
-
-	            this.shortTextClass = 'literal-ss';
-	            this.shortText = JSON.stringify(this._value);
-
-	            this.isExpandable = false;
-	            this.extendedView = null;
 	        }
 
 	        function GeneralSS(ss) {
 	            this.type = 'general';
 	            if (ss.hasOwnProperty('criteria')) this._criteria = ss.criteria;
 	            if (ss.hasOwnProperty('examples')) this._examples = ss.examples.map(function(value) { return JSON.stringify(value); });
-
-	            this.shortTextClass = 'primitive-ss';
-	            this.shortText = 'string';
-
-	            this.isExpandable = this._criteria || this._examples;
-	            if (this.isExpandable) {
-	                this.shortText = 'string'; // NOTE should we display something to signify expandability?
-	                this.extendedView = 'app/shared/schema-extended/general-ss.html';
-	            }
 	        }
 
 	        function ReferenceSS(ss) {
@@ -443,23 +422,11 @@
 
 	            this.type = 'reference';
 	            this._ref = ss.ref;
-
-	            this.shortTextClass = 'reference-ss';
-	            this.shortText = this._ref;
-
-	            this.isExpandable = true;
-	            this.extendedView = 'app/shared/schema-extended/reference-ss.html';
 	        }
 
 	        function OneOfSS(ss) {
 	            this.type = 'oneOf';
 	            this._oneOf = ss.oneOf.map(makeStringSchema);
-
-	            this.shortTextClass = 'primitive-ss';
-	            this.shortText = 'oneOf';
-
-	            this.isExpandable = true;
-	            this.extendedView = 'app/shared/schema-extended/one-of-ss.html';
 	        }
 
 	        function makeStringSchema(ss) {
@@ -491,73 +458,30 @@
 
 	            this.type = 'reference';
 	            this._ref = js.ref;
-
-	            this.shortTextClass = 'reference-js';
-	            this.shortText = this._ref;
-	            this.isExpandable = true;
-	            this.extendedView = 'app/shared/schema-extended/reference-js.html';
 	        }
 
 	        function OneOfJS(js) {
 	            this.type = 'oneOf';
 	            this._oneOf = js.oneOf.map(makeJsonSchema);
-
-	            this.shortTextClass = 'primitive-js';
-	            this.shortText = 'oneOf';
-	            this.isExpandable = true;
-	            this.extendedView = 'app/shared/schema-extended/one-of-js.html';
 	        }
 
 	        function NullJS(js) {
 	            this.type = js.type;
-
-	            this.shortTextClass = 'primitive-js';
-	            this.shortText = 'null';
-	            this.isExpandable = false;
-	            this.extendedView = null;
 	        }
 
 	        function BooleanJS(js) {
 	            this.type = js.type;
-
-	            this.shortTextClass = 'primitive-js';
-	            this.shortText = 'boolean';
-	            this.isExpandable = false;
-	            this.extendedView = null;
 	        }
 
 	        function NumberJS(js) {
 	            this.type = js.type;
 	            if (js.hasOwnProperty('criteria')) this._criteria = js.criteria;
 	            if (js.hasOwnProperty('examples')) this._examples = js.examples;
-
-	            this.shortTextClass = 'primitive-js';
-	            if (this._criteria || this._examples) {
-	                this.isExpandable = true;
-	                this.shortText = 'number'; // NOTE should we display something to signify expandability?
-	                this.extendedView = 'app/shared/schema-extended/number-js.html';
-	            } else {
-	                this.isExpandable = false;
-	                this.shortText = 'number';
-	                this.extendedView = null;
-	            }
 	        }
 
 	        function StringJS(js) {
 	            this.type = js.type;
 	            if (js.hasOwnProperty('format')) this._format = makeStringSchema(js.format);
-
-	            if (this._format) {
-	                this.shortTextClass = this._format.shortTextClass;
-	                this.shortText = this._format.shortText;
-	                this.isExpandable = this._format.isExpandable;
-	                this.extendedView = 'app/shared/schema-extended/string-js.html'; // TODO this._format.extendedView;
-	            } else {
-	                this.shortTextClass = 'primitive-js';
-	                this.shortText = 'string';
-	                this.isExpandable = false;
-	                this.extendedView = null;
-	            }
 	        }
 
 	        function ArrayJS(js) {
@@ -565,17 +489,6 @@
 	            if (js.hasOwnProperty('criteria')) this._criteria = js.criteria;
 	            if (js.hasOwnProperty('examples')) this._examples = js.examples;
 	            this._items = js.items.map(makeJsonItem);
-
-	            this.shortTextClass = 'primitive-js';
-	            if (this._criteria || this._examples || this._items.length !== 0) {
-	                this.shortText = 'array'; // NOTE should we display something to signify expandability?
-	                this.isExpandable = true;
-	                this.extendedView = 'app/shared/schema-extended/array-js.html';
-	            } else {
-	                this.shortText = 'array';
-	                this.isExpandable = false;
-	                this.extendedView = null;
-	            }
 	        }
 
 	        function ObjectJS(js) {
@@ -583,17 +496,6 @@
 	            if (js.hasOwnProperty('criteria')) this._criteria = js.criteria;
 	            if (js.hasOwnProperty('examples')) this._examples = js.examples;
 	            this._properties = js.properties.map(makeJsonProperty);
-
-	            this.shortTextClass = 'primitive-js';
-	            if (this._criteria || this._examples || this._properties.length !== 0) {
-	                this.shortText = 'object'; // NOTE should we display something to signify expandability?
-	                this.isExpandable = true;
-	                this.extendedView = 'app/shared/schema-extended/object-js.html';
-	            } else {
-	                this.shortText = 'object';
-	                this.isExpandable = false;
-	                this.extendedView = null;
-	            }
 	        }
 
 	        function makeJsonSchema(js) {
