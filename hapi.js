@@ -492,7 +492,7 @@
 
 			function LiteralSS(ss) {
 				this.type = 'literal';
-				this._value = ss;
+				this.value = ss;
 			}
 
 			LiteralSS.prototype.accept = function(visitor) {
