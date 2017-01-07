@@ -326,11 +326,7 @@
 		})();
 
 		var parse = (function() {
-			var context = null;
-
 			function Section(section) {
-				context.sections.push(this);
-
 				this.name = section.name;
 				if (section.hasOwnProperty('summary')) this.summary = section.summary;
 				if (section.hasOwnProperty('description')) this.description = section.description;
@@ -382,14 +378,14 @@
 			function FormBody(body) {
 				this.type = body.type;
 				if (body.hasOwnProperty('contentType')) this.contentType = body.contentType;
-				this._parameters = body.parameters.map(makeParameter);
+				this.parameters = body.parameters.map(makeParameter);
 			}
 
 			FormBody.prototype.accept = function(visitor) {
 				if (visitor.enterFormBody)
 					visitor.enterFormBody(this);
 
-				this._parameters.map(function(parameter) { parameter.accept(visitor); });
+				this.parameters.map(function(parameter) { parameter.accept(visitor); });
 
 				if (visitor.exitFormBody)
 					visitor.exitFormBody(this);
@@ -398,14 +394,14 @@
 			function JsonBody(body) {
 				this.type = body.type;
 				if (body.hasOwnProperty('contentType')) this.contentType = body.contentType;
-				this._schema = makeJsonSchema(body.schema);
+				this.schema = makeJsonSchema(body.schema);
 			}
 
 			JsonBody.prototype.accept = function(visitor) {
 				if (visitor.enterJsonBody)
 					visitor.enterJsonBody(this);
 
-				this._schema.accept(visitor);
+				this.schema.accept(visitor);
 
 				if (visitor.exitJsonBody)
 					visitor.exitJsonBody(this);
@@ -509,8 +505,8 @@
 
 			function GeneralSS(ss) {
 				this.type = 'general';
-				if (ss.hasOwnProperty('criteria')) this._criteria = ss.criteria;
-				if (ss.hasOwnProperty('examples')) this._examples = ss.examples.map(function(value) { return JSON.stringify(value); });
+				if (ss.hasOwnProperty('criteria')) this.criteria = ss.criteria;
+				if (ss.hasOwnProperty('examples')) this.examples = ss.examples.map(function(value) { return JSON.stringify(value); });
 			}
 
 			GeneralSS.prototype.accept = function(visitor) {
@@ -522,10 +518,8 @@
 			};
 
 			function ReferenceSS(ss) {
-				context.srefs.push(this);
-
 				this.type = 'reference';
-				this._ref = ss.ref;
+				this.ref = ss.ref;
 			}
 
 			ReferenceSS.prototype.accept = function(visitor) {
@@ -538,14 +532,14 @@
 
 			function OneOfSS(ss) {
 				this.type = 'oneOf';
-				this._oneOf = ss.oneOf.map(makeStringSchema);
+				this.oneOf = ss.oneOf.map(makeStringSchema);
 			}
 
 			OneOfSS.prototype.accept = function(visitor) {
 				if (visitor.enterOneOfSS)
 					visitor.enterOneOfSS(this);
 
-				this._oneOf.map(function(stringSchema) { stringSchema.accept(visitor); });
+				this.oneOf.map(function(stringSchema) { stringSchema.accept(visitor); });
 
 				if (visitor.exitOneOfSS)
 					visitor.exitOneOfSS(this);
@@ -597,10 +591,8 @@
 			function makeJsonProperty(property) { return new JsonProperty(property); }
 
 			function ReferenceJS(js) {
-				context.jrefs.push(this);
-
 				this.type = 'reference';
-				this._ref = js.ref;
+				this.ref = js.ref;
 			}
 
 			ReferenceJS.prototype.accept = function(visitor) {
@@ -613,14 +605,14 @@
 
 			function OneOfJS(js) {
 				this.type = 'oneOf';
-				this._oneOf = js.oneOf.map(makeJsonSchema);
+				this.oneOf = js.oneOf.map(makeJsonSchema);
 			}
 
 			OneOfJS.prototype.accept = function(visitor) {
 				if (visitor.enterOneOfJS)
 					visitor.enterOneOfJS(this);
 
-				this._oneOf.map(function(jsonSchema) { jsonSchema.accept(visitor); });
+				this.oneOf.map(function(jsonSchema) { jsonSchema.accept(visitor); });
 
 				if (visitor.exitOneOfJS)
 					visitor.exitOneOfJS(this);
@@ -652,8 +644,8 @@
 
 			function NumberJS(js) {
 				this.type = js.type;
-				if (js.hasOwnProperty('criteria')) this._criteria = js.criteria;
-				if (js.hasOwnProperty('examples')) this._examples = js.examples;
+				if (js.hasOwnProperty('criteria')) this.criteria = js.criteria;
+				if (js.hasOwnProperty('examples')) this.examples = js.examples;
 			}
 
 			NumberJS.prototype.accept = function(visitor) {
@@ -666,15 +658,15 @@
 
 			function StringJS(js) {
 				this.type = js.type;
-				if (js.hasOwnProperty('format')) this._format = makeStringSchema(js.format);
+				if (js.hasOwnProperty('format')) this.format = makeStringSchema(js.format);
 			}
 
 			StringJS.prototype.accept = function(visitor) {
 				if (visitor.enterStringJS)
 					visitor.enterStringJS(this);
 
-				if (this._format)
-					this._format.accept(visitor);
+				if (this.format)
+					this.format.accept(visitor);
 
 				if (visitor.exitStringJS)
 					visitor.exitStringJS(this);
@@ -682,16 +674,16 @@
 
 			function ArrayJS(js) {
 				this.type = js.type;
-				if (js.hasOwnProperty('criteria')) this._criteria = js.criteria;
-				if (js.hasOwnProperty('examples')) this._examples = js.examples;
-				this._items = js.items.map(makeJsonItem);
+				if (js.hasOwnProperty('criteria')) this.criteria = js.criteria;
+				if (js.hasOwnProperty('examples')) this.examples = js.examples;
+				this.items = js.items.map(makeJsonItem);
 			}
 
 			ArrayJS.prototype.accept = function(visitor) {
 				if (visitor.enterArrayJS)
 					visitor.enterArrayJS(this);
 
-				this._items.map(function(item) { item.accept(visitor); });
+				this.items.map(function(item) { item.accept(visitor); });
 
 				if (visitor.exitArrayJS)
 					visitor.exitArrayJS(this);
@@ -699,16 +691,16 @@
 
 			function ObjectJS(js) {
 				this.type = js.type;
-				if (js.hasOwnProperty('criteria')) this._criteria = js.criteria;
-				if (js.hasOwnProperty('examples')) this._examples = js.examples;
-				this._properties = js.properties.map(makeJsonProperty);
+				if (js.hasOwnProperty('criteria')) this.criteria = js.criteria;
+				if (js.hasOwnProperty('examples')) this.examples = js.examples;
+				this.properties = js.properties.map(makeJsonProperty);
 			}
 
 			ObjectJS.prototype.accept = function(visitor) {
 				if (visitor.enterObjectJS)
 					visitor.enterObjectJS(this);
 
-				this._properties.map(function(property) { property.accept(visitor); });
+				this.properties.map(function(property) { property.accept(visitor); });
 
 				if (visitor.exitObjectJS)
 					visitor.exitObjectJS(this);
@@ -727,12 +719,6 @@
 			}
 
 			function ApiDocument(httpapiSpec) {
-				context = {
-					srefs: [],
-					jrefs: [],
-					sections: []
-				};
-
 				this.sections = httpapiSpec.sections.map(makeSection);
 				this.methods = Object.getOwnPropertyNames(httpapiSpec.methods).reduce(function(methods, key) {
 					methods[key] = makeMethod(httpapiSpec.methods[key]);
@@ -748,32 +734,6 @@
 						return js;
 					}, {})
 				};
-				this.schemaTags = {
-					string: Object.getOwnPropertyNames(httpapiSpec.schemas.string).sort(),
-					json: Object.getOwnPropertyNames(httpapiSpec.schemas.json).sort(),
-				};
-				for(var key in this.methods) {
-					if(this.methods.hasOwnProperty(key)) {
-						this.methods[key].tag = key;
-					}
-				}
-
-				for(var i=0; i!=context.srefs.length; ++i) {
-					var ref = context.srefs[i];
-					ref._refObj = this.schemas.string[ref._ref];
-				}
-				for(var i=0; i!=context.jrefs.length; ++i) {
-					var ref = context.jrefs[i];
-					ref._refObj = this.schemas.json[ref._ref];
-				}
-				for(var i=0; i!=context.sections.length; ++i) {
-					var section = context.sections[i];
-					var that = this;
-					section.methods = section.methods.map(function(methodTag) {
-						return that.methods[methodTag];
-					});
-				}
-				context = null;
 			}
 
 			ApiDocument.prototype.accept = function(visitor) {
