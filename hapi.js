@@ -3,14 +3,14 @@
 		"use strict";
 
 		function ParseError(message) {
-		    this.message = message;
+			this.message = message;
 		}
 
-	    function assert(test, message) {
-	        if (!test) {
-	            throw new ParseError(message);
-	        }
-	    }
+		function assert(test, message) {
+			if (!test) {
+				throw new ParseError(message);
+			}
+		}
 
 		function jsonTypeof(x) {
 			var t = typeof x;
@@ -326,243 +326,243 @@
 		});
 
 		var parse = (function() {
-	        var context = null;
+			var context = null;
 
-	        function Section(section) {
-	            context.sections.push(this);
+			function Section(section) {
+				context.sections.push(this);
 
-	            this.name = section.name;
-	            if (section.hasOwnProperty('summary')) this.summary = section.summary;
-	            if (section.hasOwnProperty('description')) this.description = section.description;
-	            this.methods = section.methods.slice();
-	        }
+				this.name = section.name;
+				if (section.hasOwnProperty('summary')) this.summary = section.summary;
+				if (section.hasOwnProperty('description')) this.description = section.description;
+				this.methods = section.methods.slice();
+			}
 
-	        function makeSection(section) { return new Section(section); }
+			function makeSection(section) { return new Section(section); }
 
-	        function Parameter(parameter) {
-	            this.name = makeStringSchema(parameter.name);
-	            if (parameter.hasOwnProperty('description')) this.description = parameter.description;
-	            this.frequency = parameter.frequency;
-	            this.value = makeStringSchema(parameter.value);
-	        }
+			function Parameter(parameter) {
+				this.name = makeStringSchema(parameter.name);
+				if (parameter.hasOwnProperty('description')) this.description = parameter.description;
+				this.frequency = parameter.frequency;
+				this.value = makeStringSchema(parameter.value);
+			}
 
-	        function makeParameter(parameter) { return new Parameter(parameter); }
+			function makeParameter(parameter) { return new Parameter(parameter); }
 
-	        function BinaryBody(body) {
-	            this.type = body.type;
-	        }
+			function BinaryBody(body) {
+				this.type = body.type;
+			}
 
-	        function FormBody(body) {
-	            this.type = body.type;
-	            if (body.hasOwnProperty('contentType')) this.contentType = body.contentType;
-	            this._parameters = body.parameters.map(makeParameter);
-	        }
+			function FormBody(body) {
+				this.type = body.type;
+				if (body.hasOwnProperty('contentType')) this.contentType = body.contentType;
+				this._parameters = body.parameters.map(makeParameter);
+			}
 
-	        function JsonBody(body) {
-	            this.type = body.type;
-	            if (body.hasOwnProperty('contentType')) this.contentType = body.contentType;
-	            this._schema = makeJsonSchema(body.schema);
-	        }
+			function JsonBody(body) {
+				this.type = body.type;
+				if (body.hasOwnProperty('contentType')) this.contentType = body.contentType;
+				this._schema = makeJsonSchema(body.schema);
+			}
 
-	        function makeBody(body) {
-	            if (body.type === 'binary')
-	                return new BinaryBody(body);
-	            if (body.type === 'form')
-	                return new FormBody(body);
-	            if (body.type === 'json')
-	                return new JsonBody(body);
-	            throw new ParseError();
-	        }
+			function makeBody(body) {
+				if (body.type === 'binary')
+					return new BinaryBody(body);
+				if (body.type === 'form')
+					return new FormBody(body);
+				if (body.type === 'json')
+					return new JsonBody(body);
+				throw new ParseError();
+			}
 
-	        function Request(request) {
-	            if (request.hasOwnProperty('path')) this.path = request.path.map(makeParameter);
-	            if (request.hasOwnProperty('query')) this.query = request.query.map(makeParameter);
-	            if (request.hasOwnProperty('header')) this.header = request.header.map(makeParameter);
-	            if (request.hasOwnProperty('body')) this.body = request.body.map(makeBody);
-	        }
+			function Request(request) {
+				if (request.hasOwnProperty('path')) this.path = request.path.map(makeParameter);
+				if (request.hasOwnProperty('query')) this.query = request.query.map(makeParameter);
+				if (request.hasOwnProperty('header')) this.header = request.header.map(makeParameter);
+				if (request.hasOwnProperty('body')) this.body = request.body.map(makeBody);
+			}
 
-	        function makeRequest(request) { return new Request(request); }
+			function makeRequest(request) { return new Request(request); }
 
-	        function Response(response) {
-	            if (response.hasOwnProperty('name')) this.name = response.name;
-	            if (response.hasOwnProperty('description')) this.description = response.description;
-	            this.statusCode = response.statusCode;
-	            if (response.hasOwnProperty('statusMessage')) this.statusMessage = response.statusMessage;
-	            if (response.hasOwnProperty('header')) this.header = response.header.map(makeParameter);
-	            if (response.hasOwnProperty('body')) this.body = response.body.map(makeBody);
-	        }
+			function Response(response) {
+				if (response.hasOwnProperty('name')) this.name = response.name;
+				if (response.hasOwnProperty('description')) this.description = response.description;
+				this.statusCode = response.statusCode;
+				if (response.hasOwnProperty('statusMessage')) this.statusMessage = response.statusMessage;
+				if (response.hasOwnProperty('header')) this.header = response.header.map(makeParameter);
+				if (response.hasOwnProperty('body')) this.body = response.body.map(makeBody);
+			}
 
-	        function makeResponse(response) { return new Response(response); }
+			function makeResponse(response) { return new Response(response); }
 
-	        function Method(method) {
-	            this.method = method.method;
-	            this.location = method.location;
-	            this.location_type = method.location_type;
-	            if (method.hasOwnProperty('summary')) this.summary = method.summary;
-	            if (method.hasOwnProperty('description')) this.description = method.description;
-	            this.request = makeRequest(method.request);
-	            this.response = method.response.map(makeResponse);
-	        }
+			function Method(method) {
+				this.method = method.method;
+				this.location = method.location;
+				this.location_type = method.location_type;
+				if (method.hasOwnProperty('summary')) this.summary = method.summary;
+				if (method.hasOwnProperty('description')) this.description = method.description;
+				this.request = makeRequest(method.request);
+				this.response = method.response.map(makeResponse);
+			}
 
-	        function makeMethod(method) { return new Method(method); }
+			function makeMethod(method) { return new Method(method); }
 
-	        function LiteralSS(ss) {
-	            this.type = 'literal';
-	            this._value = ss;
-	        }
+			function LiteralSS(ss) {
+				this.type = 'literal';
+				this._value = ss;
+			}
 
-	        function GeneralSS(ss) {
-	            this.type = 'general';
-	            if (ss.hasOwnProperty('criteria')) this._criteria = ss.criteria;
-	            if (ss.hasOwnProperty('examples')) this._examples = ss.examples.map(function(value) { return JSON.stringify(value); });
-	        }
+			function GeneralSS(ss) {
+				this.type = 'general';
+				if (ss.hasOwnProperty('criteria')) this._criteria = ss.criteria;
+				if (ss.hasOwnProperty('examples')) this._examples = ss.examples.map(function(value) { return JSON.stringify(value); });
+			}
 
-	        function ReferenceSS(ss) {
-	            context.srefs.push(this);
+			function ReferenceSS(ss) {
+				context.srefs.push(this);
 
-	            this.type = 'reference';
-	            this._ref = ss.ref;
-	        }
+				this.type = 'reference';
+				this._ref = ss.ref;
+			}
 
-	        function OneOfSS(ss) {
-	            this.type = 'oneOf';
-	            this._oneOf = ss.oneOf.map(makeStringSchema);
-	        }
+			function OneOfSS(ss) {
+				this.type = 'oneOf';
+				this._oneOf = ss.oneOf.map(makeStringSchema);
+			}
 
-	        function makeStringSchema(ss) {
-	            if (jsonTypeof(ss) === "string") return new LiteralSS(ss);
-	            if (ss.hasOwnProperty("ref")) return new ReferenceSS(ss);
-	            if (ss.hasOwnProperty("oneOf")) return new OneOfSS(ss);
-	            return new GeneralSS(ss);
-	        }
+			function makeStringSchema(ss) {
+				if (jsonTypeof(ss) === "string") return new LiteralSS(ss);
+				if (ss.hasOwnProperty("ref")) return new ReferenceSS(ss);
+				if (ss.hasOwnProperty("oneOf")) return new OneOfSS(ss);
+				return new GeneralSS(ss);
+			}
 
-	        function JsonItem(item) {
-	            this.index = item.index;
-	            if (item.hasOwnProperty('description')) this.description = item.description;
-	            this.value = makeJsonSchema(item.value);
-	        }
+			function JsonItem(item) {
+				this.index = item.index;
+				if (item.hasOwnProperty('description')) this.description = item.description;
+				this.value = makeJsonSchema(item.value);
+			}
 
-	        function makeJsonItem(item) { return new JsonItem(item); }
+			function makeJsonItem(item) { return new JsonItem(item); }
 
-	        function JsonProperty(property) {
-	            this.key = makeStringSchema(property.key);
-	            if (property.hasOwnProperty('description')) this.description = property.description;
-	            this.frequency = property.frequency;
-	            this.value = makeJsonSchema(property.value);
-	        }
+			function JsonProperty(property) {
+				this.key = makeStringSchema(property.key);
+				if (property.hasOwnProperty('description')) this.description = property.description;
+				this.frequency = property.frequency;
+				this.value = makeJsonSchema(property.value);
+			}
 
-	        function makeJsonProperty(property) { return new JsonProperty(property); }
+			function makeJsonProperty(property) { return new JsonProperty(property); }
 
-	        function ReferenceJS(js) {
-	            context.jrefs.push(this);
+			function ReferenceJS(js) {
+				context.jrefs.push(this);
 
-	            this.type = 'reference';
-	            this._ref = js.ref;
-	        }
+				this.type = 'reference';
+				this._ref = js.ref;
+			}
 
-	        function OneOfJS(js) {
-	            this.type = 'oneOf';
-	            this._oneOf = js.oneOf.map(makeJsonSchema);
-	        }
+			function OneOfJS(js) {
+				this.type = 'oneOf';
+				this._oneOf = js.oneOf.map(makeJsonSchema);
+			}
 
-	        function NullJS(js) {
-	            this.type = js.type;
-	        }
+			function NullJS(js) {
+				this.type = js.type;
+			}
 
-	        function BooleanJS(js) {
-	            this.type = js.type;
-	        }
+			function BooleanJS(js) {
+				this.type = js.type;
+			}
 
-	        function NumberJS(js) {
-	            this.type = js.type;
-	            if (js.hasOwnProperty('criteria')) this._criteria = js.criteria;
-	            if (js.hasOwnProperty('examples')) this._examples = js.examples;
-	        }
+			function NumberJS(js) {
+				this.type = js.type;
+				if (js.hasOwnProperty('criteria')) this._criteria = js.criteria;
+				if (js.hasOwnProperty('examples')) this._examples = js.examples;
+			}
 
-	        function StringJS(js) {
-	            this.type = js.type;
-	            if (js.hasOwnProperty('format')) this._format = makeStringSchema(js.format);
-	        }
+			function StringJS(js) {
+				this.type = js.type;
+				if (js.hasOwnProperty('format')) this._format = makeStringSchema(js.format);
+			}
 
-	        function ArrayJS(js) {
-	            this.type = js.type;
-	            if (js.hasOwnProperty('criteria')) this._criteria = js.criteria;
-	            if (js.hasOwnProperty('examples')) this._examples = js.examples;
-	            this._items = js.items.map(makeJsonItem);
-	        }
+			function ArrayJS(js) {
+				this.type = js.type;
+				if (js.hasOwnProperty('criteria')) this._criteria = js.criteria;
+				if (js.hasOwnProperty('examples')) this._examples = js.examples;
+				this._items = js.items.map(makeJsonItem);
+			}
 
-	        function ObjectJS(js) {
-	            this.type = js.type;
-	            if (js.hasOwnProperty('criteria')) this._criteria = js.criteria;
-	            if (js.hasOwnProperty('examples')) this._examples = js.examples;
-	            this._properties = js.properties.map(makeJsonProperty);
-	        }
+			function ObjectJS(js) {
+				this.type = js.type;
+				if (js.hasOwnProperty('criteria')) this._criteria = js.criteria;
+				if (js.hasOwnProperty('examples')) this._examples = js.examples;
+				this._properties = js.properties.map(makeJsonProperty);
+			}
 
-	        function makeJsonSchema(js) {
-	            if (js.hasOwnProperty("ref")) return new ReferenceJS(js);
-	            if (js.hasOwnProperty("oneOf")) return new OneOfJS(js);
-	            if (js.type === 'null') return new NullJS(js);
-	            if (js.type === 'boolean') return new BooleanJS(js);
-	            if (js.type === 'number') return new NumberJS(js);
-	            if (js.type === 'string') return new StringJS(js);
-	            if (js.type === 'array') return new ArrayJS(js);
-	            if (js.type === 'object') return new ObjectJS(js);
-	            throw new ParseError();
-	        }
+			function makeJsonSchema(js) {
+				if (js.hasOwnProperty("ref")) return new ReferenceJS(js);
+				if (js.hasOwnProperty("oneOf")) return new OneOfJS(js);
+				if (js.type === 'null') return new NullJS(js);
+				if (js.type === 'boolean') return new BooleanJS(js);
+				if (js.type === 'number') return new NumberJS(js);
+				if (js.type === 'string') return new StringJS(js);
+				if (js.type === 'array') return new ArrayJS(js);
+				if (js.type === 'object') return new ObjectJS(js);
+				throw new ParseError();
+			}
 
-	        function ApiDocument(httpapiSpec) {
-	            context = {
-	                srefs: [],
-	                jrefs: [],
-	                sections: []
-	            };
+			function ApiDocument(httpapiSpec) {
+				context = {
+					srefs: [],
+					jrefs: [],
+					sections: []
+				};
 
-	            this.sections = httpapiSpec.sections.map(makeSection);
-	            this.methods = Object.getOwnPropertyNames(httpapiSpec.methods).reduce(function(methods, key) {
-	                methods[key] = makeMethod(httpapiSpec.methods[key]);
-	                return methods;
-	            }, {});
-	            this.schemas = {
-	                string: Object.getOwnPropertyNames(httpapiSpec.schemas.string).reduce(function(ss, key) {
-	                    ss[key] = makeStringSchema(httpapiSpec.schemas.string[key]);
-	                    return ss;
-	                }, {}),
-	                json: Object.getOwnPropertyNames(httpapiSpec.schemas.json).reduce(function(js, key) {
-	                    js[key] = makeJsonSchema(httpapiSpec.schemas.json[key]);
-	                    return js;
-	                }, {})
-	            };
-	            this.schemaTags = {
-	                string: Object.getOwnPropertyNames(httpapiSpec.schemas.string).sort(),
-	                json: Object.getOwnPropertyNames(httpapiSpec.schemas.json).sort(),
-	            }
-	            for(var key in this.methods) {
-	                if(this.methods.hasOwnProperty(key)) {
-	                    this.methods[key].tag = key;
-	                }
-	            }
+				this.sections = httpapiSpec.sections.map(makeSection);
+				this.methods = Object.getOwnPropertyNames(httpapiSpec.methods).reduce(function(methods, key) {
+					methods[key] = makeMethod(httpapiSpec.methods[key]);
+					return methods;
+				}, {});
+				this.schemas = {
+					string: Object.getOwnPropertyNames(httpapiSpec.schemas.string).reduce(function(ss, key) {
+						ss[key] = makeStringSchema(httpapiSpec.schemas.string[key]);
+						return ss;
+					}, {}),
+					json: Object.getOwnPropertyNames(httpapiSpec.schemas.json).reduce(function(js, key) {
+						js[key] = makeJsonSchema(httpapiSpec.schemas.json[key]);
+						return js;
+					}, {})
+				};
+				this.schemaTags = {
+					string: Object.getOwnPropertyNames(httpapiSpec.schemas.string).sort(),
+					json: Object.getOwnPropertyNames(httpapiSpec.schemas.json).sort(),
+				}
+				for(var key in this.methods) {
+					if(this.methods.hasOwnProperty(key)) {
+						this.methods[key].tag = key;
+					}
+				}
 
-	            for(var i=0; i!=context.srefs.length; ++i) {
-	                var ref = context.srefs[i];
-	                ref._refObj = this.schemas.string[ref._ref];
-	            }
-	            for(var i=0; i!=context.jrefs.length; ++i) {
-	                var ref = context.jrefs[i];
-	                ref._refObj = this.schemas.json[ref._ref];
-	            }
-	            for(var i=0; i!=context.sections.length; ++i) {
-	                var section = context.sections[i];
-	                var that = this;
-	                section.methods = section.methods.map(function(methodTag) {
-	                    return that.methods[methodTag];
-	                });
-	            }
-	            context = null;
-	        }
+				for(var i=0; i!=context.srefs.length; ++i) {
+					var ref = context.srefs[i];
+					ref._refObj = this.schemas.string[ref._ref];
+				}
+				for(var i=0; i!=context.jrefs.length; ++i) {
+					var ref = context.jrefs[i];
+					ref._refObj = this.schemas.json[ref._ref];
+				}
+				for(var i=0; i!=context.sections.length; ++i) {
+					var section = context.sections[i];
+					var that = this;
+					section.methods = section.methods.map(function(methodTag) {
+						return that.methods[methodTag];
+					});
+				}
+				context = null;
+			}
 
-	        function parse(httpapiSpec) {
-	            return new ApiDocument(httpapiSpec);
-	        }
+			function parse(httpapiSpec) {
+				return new ApiDocument(httpapiSpec);
+			}
 
 			return parse;
 		});
