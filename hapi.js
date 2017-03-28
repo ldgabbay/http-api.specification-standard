@@ -229,10 +229,12 @@
 						validateRequiredKey(top, path, x, "ref", validateString);
 						assert(top.schemas.string.hasOwnProperty(x["ref"]), path + " string schema reference " + JSON.stringify(x["ref"]) + " not found");
 					} else if (x.hasOwnProperty("oneOf")) {
-						validateOnlyKeys(top, path, x, ["oneOf"]);
+						validateOnlyKeys(top, path, x, ["oneOf", "description"]);
 						validateRequiredKey(top, path, x, "oneOf", validateStringSchemaList);
+						validateOptionalKey(top, path, x, "description", validateString);
 					} else {
-						validateOnlyKeys(top, path, x, ["criteria", "examples"]);
+						validateOnlyKeys(top, path, x, ["description", "criteria", "examples"]);
+						validateOptionalKey(top, path, x, "description", validateString);
 						validateOptionalKey(top, path, x, "criteria", function(t, p, y) { validateList(t, p, y, validateString); });
 						validateOptionalKey(top, path, x, "examples", function(t, p, y) { validateList(t, p, y, validateString); });
 					}
@@ -253,28 +255,30 @@
 					validateRequiredKey(top, path, x, "ref", validateString);
 					assert(top.schemas.json.hasOwnProperty(x["ref"]), path + " json schema reference " + JSON.stringify(x["ref"]) + " not found");
 				} else if (x.hasOwnProperty("oneOf")) {
-					validateOnlyKeys(top, path, x, ["oneOf"]);
+					validateOnlyKeys(top, path, x, ["oneOf", "description"]);
 					validateRequiredKey(top, path, x, "oneOf", validateJsonSchemaList);
+					validateOptionalKey(top, path, x, "description", validateString);
 				} else {
 					validateRequiredKey(top, path, x, "type", validateString);
+					validateOptionalKey(top, path, x, "description", validateString);
 					if (x["type"] === "null") {
-						validateOnlyKeys(top, path, x, ["type"]);
+						validateOnlyKeys(top, path, x, ["type", "description"]);
 					} else if (x["type"] === "boolean") {
-						validateOnlyKeys(top, path, x, ["type"]);
+						validateOnlyKeys(top, path, x, ["type", "description"]);
 					} else if (x["type"] === "number") {
-						validateOnlyKeys(top, path, x, ["type", "criteria", "examples"]);
+						validateOnlyKeys(top, path, x, ["type", "description", "criteria", "examples"]);
 						validateOptionalKey(top, path, x, "criteria", function(t, p, y) { validateList(t, p, y, validateString); });
 						validateOptionalKey(top, path, x, "examples", function(t, p, y) { validateList(t, p, y, validateString); });
 					} else if (x["type"] === "string") {
-						validateOnlyKeys(top, path, x, ["type", "format"]);
+						validateOnlyKeys(top, path, x, ["type", "description", "format"]);
 						validateOptionalKey(top, path, x, "format", validateStringSchema);
 					} else if (x["type"] === "array") {
-						validateOnlyKeys(top, path, x, ["type", "criteria", "examples", "items"]);
+						validateOnlyKeys(top, path, x, ["type", "description", "criteria", "examples", "items"]);
 						validateOptionalKey(top, path, x, "criteria", function(t, p, y) { validateList(t, p, y, validateString); });
 						validateOptionalKey(top, path, x, "examples", function(t, p, y) { validateList(t, p, y, validateString); });
-						validateRequiredKey(top, path, x, "items", validateJsonItemList);
+						validateRequiredKey(top, path, x, "items", validateJsonItems);
 					} else if (x["type"] === "object") {
-						validateOnlyKeys(top, path, x, ["type", "criteria", "examples", "properties"]);
+						validateOnlyKeys(top, path, x, ["type", "description", "criteria", "examples", "properties"]);
 						validateOptionalKey(top, path, x, "criteria", function(t, p, y) { validateList(t, p, y, validateString); });
 						validateOptionalKey(top, path, x, "examples", function(t, p, y) { validateList(t, p, y, validateString); });
 						validateRequiredKey(top, path, x, "properties", validateJsonPropertyList);
@@ -288,6 +292,17 @@
 			function validateJsonSchemaList(top, path, x) {
 				validateArray(top, path, x);
 				validateList(top, path, x, validateJsonSchema);
+			}
+
+			function validateJsonItems(top, path, x) {
+				var t = jsonTypeof(x);
+				if (t === "array") {
+					validateJsonItemList(top, path, x);
+				} else if (t === "object") {
+					validateJsonSchema(top, path, x);
+				} else {
+					assert(false, path + " has an invalid value " + JSON.stringify(x));
+				}
 			}
 
 			function validateJsonItemList(top, path, x) {
@@ -505,6 +520,7 @@
 
 			function GeneralSS(ss) {
 				this.type = 'general';
+				if (ss.hasOwnProperty('description')) this.description = ss.description;
 				if (ss.hasOwnProperty('criteria')) this.criteria = ss.criteria;
 				if (ss.hasOwnProperty('examples')) this.examples = ss.examples.map(function(value) { return JSON.stringify(value); });
 			}
@@ -532,6 +548,7 @@
 
 			function OneOfSS(ss) {
 				this.type = 'oneOf';
+				if (ss.hasOwnProperty('description')) this.description = ss.description;
 				this.oneOf = ss.oneOf.map(makeStringSchema);
 			}
 
@@ -605,6 +622,7 @@
 
 			function OneOfJS(js) {
 				this.type = 'oneOf';
+				if (js.hasOwnProperty('description')) this.description = js.description;
 				this.oneOf = js.oneOf.map(makeJsonSchema);
 			}
 
@@ -620,6 +638,7 @@
 
 			function NullJS(js) {
 				this.type = js.type;
+				if (js.hasOwnProperty('description')) this.description = js.description;
 			}
 
 			NullJS.prototype.accept = function(visitor) {
@@ -632,6 +651,7 @@
 
 			function BooleanJS(js) {
 				this.type = js.type;
+				if (js.hasOwnProperty('description')) this.description = js.description;
 			}
 
 			BooleanJS.prototype.accept = function(visitor) {
@@ -644,6 +664,7 @@
 
 			function NumberJS(js) {
 				this.type = js.type;
+				if (js.hasOwnProperty('description')) this.description = js.description;
 				if (js.hasOwnProperty('criteria')) this.criteria = js.criteria;
 				if (js.hasOwnProperty('examples')) this.examples = js.examples;
 			}
@@ -658,6 +679,7 @@
 
 			function StringJS(js) {
 				this.type = js.type;
+				if (js.hasOwnProperty('description')) this.description = js.description;
 				if (js.hasOwnProperty('format')) this.format = makeStringSchema(js.format);
 			}
 
@@ -674,16 +696,27 @@
 
 			function ArrayJS(js) {
 				this.type = js.type;
+				if (js.hasOwnProperty('description')) this.description = js.description;
 				if (js.hasOwnProperty('criteria')) this.criteria = js.criteria;
 				if (js.hasOwnProperty('examples')) this.examples = js.examples;
-				this.items = js.items.map(makeJsonItem);
+				if (jsonTypeof(js.items) === "array") {
+					this.arrayType = 'record';
+					this.items = js.items.map(makeJsonItem);
+				} else if (jsonTypeof(js.items) === "object") {
+					this.arrayType = 'simple';
+					this.items = makeJsonSchema(js.items);
+				}
 			}
 
 			ArrayJS.prototype.accept = function(visitor) {
 				if (visitor.enterArrayJS)
 					visitor.enterArrayJS(this);
 
-				this.items.map(function(item) { item.accept(visitor); });
+				if (this.arrayType === 'simple') {
+					this.items.accept(visitor);
+				} else if (this.arrayType === 'record') {
+					this.items.map(function(item) { item.accept(visitor); });
+				}
 
 				if (visitor.exitArrayJS)
 					visitor.exitArrayJS(this);
@@ -691,6 +724,7 @@
 
 			function ObjectJS(js) {
 				this.type = js.type;
+				if (js.hasOwnProperty('description')) this.description = js.description;
 				if (js.hasOwnProperty('criteria')) this.criteria = js.criteria;
 				if (js.hasOwnProperty('examples')) this.examples = js.examples;
 				this.properties = js.properties.map(makeJsonProperty);

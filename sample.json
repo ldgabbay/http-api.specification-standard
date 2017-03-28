@@ -231,8 +231,10 @@
 		"string": {
 			"LiteralSS": "a literal string",
 			"AnySS": {
+				"description": "Description of *AnySS*"
 			},
 			"GenericSS": {
+				"description": "Description of *GenericSS*",
 				"criteria": ["crit 1", "crit 2", "crit 3"],
 				"examples": ["ex 1", "ex 2", "ex 3"]
 			},
@@ -258,6 +260,7 @@
 				"ref": "SelfReferenceSS"
 			},
 			"OneOfSS": {
+				"description": "Description of *OneOfSS*",
 				"oneOf": [
 					"inline literal",
 					{},
@@ -278,66 +281,86 @@
 		},
 		"json": {
 			"NullJS": {
+				"description": "Description of *NullJS*",
 				"type": "null"
 			},
 			"BooleanJS": {
+				"description": "Description of *BooleanJS*",
 				"type": "boolean"
 			},
 			"NumberJS": {
+				"description": "Description of *NumberJS*",
 				"type": "number"
 			},
 			"SpecializedNumberJS": {
+				"description": "Description of *SpecializedNumberJS*",
 				"type": "number",
 				"criteria": ["crit 1", "crit 2", "crit 3"],
 				"examples": ["ex 1", "ex 2", "ex 3"]
 			},
 			"StringJS": {
+				"description": "Description of *StringJS*",
 				"type": "string"
 			},
 			"LiteralStringJS": {
+				"description": "Description of *LiteralStringJS*",
 				"type": "string",
 				"format": "a literal json string"
 			},
-			"AnyStringJS": {
+			"String0JS": {
 				"type": "string",
 				"format": {}
 			},
-			"GenericStringJS": {
+			"String1JS": {
 				"type": "string",
-				"format": {
-					"criteria": ["crit 1", "crit 2", "crit 3"],
-					"examples": ["ex 1", "ex 2", "ex 3"]
-				}
+				"description": "Description for *String1JS*"
+			},
+			"String2JS": {
+				"type": "string",
+				"format": "literal"
+			},
+			"String3JS": {
+				"type": "string",
+				"description": "Description for *String3JS*",
+				"format": "literal"
 			},
 			"LiteralReferenceStringJS": {
+				"description": "Description of *LiteralReferenceStringJS*",
 				"type": "string",
 				"format": {"ref": "LiteralSS"}
 			},
 			"AnyReferenceStringJS": {
+				"description": "Description of *AnyReferenceStringJS*",
 				"type": "string",
 				"format": {"ref": "AnySS"}
 			},
 			"GenericReferenceStringJS": {
+				"description": "Description of *GenericReferenceStringJS*",
 				"type": "string",
 				"format": {"ref": "GenericSS"}
 			},
 			"LiteralReferenceReferenceStringJS": {
+				"description": "Description of *LiteralReferenceReferenceStringJS*",
 				"type": "string",
 				"format": {"ref": "LiteralReferenceSS"}
 			},
 			"AnyReferenceReferenceStringJS": {
+				"description": "Description of *AnyReferenceReferenceStringJS*",
 				"type": "string",
 				"format": {"ref": "AnyReferenceSS"}
 			},
 			"GenericReferenceReferenceStringJS": {
+				"description": "Description of *GenericReferenceReferenceStringJS*",
 				"type": "string",
 				"format": {"ref": "GenericReferenceSS"}
 			},
 			"SelfReferenceReferenceStringJS": {
+				"description": "Description of *SelfReferenceReferenceStringJS*",
 				"type": "string",
 				"format": {"ref": "SelfReferenceSS"}
 			},
 			"ArrayJS": {
+				"description": "Description of *ArrayJS*",
 				"type": "array",
 				"criteria": ["crit 1", "crit 2", "crit 3"],
 				"examples": ["ex 1", "ex 2", "ex 3"],
@@ -373,14 +396,52 @@
 						"value": {"ref": "LiteralStringJS"}
 					},
 					{
-						"index": "AnyStringJS",
-						"description": "ArrayJS AnyStringJS Description",
-						"value": {"ref": "AnyStringJS"}
+						"index": "String0JS",
+						"description": "ArrayJS String0JS Description",
+						"value": {"ref": "String0JS"}
 					},
 					{
-						"index": "GenericStringJS",
-						"description": "ArrayJS GenericStringJS Description",
-						"value": {"ref": "GenericStringJS"}
+						"index": "String1JS",
+						"description": "ArrayJS String1JS Description",
+						"value": {"ref": "String1JS"}
+					},
+					{
+						"index": "String2JS",
+						"description": "ArrayJS String2JS Description",
+						"value": {"ref": "String2JS"}
+					},
+					{
+						"index": "String3JS",
+						"description": "ArrayJS String3JS Description",
+						"value": {"ref": "String3JS"}
+					},
+					{
+						"index": "InlineString0JS",
+						"value": {
+							"type": "string"
+						}
+					},
+					{
+						"index": "InlineString1JS",
+						"value": {
+							"type": "string",
+							"description": "Description for *InlineString1JS*"
+						}
+					},
+					{
+						"index": "InlineString2JS",
+						"value": {
+							"type": "string",
+							"format": "literal"
+						}
+					},
+					{
+						"index": "InlineString3JS",
+						"value": {
+							"type": "string",
+							"description": "Description for *InlineString3JS*",
+							"format": "literal"
+						}
 					},
 					{
 						"index": "LiteralReferenceStringJS",
@@ -429,7 +490,19 @@
 					}
 				]
 			},
+			"Array2JS": {
+				"description": "Description of *ArrayJS2*",
+				"type": "array",
+				"criteria": ["crit 1", "crit 2", "crit 3"],
+				"examples": ["ex 1", "ex 2", "ex 3"],
+				"items": {"ref": "NullJS"}
+			},
+			"Array3JS": {
+				"type": "array",
+				"items": {"type": "null"}
+			},
 			"ObjectJS": {
+				"description": "Description of *ObjectJS*",
 				"type": "object",
 				"criteria": ["crit 1", "crit 2", "crit 3"],
 				"examples": ["ex 1", "ex 2", "ex 3"],
@@ -471,16 +544,64 @@
 						"value": {"ref": "LiteralStringJS"}
 					},
 					{
-						"key": "AnyStringJS",
-						"description": "ObjectJS AnyStringJS Description",
-						"frequency": "ObjectJS AnyStringJS Frequency",
-						"value": {"ref": "AnyStringJS"}
+						"key": "String0JS",
+						"description": "ObjectJS String0JS Description",
+						"frequency": "ObjectJS String0JS Frequency",
+						"value": {"ref": "String0JS"}
 					},
 					{
-						"key": "GenericStringJS",
-						"description": "ObjectJS GenericStringJS Description",
-						"frequency": "ObjectJS GenericStringJS Frequency",
-						"value": {"ref": "GenericStringJS"}
+						"key": "String1JS",
+						"description": "ObjectJS String1JS Description",
+						"frequency": "ObjectJS String1JS Frequency",
+						"value": {"ref": "String1JS"}
+					},
+					{
+						"key": "String2JS",
+						"description": "ObjectJS String2JS Description",
+						"frequency": "ObjectJS String2JS Frequency",
+						"value": {"ref": "String2JS"}
+					},
+					{
+						"key": "String3JS",
+						"description": "ObjectJS String3JS Description",
+						"frequency": "ObjectJS String3JS Frequency",
+						"value": {"ref": "String3JS"}
+					},
+					{
+						"key": "InlineString0JS",
+						"description": "ObjectJS InlineString0JS Description",
+						"frequency": "ObjectJS InlineString0JS Frequency",
+						"value": {
+							"type": "string"
+						}
+					},
+					{
+						"key": "InlineString1JS",
+						"description": "ObjectJS InlineString1JS Description",
+						"frequency": "ObjectJS InlineString1JS Frequency",
+						"value": {
+							"type": "string",
+							"description": "Description for *InlineString1JS*"
+						}
+					},
+					{
+						"key": "InlineString2JS",
+						"description": "ObjectJS InlineString2JS Description",
+						"frequency": "ObjectJS InlineString2JS Frequency",
+						"value": {
+							"type": "string",
+							"format": "literal"
+						}
+					},
+					{
+						"key": "InlineString3JS",
+						"description": "ObjectJS InlineString3JS Description",
+						"frequency": "ObjectJS InlineString3JS Frequency",
+						"value": {
+							"type": "string",
+							"description": "Description for *InlineString3JS*",
+							"format": "literal"
+						}
 					},
 					{
 						"key": "LiteralReferenceStringJS",
@@ -531,6 +652,26 @@
 						"value": {"ref": "ArrayJS"}
 					},
 					{
+						"key": "Array2JS",
+						"description": "ObjectJS Array2JS Description",
+						"frequency": "ObjectJS Array2JS Frequency",
+						"value": {
+							"type": "array",
+							"items": {"ref": "NullJS"}
+						}
+					},
+					{
+						"key": "Array3JS",
+						"description": "ObjectJS Array3JS Description",
+						"frequency": "ObjectJS Array3JS Frequency",
+						"value": {
+							"type": "array",
+							"items": {
+								"type": "null"
+							}
+						}
+					},
+					{
 						"key": "ObjectJS",
 						"description": "ObjectJS ObjectJS Description",
 						"frequency": "ObjectJS ObjectJS Frequency",
@@ -574,15 +715,15 @@
 					},
 					{
 						"key": {"ref": "AnySS"},
-						"description": "ObjectJS AnyStringJS Description",
-						"frequency": "ObjectJS AnyStringJS Frequency",
-						"value": {"ref": "AnyStringJS"}
+						"description": "ObjectJS String0JS Description",
+						"frequency": "ObjectJS String0JS Frequency",
+						"value": {"ref": "String0JS"}
 					},
 					{
 						"key": {"ref": "AnySS"},
-						"description": "ObjectJS GenericStringJS Description",
-						"frequency": "ObjectJS GenericStringJS Frequency",
-						"value": {"ref": "GenericStringJS"}
+						"description": "ObjectJS String1JS Description",
+						"frequency": "ObjectJS String1JS Frequency",
+						"value": {"ref": "String1JS"}
 					},
 					{
 						"key": {"ref": "AnySS"},
@@ -659,10 +800,10 @@
 				"ref": "LiteralStringJS"
 			},
 			"AnyStringReferenceJS": {
-				"ref": "AnyStringJS"
+				"ref": "String0JS"
 			},
 			"GenericStringReferenceJS": {
-				"ref": "GenericStringJS"
+				"ref": "String1JS"
 			},
 			"LiteralReferenceStringReferenceJS": {
 				"ref": "LiteralReferenceStringJS"
@@ -695,6 +836,7 @@
 				"ref": "SelfReferenceJS"
 			},
 			"OneOfJS": {
+				"description": "Description of *OneOfJS*",
 				"oneOf": [
 					{"type": "null"},
 					{"type": "boolean"},
@@ -784,14 +926,14 @@
 								"value": {"ref": "LiteralStringJS"}
 							},
 							{
-								"index": "AnyStringJS",
-								"description": "ArrayJS AnyStringJS Description",
-								"value": {"ref": "AnyStringJS"}
+								"index": "String0JS",
+								"description": "ArrayJS String0JS Description",
+								"value": {"ref": "String0JS"}
 							},
 							{
-								"index": "GenericStringJS",
-								"description": "ArrayJS GenericStringJS Description",
-								"value": {"ref": "GenericStringJS"}
+								"index": "String1JS",
+								"description": "ArrayJS String1JS Description",
+								"value": {"ref": "String1JS"}
 							},
 							{
 								"index": "LiteralReferenceStringJS",
@@ -882,16 +1024,16 @@
 								"value": {"ref": "LiteralStringJS"}
 							},
 							{
-								"key": "AnyStringJS",
-								"description": "ObjectJS AnyStringJS Description",
-								"frequency": "ObjectJS AnyStringJS Frequency",
-								"value": {"ref": "AnyStringJS"}
+								"key": "String0JS",
+								"description": "ObjectJS String0JS Description",
+								"frequency": "ObjectJS String0JS Frequency",
+								"value": {"ref": "String0JS"}
 							},
 							{
-								"key": "GenericStringJS",
-								"description": "ObjectJS GenericStringJS Description",
-								"frequency": "ObjectJS GenericStringJS Frequency",
-								"value": {"ref": "GenericStringJS"}
+								"key": "String1JS",
+								"description": "ObjectJS String1JS Description",
+								"frequency": "ObjectJS String1JS Frequency",
+								"value": {"ref": "String1JS"}
 							},
 							{
 								"key": "LiteralReferenceStringJS",
@@ -985,15 +1127,15 @@
 							},
 							{
 								"key": {"ref": "AnySS"},
-								"description": "ObjectJS AnyStringJS Description",
-								"frequency": "ObjectJS AnyStringJS Frequency",
-								"value": {"ref": "AnyStringJS"}
+								"description": "ObjectJS String0JS Description",
+								"frequency": "ObjectJS String0JS Frequency",
+								"value": {"ref": "String0JS"}
 							},
 							{
 								"key": {"ref": "AnySS"},
-								"description": "ObjectJS GenericStringJS Description",
-								"frequency": "ObjectJS GenericStringJS Frequency",
-								"value": {"ref": "GenericStringJS"}
+								"description": "ObjectJS String1JS Description",
+								"frequency": "ObjectJS String1JS Frequency",
+								"value": {"ref": "String1JS"}
 							},
 							{
 								"key": {"ref": "AnySS"},
@@ -1057,8 +1199,8 @@
 					{"ref": "SpecializedNumberJS"},
 					{"ref": "StringJS"},
 					{"ref": "LiteralStringJS"},
-					{"ref": "AnyStringJS"},
-					{"ref": "GenericStringJS"},
+					{"ref": "String0JS"},
+					{"ref": "String1JS"},
 					{"ref": "LiteralReferenceStringJS"},
 					{"ref": "AnyReferenceStringJS"},
 					{"ref": "GenericReferenceStringJS"},
