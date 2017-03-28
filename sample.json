@@ -231,8 +231,10 @@
 		"string": {
 			"LiteralSS": "a literal string",
 			"AnySS": {
+				"description": "*Description*"
 			},
 			"GenericSS": {
+				"description": "*Description*",
 				"criteria": ["crit 1", "crit 2", "crit 3"],
 				"examples": ["ex 1", "ex 2", "ex 3"]
 			},
@@ -258,6 +260,7 @@
 				"ref": "SelfReferenceSS"
 			},
 			"OneOfSS": {
+				"description": "*Description*",
 				"oneOf": [
 					"inline literal",
 					{},
@@ -278,66 +281,83 @@
 		},
 		"json": {
 			"NullJS": {
+				"description": "*Description*",
 				"type": "null"
 			},
 			"BooleanJS": {
+				"description": "*Description*",
 				"type": "boolean"
 			},
 			"NumberJS": {
+				"description": "*Description*",
 				"type": "number"
 			},
 			"SpecializedNumberJS": {
+				"description": "*Description*",
 				"type": "number",
 				"criteria": ["crit 1", "crit 2", "crit 3"],
 				"examples": ["ex 1", "ex 2", "ex 3"]
 			},
 			"StringJS": {
+				"description": "*Description*",
 				"type": "string"
 			},
 			"LiteralStringJS": {
+				"description": "*Description*",
 				"type": "string",
 				"format": "a literal json string"
 			},
 			"AnyStringJS": {
+				"description": "*Description*",
 				"type": "string",
 				"format": {}
 			},
 			"GenericStringJS": {
+				"description": "*Description*",
 				"type": "string",
 				"format": {
+					"description": "*Description*",
 					"criteria": ["crit 1", "crit 2", "crit 3"],
 					"examples": ["ex 1", "ex 2", "ex 3"]
 				}
 			},
 			"LiteralReferenceStringJS": {
+				"description": "*Description*",
 				"type": "string",
 				"format": {"ref": "LiteralSS"}
 			},
 			"AnyReferenceStringJS": {
+				"description": "*Description*",
 				"type": "string",
 				"format": {"ref": "AnySS"}
 			},
 			"GenericReferenceStringJS": {
+				"description": "*Description*",
 				"type": "string",
 				"format": {"ref": "GenericSS"}
 			},
 			"LiteralReferenceReferenceStringJS": {
+				"description": "*Description*",
 				"type": "string",
 				"format": {"ref": "LiteralReferenceSS"}
 			},
 			"AnyReferenceReferenceStringJS": {
+				"description": "*Description*",
 				"type": "string",
 				"format": {"ref": "AnyReferenceSS"}
 			},
 			"GenericReferenceReferenceStringJS": {
+				"description": "*Description*",
 				"type": "string",
 				"format": {"ref": "GenericReferenceSS"}
 			},
 			"SelfReferenceReferenceStringJS": {
+				"description": "*Description*",
 				"type": "string",
 				"format": {"ref": "SelfReferenceSS"}
 			},
 			"ArrayJS": {
+				"description": "*Description*",
 				"type": "array",
 				"criteria": ["crit 1", "crit 2", "crit 3"],
 				"examples": ["ex 1", "ex 2", "ex 3"],
@@ -430,6 +450,7 @@
 				]
 			},
 			"ObjectJS": {
+				"description": "*Description*",
 				"type": "object",
 				"criteria": ["crit 1", "crit 2", "crit 3"],
 				"examples": ["ex 1", "ex 2", "ex 3"],
@@ -695,6 +716,7 @@
 				"ref": "SelfReferenceJS"
 			},
 			"OneOfJS": {
+				"description": "*Description*",
 				"oneOf": [
 					{"type": "null"},
 					{"type": "boolean"},

@@ -105,6 +105,7 @@ STRING_SCHEMA :
 
     // schema
     {
+        "description" optional : MARKDOWN,
         "criteria" optional : [ MARKDOWN, MARKDOWN, ... ],
         "examples" optional : [ string, string, ... ]
     }
@@ -115,7 +116,8 @@ STRING_SCHEMA :
     }
 
     {
-        "oneOf" required : STRING_SCHEMA_LIST
+        "oneOf" required : STRING_SCHEMA_LIST,
+        "description" optional : MARKDOWN
     }
 
 
@@ -130,30 +132,36 @@ JSON_SCHEMA :
     }
 
     {
-        "oneOf" required : JSON_SCHEMA_LIST
+        "oneOf" required : JSON_SCHEMA_LIST,
+        "description" optional : MARKDOWN
     }
 
     {
-        "type" required : "null"
+        "type" required : "null",
+        "description" optional : MARKDOWN
     }
 
     {
-        "type" required : "boolean"
+        "type" required : "boolean",
+        "description" optional : MARKDOWN
     }
 
     {
         "type" required : "number",
+        "description" optional : MARKDOWN,
         "criteria" optional : [ MARKDOWN, MARKDOWN, ... ],
         "examples" optional : [ string, string, ... ]
     }
 
     {
         "type" required : "string",
+        "description" optional : MARKDOWN,
         "format" optional : STRING_SCHEMA
     }
 
     {
         "type" required : "array",
+        "description" optional : MARKDOWN,
         "criteria" optional : [ MARKDOWN, MARKDOWN, ... ],
         "examples" optional : [ string, string, ... ],
         "items" required : JSON_ITEM_LIST
@@ -161,6 +169,7 @@ JSON_SCHEMA :
 
     {
         "type" required : "object",
+        "description" optional : MARKDOWN,
         "criteria" optional : [ MARKDOWN, MARKDOWN, ... ],
         "examples" optional : [ string, string, ... ],
         "properties" required : JSON_PROPERTY_LIST
