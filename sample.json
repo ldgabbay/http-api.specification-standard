@@ -490,6 +490,17 @@
 					}
 				]
 			},
+			"Array2JS": {
+				"description": "Description of *ArrayJS2*",
+				"type": "array",
+				"criteria": ["crit 1", "crit 2", "crit 3"],
+				"examples": ["ex 1", "ex 2", "ex 3"],
+				"items": {"ref": "NullJS"}
+			},
+			"Array3JS": {
+				"type": "array",
+				"items": {"type": "null"}
+			},
 			"ObjectJS": {
 				"description": "Description of *ObjectJS*",
 				"type": "object",
@@ -639,6 +650,26 @@
 						"description": "ObjectJS ArrayJS Description",
 						"frequency": "ObjectJS ArrayJS Frequency",
 						"value": {"ref": "ArrayJS"}
+					},
+					{
+						"key": "Array2JS",
+						"description": "ObjectJS Array2JS Description",
+						"frequency": "ObjectJS Array2JS Frequency",
+						"value": {
+							"type": "array",
+							"items": {"ref": "NullJS"}
+						}
+					},
+					{
+						"key": "Array3JS",
+						"description": "ObjectJS Array3JS Description",
+						"frequency": "ObjectJS Array3JS Frequency",
+						"value": {
+							"type": "array",
+							"items": {
+								"type": "null"
+							}
+						}
 					},
 					{
 						"key": "ObjectJS",

@@ -276,7 +276,7 @@
 						validateOnlyKeys(top, path, x, ["type", "description", "criteria", "examples", "items"]);
 						validateOptionalKey(top, path, x, "criteria", function(t, p, y) { validateList(t, p, y, validateString); });
 						validateOptionalKey(top, path, x, "examples", function(t, p, y) { validateList(t, p, y, validateString); });
-						validateRequiredKey(top, path, x, "items", validateJsonItemList);
+						validateRequiredKey(top, path, x, "items", validateJsonItems);
 					} else if (x["type"] === "object") {
 						validateOnlyKeys(top, path, x, ["type", "description", "criteria", "examples", "properties"]);
 						validateOptionalKey(top, path, x, "criteria", function(t, p, y) { validateList(t, p, y, validateString); });
@@ -292,6 +292,17 @@
 			function validateJsonSchemaList(top, path, x) {
 				validateArray(top, path, x);
 				validateList(top, path, x, validateJsonSchema);
+			}
+
+			function validateJsonItems(top, path, x) {
+				var t = jsonTypeof(x);
+				if (t === "array") {
+					validateJsonItemList(top, path, x);
+				} else if (t === "object") {
+					validateJsonSchema(top, path, x);
+				} else {
+					assert(false, path + " has an invalid value " + JSON.stringify(x));
+				}
 			}
 
 			function validateJsonItemList(top, path, x) {
@@ -688,14 +699,24 @@
 				if (js.hasOwnProperty('description')) this.description = js.description;
 				if (js.hasOwnProperty('criteria')) this.criteria = js.criteria;
 				if (js.hasOwnProperty('examples')) this.examples = js.examples;
-				this.items = js.items.map(makeJsonItem);
+				if (jsonTypeof(js.items) === "array") {
+					this.arrayType = 'record';
+					this.items = js.items.map(makeJsonItem);
+				} else if (jsonTypeof(js.items) === "object") {
+					this.arrayType = 'simple';
+					this.items = makeJsonSchema(js.items);
+				}
 			}
 
 			ArrayJS.prototype.accept = function(visitor) {
 				if (visitor.enterArrayJS)
 					visitor.enterArrayJS(this);
 
-				this.items.map(function(item) { item.accept(visitor); });
+				if (this.arrayType === 'simple') {
+					this.items.accept(visitor);
+				} else if (this.arrayType === 'record') {
+					this.items.map(function(item) { item.accept(visitor); });
+				}
 
 				if (visitor.exitArrayJS)
 					visitor.exitArrayJS(this);

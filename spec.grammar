@@ -164,7 +164,7 @@ JSON_SCHEMA :
         "description" optional : MARKDOWN,
         "criteria" optional : [ MARKDOWN, MARKDOWN, ... ],
         "examples" optional : [ string, string, ... ],
-        "items" required : JSON_ITEM_LIST
+        "items" required : JSON_ITEMS
     }
 
     {
@@ -178,6 +178,12 @@ JSON_SCHEMA :
 
 JSON_SCHEMA_LIST :
     [ JSON_SCHEMA, JSON_SCHEMA, ... ]
+
+
+JSON_ITEMS :
+    JSON_ITEM_LIST
+
+    JSON_SCHEMA
 
 
 JSON_ITEM_LIST :
