@@ -24,12 +24,23 @@ try {
 	httpapiSpec = JSON.parse(body);
 }
 catch(e) {
-	console.error("Couldn't parse: "+e);
+	console.error("Couldn't JSON parse: "+e);
 	process.exit(1);
 }
 
 try {
 	Hapi.validate(httpapiSpec);
+}
+catch(e) {
+	if (!(e instanceof Hapi.ParseError))
+		throw e;
+	console.error(e.message);
+	process.exit(1);
+}
+
+var httpapiSpecParsed = null;
+try {
+	httpapiSpecParsed = Hapi.parse(httpapiSpec);
 }
 catch(e) {
 	if (!(e instanceof Hapi.ParseError))
