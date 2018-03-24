@@ -146,13 +146,12 @@
 
 			function validateMethod(top, path, x) {
 				validateObject(top, path, x);
-				validateOnlyKeys(top, path, x, ["method", "location", "location_type", "summary", "description", "method", "request", "response"]);
+				validateOnlyKeys(top, path, x, ["method", "location", "location_type", "summary", "description", "request", "response"]);
 				validateRequiredKey(top, path, x, "method", validateString);
 				validateRequiredKey(top, path, x, "location", validateString);
 				validateRequiredKey(top, path, x, "location_type", validateString);
 				validateOptionalKey(top, path, x, "summary", validateString);
 				validateOptionalKey(top, path, x, "description", validateString);
-				validateOptionalKey(top, path, x, "method", validateString);
 				validateRequiredKey(top, path, x, "request", validateRequest);
 				validateRequiredKey(top, path, x, "response", validateResponseList);
 			}
