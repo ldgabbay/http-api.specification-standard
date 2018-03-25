@@ -71,6 +71,7 @@ BODY_LIST :
 BODY :
     {
         "type" required : "binary"
+        "contentType" optional : string            // default "application/octet-stream"
     }
 
     {
