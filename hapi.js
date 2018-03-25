@@ -190,7 +190,8 @@
 				validateObject(top, path, x);
 				validateRequiredKey(top, path, x, "type", validateString);
 				if (x["type"] === "binary") {
-					validateOnlyKeys(top, path, x, ["type"]);
+					validateOnlyKeys(top, path, x, ["type", "contentType"]);
+					validateOptionalKey(top, path, x, "contentType", validateString);
 				} else if (x["type"] === "form") {
 					validateOnlyKeys(top, path, x, ["type", "contentType", "parameters"]);
 					validateOptionalKey(top, path, x, "contentType", validateString);
@@ -379,6 +380,10 @@
 
 			function BinaryBody(body) {
 				this.type = body.type;
+				if (body.hasOwnProperty('contentType'))
+					this.contentType = body.contentType;
+				else
+					this.contentType = 'application/octet-stream';
 			}
 
 			BinaryBody.prototype.accept = function(visitor) {
@@ -391,7 +396,10 @@
 
 			function FormBody(body) {
 				this.type = body.type;
-				if (body.hasOwnProperty('contentType')) this.contentType = body.contentType;
+				if (body.hasOwnProperty('contentType'))
+					this.contentType = body.contentType;
+				else
+					this.contentType = 'application/x-www-form-urlencoded';
 				this.parameters = body.parameters.map(makeParameter);
 			}
 
@@ -407,7 +415,10 @@
 
 			function JsonBody(body) {
 				this.type = body.type;
-				if (body.hasOwnProperty('contentType')) this.contentType = body.contentType;
+				if (body.hasOwnProperty('contentType'))
+					this.contentType = body.contentType;
+				else
+					this.contentType = 'application/json';
 				this.schema = makeJsonSchema(body.schema);
 			}
 
