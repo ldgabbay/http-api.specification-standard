@@ -838,6 +838,12 @@
 			"OneOfJS": {
 				"description": "Description of *OneOfJS*",
 				"oneOf": [
+					{"literal": null},
+					{"literal": true},
+					{"literal": 0},
+					{"literal": "string"},
+					{"literal": ["array"]},
+					{"literal": {"object": true}},
 					{"type": "null"},
 					{"type": "boolean"},
 					{"type": "number"},

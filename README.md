@@ -42,6 +42,8 @@ This structure is specified in a grammar-like syntax in the included [spec.gramm
 		exitReferenceJS: function(obj) { console.log('exitReferenceJS'); },
 		enterOneOfJS: function(obj) { console.log('enterOneOfJS'); },
 		exitOneOfJS: function(obj) { console.log('exitOneOfJS'); },
+		enterLiteralJS: function(obj) { console.log('enterLiteralJS'); },
+		exitLiteralJS: function(obj) { console.log('exitLiteralJS'); },
 		enterNullJS: function(obj) { console.log('enterNullJS'); },
 		exitNullJS: function(obj) { console.log('exitNullJS'); },
 		enterBooleanJS: function(obj) { console.log('enterBooleanJS'); },
