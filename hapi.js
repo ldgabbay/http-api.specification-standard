@@ -258,6 +258,8 @@
 					validateOnlyKeys(top, path, x, ["oneOf", "description"]);
 					validateRequiredKey(top, path, x, "oneOf", validateJsonSchemaList);
 					validateOptionalKey(top, path, x, "description", validateString);
+				} else if (x.hasOwnProperty("literal")) {
+					validateOnlyKeys(top, path, x, ["literal"]);
 				} else {
 					validateRequiredKey(top, path, x, "type", validateString);
 					validateOptionalKey(top, path, x, "description", validateString);
@@ -646,6 +648,19 @@
 					visitor.exitOneOfJS(this);
 			};
 
+			function LiteralJS(js) {
+				this.type = 'literal';
+				this.value = js.literal;
+			}
+			
+			LiteralJS.prototype.accept = function(visitor) {
+				if (visitor.enterLiteralJS)
+					visitor.enterLiteralJS(this);
+
+				if (visitor.exitLiteralJS)
+					visitor.exitLiteralJS(this);
+			};
+			
 			function NullJS(js) {
 				this.type = js.type;
 				if (js.hasOwnProperty('description')) this.description = js.description;
@@ -753,6 +768,7 @@
 			function makeJsonSchema(js) {
 				if (js.hasOwnProperty("ref")) return new ReferenceJS(js);
 				if (js.hasOwnProperty("oneOf")) return new OneOfJS(js);
+				if (js.hasOwnProperty("literal")) return new LiteralJS(js);
 				if (js.type === 'null') return new NullJS(js);
 				if (js.type === 'boolean') return new BooleanJS(js);
 				if (js.type === 'number') return new NumberJS(js);

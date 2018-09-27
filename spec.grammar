@@ -127,6 +127,11 @@ STRING_SCHEMA_LIST :
 
 
 JSON_SCHEMA :
+    // literal
+    {
+        "literal" required : anything
+    }
+
     // reference to another type
     {
         "ref" required : string        // matches key in API_DOCUMENT."schemas"."json"
