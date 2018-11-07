@@ -197,8 +197,9 @@
 					validateOptionalKey(top, path, x, "contentType", validateString);
 					validateRequiredKey(top, path, x, "parameters", validateParameterList);
 				} else if (x["type"] === "json") {
-					validateOnlyKeys(top, path, x, ["type", "contentType", "schema"]);
+					validateOnlyKeys(top, path, x, ["type", "contentType", "description", "schema"]);
 					validateOptionalKey(top, path, x, "contentType", validateString);
+					validateOptionalKey(top, path, x, "description", validateString);
 					validateRequiredKey(top, path, x, "schema", validateJsonSchema);
 				} else {
 					assert(false, path + " has invalid type " + JSON.stringify(x["type"]));
@@ -421,6 +422,7 @@
 					this.contentType = body.contentType;
 				else
 					this.contentType = 'application/json';
+				if (body.hasOwnProperty('description')) this.description = body.description;
 				this.schema = makeJsonSchema(body.schema);
 			}
 

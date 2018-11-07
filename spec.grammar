@@ -83,6 +83,7 @@ BODY :
     {
         "type" required : "json",
         "contentType" optional : string,           // default "application/json"
+        "description" optional : MARKDOWN,
         "schema" required : JSON_SCHEMA
     }
 
