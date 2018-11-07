@@ -194,6 +194,15 @@
 								"value": {"ref": "GenericSS"}
 							}
 						]
+					},
+					{
+						"type": "json",
+						"schema": {"ref": "NullJS"}
+					},
+					{
+						"type": "json",
+						"description": "huh?",
+						"schema": {"ref": "NullJS"}
 					}
 				]
 			},
