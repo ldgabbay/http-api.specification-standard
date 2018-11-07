@@ -206,7 +206,9 @@
 					}
 				]
 			},
-			"response": []
+			"response": [
+				"401"
+			]
 		},
 		"Method 2": {
 			"method": "GET",
@@ -1228,6 +1230,16 @@
 					{"ref": "SelfReferenceJS"},
 					{"ref": "OneOfJS"}
 				]
+			}
+		}
+	},
+	"templates": {
+		"response": {
+			"401": {
+				"name": "Not Authenticated",
+				"statusCode": 401,
+				"statusMessage": "Unauthorized",
+				"description": "The user could not be authenticated."
 			}
 		}
 	}
