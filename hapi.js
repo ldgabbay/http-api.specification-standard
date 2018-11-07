@@ -874,7 +874,7 @@
 		})();
 
 		return {
-			version: '1.4',
+			version: '1.7',
 			validate: validate,
 			parse: parse,
 			ParseError: ParseError
