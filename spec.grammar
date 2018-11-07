@@ -11,6 +11,11 @@ API_DOCUMENT :
             "json" required : {
                 string: JSON_SCHEMA
             }
+        },
+        "templates" optional : {
+            "response" optional : {
+                string: RAW_RESPONSE
+            }
         }
     }
 
@@ -54,6 +59,12 @@ RESPONSE_LIST :
 
 
 RESPONSE :
+    string        // matches key in API_DOCUMENT."templates"."response"
+
+    RAW_RESPONSE
+
+
+RAW_RESPONSE :
     {
         "name" optional : string,
         "description" optional : MARKDOWN,
