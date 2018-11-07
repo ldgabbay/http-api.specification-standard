@@ -862,10 +862,6 @@
 					if (this.schemas.json.hasOwnProperty(key))
 						this.schemas.json[key].accept(visitor);
 
-				for (var key in this.templates.response)
-					if (this.templates.response.hasOwnProperty(key))
-						this.templates.response[key].accept(visitor);
-
 				if (visitor.exitApiDocument)
 					visitor.exitApiDocument(this);
 			};
