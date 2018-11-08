@@ -30,6 +30,7 @@
 			"description": "Method 1 Description",
 			"request": {
 				"path": [
+					"M1P1",
 					{
 						"name": "M1P1 Name",
 						"description": "M1P1 Description",
@@ -1240,6 +1241,14 @@
 				"statusCode": 401,
 				"statusMessage": "Unauthorized",
 				"description": "The user could not be authenticated."
+			}
+		},
+		"parameter": {
+			"M1P1": {
+				"name": "M1P1 Name",
+				"description": "M1P1 Description",
+				"frequency": "M1P1 Frequency",
+				"value": "M1P1 Value"
 			}
 		}
 	}

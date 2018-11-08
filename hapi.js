@@ -104,6 +104,7 @@
 			function prevalidateTemplates(top, path, x) {
 				validateObject(top, path, x);
 				validateOptionalKey(top, path, x, "response", validateObject);
+				validateOptionalKey(top, path, x, "parameter", validateObject);
 			}
 
 			function prevalidateApiDocument(top, path, x) {
@@ -127,8 +128,9 @@
 
 			function validateTemplates(top, path, x) {
 				validateObject(top, path, x);
-				validateOnlyKeys(top, path, x, ["response"]);
+				validateOnlyKeys(top, path, x, ["response", "parameter"]);
 				validateOptionalKey(top, path, x, "response", function(t, p, y) { validateMap(t, p, y, validateRawResponse); });
+				validateOptionalKey(top, path, x, "parameter", function(t, p, y) { validateMap(t, p, y, validateRawParameter); });
 			}
 
 			function validateApiDocument(top, path, x) {
@@ -236,6 +238,17 @@
 			}
 
 			function validateParameter(top, path, x) {
+				var t = jsonTypeof(x);
+				if (t === "string") {
+					assert(top.templates.parameter.hasOwnProperty(x), path + " parameter template " + JSON.stringify(x) + " not found");
+				} else if (t === "object") {
+					validateRawParameter(top, path, x);
+				} else {
+					assert(false, path + " is of invalid type " + JSON.stringify(t));
+				}
+			}
+
+			function validateRawParameter(top, path, x) {
 				validateObject(top, path, x);
 				validateOnlyKeys(top, path, x, ["name", "description", "frequency", "value"]);
 				validateRequiredKey(top, path, x, "name", validateStringSchema);
@@ -406,7 +419,12 @@
 						visitor.exitParameter(this);
 				};
 
-				function makeParameter(parameter) { return new Parameter(parameter); }
+				function makeParameter(parameter) {
+					if (jsonTypeof(parameter) === "string")
+						parameter = templates.parameter[parameter];
+
+					return new Parameter(parameter);
+				}
 
 				function BinaryBody(body) {
 					this.type = body.type;
@@ -813,7 +831,8 @@
 				}
 
 				var templates = {
-					response: {}
+					response: {},
+					parameter: {}
 				};
 
 				if (httpapiSpec.templates) {
@@ -821,6 +840,12 @@
 						templates.response = Object.getOwnPropertyNames(httpapiSpec.templates.response).reduce(function(r, key) {
 							r[key] = httpapiSpec.templates.response[key];
 							return r;
+						}, {});
+					}
+					if (httpapiSpec.templates.parameter) {
+						templates.parameter = Object.getOwnPropertyNames(httpapiSpec.templates.parameter).reduce(function(p, key) {
+							p[key] = httpapiSpec.templates.parameter[key];
+							return p;
 						}, {});
 					}
 				}

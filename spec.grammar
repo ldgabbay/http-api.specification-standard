@@ -16,6 +16,9 @@ API_DOCUMENT :
             "response" optional : {
                 string: RAW_RESPONSE
             }
+            "parameter" optional : {
+                string: RAW_PARAMETER
+            }
         }
     }
 
@@ -104,6 +107,12 @@ PARAMETER_LIST :
 
 
 PARAMETER :
+    string        // matches key in API_DOCUMENT."templates"."parameter"
+
+    RAW_PARAMETER
+
+
+RAW_PARAMETER :
     {
         "name" required : STRING_SCHEMA,
         "description" optional : MARKDOWN,
