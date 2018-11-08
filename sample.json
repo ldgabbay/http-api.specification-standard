@@ -371,6 +371,13 @@
 				"type": "string",
 				"format": {"ref": "SelfReferenceSS"}
 			},
+			"LiteralStringReferenceStringJS": {"sref": "LiteralSS"},
+			"AnyStringReferenceStringJS": {"sref": "AnySS"},
+			"GenericStringReferenceStringJS": {"sref": "GenericSS"},
+			"LiteralReferenceStringReferenceStringJS": {"sref": "LiteralReferenceSS"},
+			"AnyReferenceStringReferenceStringJS": {"sref": "AnyReferenceSS"},
+			"GenericReferenceStringReferenceStringJS": {"sref": "GenericReferenceSS"},
+			"SelfReferenceStringReferenceStringJS": {"sref": "SelfReferenceSS"},
 			"ArrayJS": {
 				"description": "Description of *ArrayJS*",
 				"type": "array",

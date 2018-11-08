@@ -292,6 +292,10 @@
 					validateOnlyKeys(top, path, x, ["ref"]);
 					validateRequiredKey(top, path, x, "ref", validateString);
 					assert(top.schemas.json.hasOwnProperty(x["ref"]), path + " json schema reference " + JSON.stringify(x["ref"]) + " not found");
+				} else if (x.hasOwnProperty("sref")) {
+					validateOnlyKeys(top, path, x, ["sref"]);
+					validateRequiredKey(top, path, x, "sref", validateString);
+					assert(top.schemas.string.hasOwnProperty(x["sref"]), path + " string schema reference " + JSON.stringify(x["sref"]) + " not found");
 				} else if (x.hasOwnProperty("oneOf")) {
 					validateOnlyKeys(top, path, x, ["oneOf", "description"]);
 					validateRequiredKey(top, path, x, "oneOf", validateJsonSchemaList);
@@ -684,6 +688,19 @@
 						visitor.exitReferenceJS(this);
 				};
 
+				function StringReferenceJS(js) {
+					this.type = 'stringReference';
+					this.sref = js.sref;
+				}
+
+				StringReferenceJS.prototype.accept = function(visitor) {
+					if (visitor.enterStringReferenceJS)
+						visitor.enterStringReferenceJS(this);
+
+					if (visitor.exitStringReferenceJS)
+						visitor.exitStringReferenceJS(this);
+				};
+
 				function OneOfJS(js) {
 					this.type = 'oneOf';
 					if (js.hasOwnProperty('description')) this.description = js.description;
@@ -819,6 +836,7 @@
 
 				function makeJsonSchema(js) {
 					if (js.hasOwnProperty("ref")) return new ReferenceJS(js);
+					if (js.hasOwnProperty("sref")) return new StringReferenceJS(js);
 					if (js.hasOwnProperty("oneOf")) return new OneOfJS(js);
 					if (js.hasOwnProperty("literal")) return new LiteralJS(js);
 					if (js.type === 'null') return new NullJS(js);
