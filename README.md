@@ -40,6 +40,8 @@ This structure is specified in a grammar-like syntax in the included [spec.gramm
 		exitJsonProperty: function(obj) { console.log('exitJsonProperty'); },
 		enterReferenceJS: function(obj) { console.log('enterReferenceJS'); },
 		exitReferenceJS: function(obj) { console.log('exitReferenceJS'); },
+		enterStringReferenceJS: function(obj) { console.log('enterStringReferenceJS'); },
+		exitStringReferenceJS: function(obj) { console.log('exitStringReferenceJS'); },
 		enterOneOfJS: function(obj) { console.log('enterOneOfJS'); },
 		exitOneOfJS: function(obj) { console.log('exitOneOfJS'); },
 		enterLiteralJS: function(obj) { console.log('enterLiteralJS'); },

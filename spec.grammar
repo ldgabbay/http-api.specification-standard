@@ -159,6 +159,10 @@ JSON_SCHEMA :
     }
 
     {
+        "sref" required : string        // matches key in API_DOCUMENT."schemas"."string"
+    }
+
+    {
         "oneOf" required : JSON_SCHEMA_LIST,
         "description" optional : MARKDOWN
     }
