@@ -1,0 +1,18 @@
+{
+  "name": "@ldgabbay/http-api.specification-standard",
+  "version": "1.9.0",
+  "description": "http-api.specification-standard",
+  "main": "./src/index.js",
+  "bin": {
+    "hapi-validate": "./bin/validate"
+  },
+  "scripts": {
+    "build": "webpack"
+  },
+  "author": "Lynn Gabbay <gabbay.z@gmail.com>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.6"
+  }
+}

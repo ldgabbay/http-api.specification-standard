@@ -2,7 +2,7 @@
 "use strict";
 
 var fs = require('fs');
-var Hapi = require('./hapi.js');
+var Hapi = require('../src/index.js');
 
 if(process.argv.length < 3) {
 	console.error("No filename specified.");
